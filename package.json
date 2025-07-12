@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "navagrameen-platform",
   "private": true,
   "scripts": {
     "build": "turbo run build",
