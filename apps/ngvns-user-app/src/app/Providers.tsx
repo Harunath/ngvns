@@ -6,7 +6,7 @@ import React, { ReactNode } from "react";
 
 const Providers = ({ children }: { children: ReactNode }) => {
 	return (
-		<div className="min-h-screen w-screen">
+		<div>
 			{/* <ToastContainer
 				position="top-right"
 				autoClose={5000} // Close after 5 seconds
