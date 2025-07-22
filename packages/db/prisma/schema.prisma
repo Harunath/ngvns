@@ -113,6 +113,7 @@ model Onboarding {
 
   referralId    String? @unique
 
+  onBoardingFinished  Boolean @default(false)
   user        User?     @relation("UserOnboarding")
   orders          Order[] @relation("OnBoardingPaymentOrder")
 
