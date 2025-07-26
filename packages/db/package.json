@@ -3,10 +3,11 @@
 	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
-		"build": "npx prisma generate",
+		"build": "tsup src/index.ts --dts --format esm,cjs && prisma generate",
 		"db:migrate:deploy": "prisma migrate deploy",
 		"db:migrate:dev": "prisma migrate dev",
 		"db:push": "prisma db push",
+		"db:pull": "prisma db pull",
 		"db:seed": "tsx src/seed.ts",
 		"dev": "tsup src/* --watch",
 		"format": "prisma format",

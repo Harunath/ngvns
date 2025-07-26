@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 		const date = new Date();
 		const expiresAt = new Date(date.getTime() + 10 * 60 * 1000);
 		console.log(`email code for ${email} is ${code}`);
-		// await SentEmailOtp(process.env.ZEPTO_TOKEN as string, code, email);
+		await SentEmailOtp(process.env.ZEPTO_TOKEN as string, code, email);
 
 		await prisma.gmailVerificationCode.upsert({
 			where: { email },

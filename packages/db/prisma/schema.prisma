@@ -2,156 +2,98 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
-enum ADMIN_ROLE {
-  SUPER
-  ADMIN
-  TRESASURAR
-}
-
-// Top-level admin model
 model Admin {
-  id               String             @id @default(uuid())
-  email            String             @unique
-  emailVerified    Boolean            @default(false)
-  password         String
-  fullname         String
-  phone            String?            @unique
-  phoneVerified    Boolean?           @default(false)
-  role             ADMIN_ROLE
-  // franchises
-  address          Json?
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @updatedAt
-
+  id            String     @id @default(uuid())
+  email         String     @unique
+  emailVerified Boolean    @default(false)
+  password      String
+  fullname      String
+  phone         String?    @unique
+  phoneVerified Boolean?   @default(false)
+  role          ADMIN_ROLE
+  address       Json?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
 
-
-// User Model
 model User {
-  id             String      @id @default(uuid())
-
-  fullname    String
-
-  relationType  RelationType // Optional, as not everyone needs to specify a relation
-  relationName  String
-
-  dob           DateTime
-  address       Json
-  phone         String @unique
-  email         String @unique
-  emailVerified Boolean
-
-  aadhaar       String
-  aadhaarVerified Boolean
-
-  gender      GenderType @default(None)
-  userPhoto      String
-
-  referralId    String @unique
-
-  parentReferralId    String?
-  directJoin    User[] @relation("UserDirectJoin")
-  joinedBy      User?  @relation("UserDirectJoin", fields: [parentReferralId], references: [referralId])
-
-  parentBId       String?
-  parentCId       String?
-
-  TnCAcceptance TnCAcceptance?
-
-  healthCard    Boolean @default(false)
-
-  nominieeName  String
-  nominieeDob   DateTime
-  relationship  String
-
-
-  deleted        Boolean     @default(false)
-  deactivated    Boolean     @default(false)
-
-  onBoardingId   String   @unique
-  onBoarding     Onboarding   @relation("UserOnboarding", fields: [onBoardingId], references: [id])
-
-  orderId        String @unique
-  order          Order  @relation("paymentOrder", fields: [orderId], references: [id])
-
-  bankDetails   BankDetails?
-  
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-}
-
-enum GenderType {
-  Male
-  Female
-  Others
-  None
-}
-
-enum RelationType {
-  So   @map("S/o")
-  Do   @map("D/o")
-  Wo   @map("W/o")
-}
-
-enum TCOptions {
-  ACCEPTED
-  REJECTED
+  id               String         @id @default(uuid())
+  fullname         String
+  relationType     RelationType
+  relationName     String
+  dob              DateTime
+  address          Json
+  phone            String         @unique
+  email            String         @unique
+  emailVerified    Boolean
+  aadhaar          String
+  aadhaarVerified  Boolean
+  gender           GenderType     @default(None)
+  userPhoto        String
+  referralId       String         @unique
+  nominieeName     String
+  nominieeDob      DateTime
+  relationship     String
+  deleted          Boolean        @default(false)
+  deactivated      Boolean        @default(false)
+  onBoardingId     String         @unique
+  orderId          String         @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  healthCard       Boolean        @default(false)
+  parentBId        String?
+  parentCId        String?
+  parentReferralId String?
+  bankDetails      BankDetails?
+  TnCAcceptance    TnCAcceptance?
+  onBoarding       Onboarding     @relation("UserOnboarding", fields: [onBoardingId], references: [id])
+  order            Order          @relation("paymentOrder", fields: [orderId], references: [id])
+  joinedBy         User?          @relation("UserDirectJoin", fields: [parentReferralId], references: [referralId])
+  directJoin       User[]         @relation("UserDirectJoin")
 }
 
 model Onboarding {
-  id             String      @id @default(uuid())
-  fullname    String
-
-  relationType  RelationType // Optional, as not everyone needs to specify a relation
-  relationName  String
-
-  dob           DateTime
-  address       Json
-  phone         String @unique
-  phoneVerified Boolean
-  email         String
-  emailVerified Boolean
-  aadhaar       String
-  aadhaarVerified Boolean
-  gender      GenderType @default(None)
-  userPhoto      String
-
-  nominieeName  String
-  nominieeDob   DateTime
-  relationship  String
-
-  referralId    String? @unique
-
-  TnCAcceptance TnCAcceptance?
-
-  onBoardingFinished  Boolean @default(false)
-  user        User?     @relation("UserOnboarding")
-  orders          Order[] @relation("OnBoardingPaymentOrder")
-
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  id                 String         @id @default(uuid())
+  fullname           String
+  relationType       RelationType
+  relationName       String
+  dob                DateTime
+  address            Json
+  phone              String         @unique
+  phoneVerified      Boolean
+  email              String
+  emailVerified      Boolean
+  aadhaar            String
+  aadhaarVerified    Boolean
+  gender             GenderType     @default(None)
+  userPhoto          String
+  nominieeName       String
+  nominieeDob        DateTime
+  relationship       String
+  referralId         String?        @unique
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+  onBoardingFinished Boolean        @default(false)
+  orders             Order[]        @relation("OnBoardingPaymentOrder")
+  TnCAcceptance      TnCAcceptance?
+  user               User?          @relation("UserOnboarding")
 }
 
 model BankDetails {
-  id             String      @id @default(uuid())
-
-  bankName       String
+  id            String   @id @default(uuid())
+  bankName      String
   accountNumber String
   ifscCode      String
   branch        String
-
-  userId        String  @unique
-  User          User  @relation(fields: [userId],references: [id],onDelete: Cascade)
-
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  userId        String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model GmailVerificationCode {
@@ -170,25 +112,82 @@ model PhoneVerificationCode {
   createdAt DateTime @default(now())
 }
 
-
 model Order {
-  id             String      @id @default(cuid())
-  paymentOrderId String   @unique
-  paymentSessionId String  @unique
-  status         OrderStatus @default(PENDING)
-  totalAmount    Decimal     @default(3999)
-  currency       String      @default("INR")
-  notes          String?
+  id                  String      @id @default(cuid())
+  paymentSessionId    String      @unique
+  status              OrderStatus @default(PENDING)
+  totalAmount         Decimal     @default(3999)
+  currency            String      @default("INR")
+  notes               String?
   itemDetailsSnapshot Json?
+  onBoardingId        String
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  paymentOrderId      String      @unique
+  onBoarding          Onboarding  @relation("OnBoardingPaymentOrder", fields: [onBoardingId], references: [id])
+  payments            Payment[]
+  user                User?       @relation("paymentOrder")
+}
 
-  payments       Payment[]
+model Payment {
+  id               String        @id @default(cuid())
+  paymentSessionId String        @unique
+  status           PaymentStatus @default(INITIATED)
+  amount           Decimal
+  currency         String        @default("INR")
+  paymentMethod    String?
+  gatewayResponse  Json?
+  errorMessage     String?
+  processedAt      DateTime?
+  orderId          String
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  paymentOrderId   String        @unique
+  order            Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+}
 
-  user           User?       @relation("paymentOrder")
-  onBoardingId   String
-  onBoarding     Onboarding  @relation("OnBoardingPaymentOrder", fields: [onBoardingId], references: [id])
+model TnCVersion {
+  id            String          @id @default(uuid())
+  version       String
+  content       String
+  createdAt     DateTime        @default(now())
+  TnCAcceptance TnCAcceptance[]
+}
 
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+model TnCAcceptance {
+  id           String     @id @default(uuid())
+  userId       String?    @unique
+  onboardingId String     @unique
+  tncVersionId String
+  acceptedAt   DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  onboarding   Onboarding @relation(fields: [onboardingId], references: [id])
+  tncVersion   TnCVersion @relation(fields: [tncVersionId], references: [id])
+  user         User?      @relation(fields: [userId], references: [id])
+}
+
+enum ADMIN_ROLE {
+  SUPER
+  ADMIN
+  TRESASURAR
+}
+
+enum GenderType {
+  Male
+  Female
+  Others
+  None
+}
+
+enum RelationType {
+  So @map("S/o")
+  Do @map("D/o")
+  Wo @map("W/o")
+}
+
+enum TCOptions {
+  ACCEPTED
+  REJECTED
 }
 
 enum OrderStatus {
@@ -206,48 +205,4 @@ enum PaymentStatus {
   SUCCESS
   FAILED
   FLAGGED
-}
-
-model Payment {
-  id                  String       @id @default(cuid())
-  paymentOrderId   String    @unique
-  paymentSessionId    String    @unique 
-  status              PaymentStatus @default(INITIATED)
-  amount              Decimal
-  currency            String       @default("INR")
-  paymentMethod       String?
-  gatewayResponse     Json?
-  errorMessage        String?
-
-  processedAt         DateTime?    
-
-  orderId             String       
-  order               Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
-
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-}
-
-
-model TnCVersion {
-  id        String   @id @default(uuid())
-  version   String   // e.g., "v1.0", "v2.1"
-  content   String   // optional: store plain text or markdown
-  TnCAcceptance TnCAcceptance[]
-  createdAt DateTime @default(now())
-}
-
-model TnCAcceptance {
-  id           String      @id @default(uuid())
-  userId       String?     @unique
-  user         User?       @relation(fields: [userId], references: [id])
-  
-  onboardingId String      @unique
-  onboarding   Onboarding  @relation(fields: [onboardingId], references: [id])
-
-  tncVersionId String
-  tncVersion   TnCVersion  @relation(fields: [tncVersionId], references: [id])
-
-  acceptedAt   DateTime    @default(now())
-  createdAt    DateTime    @default(now())
 }
