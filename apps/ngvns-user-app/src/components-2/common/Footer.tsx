@@ -138,20 +138,8 @@ export default function Footer() {
 
 			{/* Bottom Bar */}
 			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 w-full">
-				<div>
-					&copy; {new Date().getFullYear()} NAVA GRAMEEN VIKAS NIRMAN SOCIETY.
-					All rights reserved.
-				</div>
-				<div>
-					Developed by{" "}
-					<a
-						href="https://www.hsdev.in"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="text-[#72d275] hover:underline">
-						HSDev
-					</a>
-				</div>
+				&copy; {new Date().getFullYear()} NAVA GRAMEEN VIKAS NIRMAN SOCIETY. All
+				rights reserved.
 			</div>
 		</footer>
 	);

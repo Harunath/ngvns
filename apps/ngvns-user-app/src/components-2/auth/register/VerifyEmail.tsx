@@ -21,7 +21,17 @@ function VerifyEmail() {
 		try {
 			setLoading(true);
 			// Simulate API call
-			await new Promise((res) => setTimeout(res, 1000));
+			const response = await fetch("/api/auth/onboarding/email-otp", {
+				method: "POST",
+				body: JSON.stringify({
+					email: email,
+					phone: data?.phone,
+					code: otp,
+				}),
+			});
+			const res = await response.json();
+			// await new Promise((res) => setTimeout(res, 1000));
+			console.log(res);
 			setOtpSent(true);
 			toast.success("OTP sent to your email");
 		} catch (err) {
@@ -40,7 +50,17 @@ function VerifyEmail() {
 		try {
 			setLoading(true);
 			// Simulate verification API
-			await new Promise((res) => setTimeout(res, 1000));
+			const response = await fetch("/api/auth/onboarding/email-otp/verify", {
+				method: "POST",
+				body: JSON.stringify({
+					email: email,
+					phone: data?.phone,
+					code: otp,
+				}),
+			});
+			const res = await response.json();
+			// await new Promise((res) => setTimeout(res, 1000));
+			console.log(res);
 			toast.success("Email verified successfully!");
 		} catch (err) {
 			toast.error("Invalid OTP or verification failed");
