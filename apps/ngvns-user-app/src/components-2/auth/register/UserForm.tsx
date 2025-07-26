@@ -6,11 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import toast from "react-hot-toast";
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
+import { RelationType } from "@ngvns2025/db/client";
 
 const schema = z.object({
 	referralId: z.string().min(1, "Referral ID is required"),
 	fullname: z.string().min(1, "Full name is required"),
-	relationType: z.string(),
+	relationType: z.nativeEnum(RelationType),
 	relationName: z.string().min(1, "Relation name is required"),
 	dob: z.string().min(1, "Date of birth is required"),
 	address: z.string().min(1, "Address is required"),
@@ -122,9 +123,9 @@ function UserForm() {
 								{...register("relationType")}
 								className="border px-3 py-2 w-full">
 								<option value="">Select</option>
-								<option value="Father">Father</option>
-								<option value="Mother">Mother</option>
-								<option value="Spouse">Spouse</option>
+								<option value={RelationType.So}>S/o</option>
+								<option value={RelationType.Do}>D/o</option>
+								<option value={RelationType.Wo}>W/o</option>
 							</select>
 						</div>
 

@@ -2,8 +2,25 @@
 // components/TandC.tsx
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 
 const termsContent = [
+	"1. You agree to provide accurate and complete information during onboarding.",
+	"2. Your data will be used for identity verification and service enhancement.",
+	"3. You may not use our platform for any unlawful or harmful activity.",
+	"4. You consent to receive communications regarding verification and services.",
+	"5. We are not liable for third-party misuse or external data breaches.",
+	"6. You can contact us anytime to request deletion of your data.",
+	"7. Continued use implies acceptance of all policy changes.",
+	"8. All disputes will be governed by applicable local laws.",
+	"1. You agree to provide accurate and complete information during onboarding.",
+	"2. Your data will be used for identity verification and service enhancement.",
+	"3. You may not use our platform for any unlawful or harmful activity.",
+	"4. You consent to receive communications regarding verification and services.",
+	"5. We are not liable for third-party misuse or external data breaches.",
+	"6. You can contact us anytime to request deletion of your data.",
+	"7. Continued use implies acceptance of all policy changes.",
+	"8. All disputes will be governed by applicable local laws.",
 	"1. You agree to provide accurate and complete information during onboarding.",
 	"2. Your data will be used for identity verification and service enhancement.",
 	"3. You may not use our platform for any unlawful or harmful activity.",
@@ -17,13 +34,34 @@ const termsContent = [
 const TandC = () => {
 	const [accepted, setAccepted] = useState(false);
 	const [showTerms, setShowTerms] = useState(false);
+	const { data } = useOnboardingStore();
+	const phone = data?.phone || "";
 
 	const handleContinue = () => {
 		if (accepted) toast.success("You accepted the Terms & Conditions");
 	};
 
+	const createUser = async () => {
+		const response = await fetch("/api/auth/user", {
+			method: "POST",
+			body: JSON.stringify({ phone }),
+		});
+	};
+
 	return (
-		<div className="max-w-xl mx-auto p-4">
+		<div className="max-w-xl mx-auto p-4 space-y-4">
+			{/*  */}
+			<div className="flex items-center justify-center">
+				<div className="bg-white w-full h-[80vh] rounded shadow-lg p-6 relative overflow-y-auto">
+					<h2 className="text-lg font-semibold mb-4">Terms & Conditions</h2>
+					<ul className="list-disc list-inside space-y-2 text-sm">
+						{termsContent.map((item, index) => (
+							<li key={index}>{item}</li>
+						))}
+					</ul>
+				</div>
+			</div>
+			{/*  */}
 			<div className="flex items-center gap-2 mb-4">
 				<input
 					type="checkbox"
@@ -46,7 +84,8 @@ const TandC = () => {
 			<button
 				className="bg-green-600 text-white px-4 py-2 rounded disabled:opacity-50"
 				disabled={!accepted}
-				onClick={handleContinue}>
+				// onClick={handleContinue}
+				onClick={createUser}>
 				Continue
 			</button>
 

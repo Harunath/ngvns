@@ -62,11 +62,11 @@ export default function Gallery() {
 						/>
 
 						{/* Overlay Description - On Hover */}
-					<div className="absolute inset-0 bg-orange-600 bg-opacity-70 flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-	<p className="text-sm sm:text-base text-white">
-		{item.description}
-	</p>
-</div>
+						<div className="absolute inset-0 bg-orange-600 bg-opacity-70 flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+							<p className="text-sm sm:text-base text-white">
+								{item.description}
+							</p>
+						</div>
 
 						{/* Title Always Visible - Background */}
 						<div className="absolute bottom-0 left-0 w-full py-3 text-center bg-orange-600 z-10">

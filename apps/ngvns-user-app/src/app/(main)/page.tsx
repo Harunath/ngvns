@@ -14,11 +14,13 @@ import StayConnected from "../../components/home/StayConnected";
 import News from "../../components/home/News";
 import Achievements from "../../components/home/Achievements";
 import LiveStockEnergy from "../../components/home/LiveStockEnergy";
+import Intro from "../../components/home/Intro";
 
 function page() {
 	return (
 		<>
 			<Hero />
+			<Intro />
 			<News />
 			<LiveStockEnergy />
 			<Programs />
