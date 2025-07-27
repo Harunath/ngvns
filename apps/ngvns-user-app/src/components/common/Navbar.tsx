@@ -31,7 +31,7 @@ export default function Navbar() {
 				{/* Logo */}
 				<Link href="/" className="flex items-center ml-4 md:ml-8">
 					<Image
-						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1753339889/Nava_Grameena_Logo_tkcjwe.png"
+						src="https://res.cloudinary.com/degrggosz/image/upload/v1753602577/ngvns-final-logo_mgmheg.png"
 						alt="Nava Grameena Logo"
 						width={180}
 						height={50}
