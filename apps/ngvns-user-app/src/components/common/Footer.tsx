@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
 	FaFacebookF,
 	FaTwitter,
@@ -11,13 +12,20 @@ import {
 export default function Footer() {
 	return (
 		<footer className="bg-[#001f3f] text-white w-full">
-			<div className="w-full px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
 				{/* About */}
 				<div>
-					<h2 className="text-lg font-bold text-[#FF9933] mb-4">
-						NAVA GRAMEEN
-					</h2>
-					<p className="text-sm text-gray-300">
+					<div className="mb-4">
+						<Image
+							src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1753339889/Nava_Grameena_Logo_tkcjwe.png"
+							alt="Nava Grameena Logo"
+							width={180}
+							height={50}
+							className="h-18 w-auto object-contain"
+							priority
+						/>
+					</div>
+					<p className="text-sm text-gray-300 leading-relaxed">
 						Empowering rural India through sustainability, innovation, and
 						inclusion. Together, we build self-reliant villages for a better
 						tomorrow.
@@ -30,26 +38,18 @@ export default function Footer() {
 						Quick Links
 					</h3>
 					<ul className="space-y-2 text-sm">
-						<li>
-							<Link href="/" className="hover:text-[#FF9933]">
-								Home
-							</Link>
-						</li>
-						<li>
-							<Link href="/about" className="hover:text-[#FF9933]">
-								About Us
-							</Link>
-						</li>
-						<li>
-							<Link href="/impact" className="hover:text-[#FF9933]">
-								Impact
-							</Link>
-						</li>
-						<li>
-							<Link href="/contact" className="hover:text-[#FF9933]">
-								Contact
-							</Link>
-						</li>
+						{([
+							["Home", "/"],
+							["About Us", "/about"],
+							["Impact", "/impact"],
+							["Contact", "/contact"],
+						] as [string, string][]).map(([label, href]) => (
+							<li key={label}>
+								<Link href={href} className="hover:text-[#FF9933]">
+									{label}
+								</Link>
+							</li>
+						))}
 					</ul>
 				</div>
 
@@ -102,42 +102,37 @@ export default function Footer() {
 					<h3 className="text-md font-semibold text-[#FF9933] mb-3">
 						Contact Us
 					</h3>
-					<p className="text-sm text-gray-300 mb-4">
-						Email: info@nava.org
+					<p className="text-sm text-gray-300 mb-4 leading-relaxed">
+						Email: info@navagrameen.com
 						<br />
-						Phone: +91-XXXXXXXXXX
+						Phone: +91 9515934289
 					</p>
+					<a
+						href="tel:+919515934289"
+						className="inline-block mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition">
+						📞 Call Support
+					</a>
 					<div className="flex space-x-4 text-xl">
-						<a
-							href="#"
-							aria-label="Facebook"
-							className="text-[#1877F2] hover:text-[#FF9933] transition-colors duration-300">
-							<FaFacebookF />
-						</a>
-						<a
-							href="#"
-							aria-label="Twitter"
-							className="text-[#1DA1F2] hover:text-[#FF9933] transition-colors duration-300">
-							<FaTwitter />
-						</a>
-						<a
-							href="#"
-							aria-label="Instagram"
-							className="text-[#E1306C] hover:text-[#FF9933] transition-colors duration-300">
-							<FaInstagram />
-						</a>
-						<a
-							href="#"
-							aria-label="LinkedIn"
-							className="text-[#0077B5] hover:text-[#FF9933] transition-colors duration-300">
-							<FaLinkedin />
-						</a>
+						{[
+							{ href: "#", icon: <FaFacebookF />, color: "#1877F2" },
+							{ href: "#", icon: <FaTwitter />, color: "#1DA1F2" },
+							{ href: "#", icon: <FaInstagram />, color: "#E1306C" },
+							{ href: "#", icon: <FaLinkedin />, color: "#0077B5" },
+						].map(({ href, icon, color }, idx) => (
+							<a
+								key={idx}
+								href={href}
+								aria-label="Social link"
+								className={`text-[${color}] hover:text-[#FF9933] transition-colors duration-300`}>
+								{icon}
+							</a>
+						))}
 					</div>
 				</div>
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 w-full">
+			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 px-4">
 				<div>
 					&copy; {new Date().getFullYear()} NAVA GRAMEEN VIKAS NIRMAN SOCIETY.
 					All rights reserved.

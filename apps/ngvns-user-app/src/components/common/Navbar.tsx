@@ -105,12 +105,12 @@ export default function Navbar() {
 							</div>
 						)}
 					</div>
-
 					<Link
-						href="/impact"
+						href="/blog"
 						className="block py-2 md:py-0 hover:text-orange-500">
-						Impact
+						Blog
 					</Link>
+
 					<Link
 						href="/contact"
 						className="block py-2 md:py-0 hover:text-orange-500">
