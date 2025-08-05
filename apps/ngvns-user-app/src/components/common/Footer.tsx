@@ -38,12 +38,12 @@ export default function Footer() {
 						Quick Links
 					</h3>
 					<ul className="space-y-2 text-sm">
-						{[
+						{([
 							["Home", "/"],
 							["About Us", "/about"],
 							["Impact", "/impact"],
 							["Contact", "/contact"],
-						].map(([label, href]) => (
+						] as [string, string][]).map(([label, href]) => (
 							<li key={label}>
 								<Link href={href} className="hover:text-[#FF9933]">
 									{label}
