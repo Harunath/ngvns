@@ -23,7 +23,7 @@ const WhoWeAre = () => {
 
 					<p className="text-gray-800 text-lg mb-6">
 						<span className="font-semibold text-[#1a1a1a]">
-							Nava Grameen Vikas Nirman Society
+							VR Kisan Parivaar
 						</span>{" "}
 						is a grassroots organization committed to empowering rural India
 						through self-sustaining development models.

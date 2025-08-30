@@ -17,8 +17,8 @@ export default function Footer() {
 				<div>
 					<div className="mb-4">
 						<Image
-							src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1753339889/Nava_Grameena_Logo_tkcjwe.png"
-							alt="Nava Grameena Logo"
+							src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756539882/vr_kp-6_cwoyjy.png"
+							alt="VR KP Logo"
 							width={180}
 							height={50}
 							className="h-18 w-auto object-contain"
@@ -38,12 +38,14 @@ export default function Footer() {
 						Quick Links
 					</h3>
 					<ul className="space-y-2 text-sm">
-						{([
-							["Home", "/"],
-							["About Us", "/about"],
-							["Impact", "/impact"],
-							["Contact", "/contact"],
-						] as [string, string][]).map(([label, href]) => (
+						{(
+							[
+								["Home", "/"],
+								["About Us", "/about"],
+								["Impact", "/impact"],
+								["Contact", "/contact"],
+							] as [string, string][]
+						).map(([label, href]) => (
 							<li key={label}>
 								<Link href={href} className="hover:text-[#FF9933]">
 									{label}
@@ -103,7 +105,7 @@ export default function Footer() {
 						Contact Us
 					</h3>
 					<p className="text-sm text-gray-300 mb-4 leading-relaxed">
-						Email: info@navagrameen.com
+						Email: contact@vrkisanparivaar.com
 						<br />
 						Phone: +91 9515934289
 					</p>
@@ -134,8 +136,8 @@ export default function Footer() {
 			{/* Bottom Bar */}
 			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 px-4">
 				<div>
-					&copy; {new Date().getFullYear()} NAVA GRAMEEN VIKAS NIRMAN SOCIETY.
-					All rights reserved.
+					&copy; {new Date().getFullYear()} VR KISAN PARIVAAR. All rights
+					reserved.
 				</div>
 				<div>
 					Developed by{" "}

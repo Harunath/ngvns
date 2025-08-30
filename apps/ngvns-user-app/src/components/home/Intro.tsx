@@ -40,7 +40,7 @@ const Intro = () => {
 				<h2 className="text-3xl md:text-4xl font-bold text-[#1a1a1a] mb-3 border-b-2 border-gray-300 pb-2">
 					Welcome to{" "}
 					<span className="text-[#ff6600]">
-						Nava Grameen Vikas Nirman Society
+					VR Kisan Parivaar
 					</span>
 				</h2>
 
@@ -50,7 +50,7 @@ const Intro = () => {
 				</p>
 
 				<p className="text-gray-800 text-[17px] mb-10 leading-relaxed">
-					Nava Grameen Vikas Nirman Society is a rural development organization
+					VR Kisan Parivaar is a rural development organization
 					dedicated to empowering villages through sustainable practices and
 					community-driven progress.
 				</p>

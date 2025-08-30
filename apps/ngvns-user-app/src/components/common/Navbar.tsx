@@ -31,8 +31,8 @@ export default function Navbar() {
 				{/* Logo */}
 				<Link href="/" className="flex items-center ml-4 md:ml-8">
 					<Image
-						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1753339889/Nava_Grameena_Logo_tkcjwe.png"
-						alt="Nava Grameena Logo"
+						src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756539882/vr_kp-6_cwoyjy.png"
+						alt="VR KP Logo"
 						width={180}
 						height={50}
 						className="h-20 w-auto object-contain"
@@ -105,11 +105,11 @@ export default function Navbar() {
 							</div>
 						)}
 					</div>
-					<Link
+					{/* <Link
 						href="/blog"
 						className="block py-2 md:py-0 hover:text-orange-500">
 						Blog
-					</Link>
+					</Link> */}
 
 					<Link
 						href="/contact"

@@ -53,7 +53,7 @@ const ContactMain = () => {
 						<FaEnvelope className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Email</h4>
-							<p className="text-gray-700">support@navagrameen.com</p>
+							<p className="text-gray-700">contact@vrkisanparivaar.com</p>
 						</div>
 					</div>
 
@@ -64,10 +64,10 @@ const ContactMain = () => {
 							<h4 className="font-bold text-black">Website</h4>
 							<p className="text-blue-700 hover:underline">
 								<a
-									href="https://www.navagrameen.org/"
+									href="https://www.vrkisanparivaar.com/"
 									target="_blank"
 									rel="noreferrer">
-									www.navagrameen.org
+									www.vrkisanparivaar.com
 								</a>
 							</p>
 						</div>

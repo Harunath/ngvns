@@ -49,7 +49,7 @@ export default function Achievements() {
 						<div className="flex justify-center mb-4">
 							<div className={`text-4xl ${item.color}`}>{item.icon}</div>
 						</div>
-						<h3 className="text-3xl font-extrabold text-black">{item.value}</h3>
+						{/* <h3 className="text-3xl font-extrabold text-black">{item.value}</h3> */}
 						<p className="mt-2 text-sm text-gray-700 font-medium">
 							{item.label}
 						</p>

@@ -7,7 +7,7 @@ export default function Hero() {
 		<section className="h-screen w-screen bg-linear-to-b/hsl from-orange-300 from-[25%] via-white via-50% to-green-400 to-75% flex items-center justify-center">
 			<div className="max-w-screen-xl mx-auto flex flex-col items-center justify-center">
 				<h4 className="text-sm font-semibold text-white uppercase tracking-widest mb-3">
-					NAVA GRAMEEN VIKAS NIRMAN SOCIETY
+					VR KISAN PARIVAAR
 				</h4>
 
 				<h1 className="text-4xl md:text-5xl font-bold text-[#001f3f] leading-tight mb-6">
