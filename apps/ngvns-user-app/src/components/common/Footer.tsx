@@ -91,7 +91,7 @@ export default function Footer() {
 						</li>
 						<li>
 							<Link
-								href="/join"
+								href="/member"
 								className="hover:text-[#FF9933] font-medium text-white">
 								✅ Become a Member
 							</Link>
