@@ -10,6 +10,7 @@ import {
 	FaSeedling,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 export default function BecomeMember() {
 	return (
@@ -82,13 +83,11 @@ export default function BecomeMember() {
 					</motion.div>
 				</div>
 
-				<motion.a
+				<Link
 					href="/join"
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.97 }}
 					className="inline-block px-10 py-4 bg-orange-500 text-white text-lg font-semibold rounded-md shadow-md hover:bg-orange-600 transition duration-300">
-					Become a Member Now
-				</motion.a>
+					Join Now
+				</Link>
 			</div>
 		</section>
 	);

@@ -118,7 +118,7 @@ export default function Navbar() {
 					</Link>
 
 					{/* Become a Member */}
-					<Link href="/join">
+					<Link href="/member">
 						<button className="mt-4 md:mt-0 bg-[#138808] hover:bg-green-700 text-white px-4 py-2 rounded-full transition">
 							Become a Member
 						</button>
