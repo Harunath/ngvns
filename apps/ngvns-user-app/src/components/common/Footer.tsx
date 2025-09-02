@@ -134,10 +134,20 @@ export default function Footer() {
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 px-4">
+			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 px-4 space-y-2">
 				<div>
 					&copy; {new Date().getFullYear()} VR KISAN PARIVAAR. All rights
 					reserved.
+				</div>
+				<div className="flex flex-wrap justify-center space-x-4">
+					<Link
+						href="/legals/terms-and-conditions"
+						className="hover:text-[#FF9933]">
+						Terms & Conditions
+					</Link>
+					<Link href="/legals/privacy-policy" className="hover:text-[#FF9933]">
+						Privacy Policy
+					</Link>
 				</div>
 				<div>
 					Developed by{" "}
