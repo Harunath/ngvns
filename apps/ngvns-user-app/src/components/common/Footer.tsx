@@ -104,16 +104,16 @@ export default function Footer() {
 					<h3 className="text-md font-semibold text-[#FF9933] mb-3">
 						Contact Us
 					</h3>
-					<p className="text-sm text-gray-300 mb-4 leading-relaxed">
+					{/* <p className="text-sm text-gray-300 mb-4 leading-relaxed">
 						Email: support@vrkisanparivaar.com
 						<br />
 						Phone: +91 9515934289
-					</p>
-					<a
+					</p> */}
+					{/* <a
 						href="tel:+919515934289"
 						className="inline-block mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition">
 						📞 Call Support
-					</a>
+					</a> */}
 					<div className="flex space-x-4 text-xl">
 						{[
 							{ href: "#", icon: <FaFacebookF />, color: "#1877F2" },
