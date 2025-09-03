@@ -40,20 +40,20 @@ const ContactMain = () => {
 					</div>
 
 					{/* Phone */}
-					<div className="flex items-center gap-4 mb-4">
+					{/* <div className="flex items-center gap-4 mb-4">
 						<FaPhoneAlt className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Phone</h4>
 							<p className="text-gray-700">+91 9515934289</p>
 						</div>
-					</div>
+					</div> */}
 
 					{/* Email */}
 					<div className="flex items-center gap-4 mb-4">
 						<FaEnvelope className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Email</h4>
-							<p className="text-gray-700">contact@vrkisanparivaar.com</p>
+							<p className="text-gray-700">support@vrkisanparivaar.com</p>
 						</div>
 					</div>
 

@@ -23,7 +23,7 @@ function PaymentsPage() {
 					<button
 						disabled
 						className="bg-green-600 text-white px-6 py-3 rounded-xl opacity-60 cursor-not-allowed">
-						Pay ₹4999
+						Pay ₹4999+ GST
 					</button>
 				</div>
 			</div>
