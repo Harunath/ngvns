@@ -53,7 +53,7 @@ export default function Page() {
 								<p className="mt-1 text-3xl font-bold">
 									₹ 4,999
 									<span className="ml-2 align-middle text-sm font-medium text-white/60">
-										(includes taxes where applicable)
+										(+ GST)
 									</span>
 								</p>
 							</div>

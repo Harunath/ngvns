@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, easeInOut } from "framer-motion";
 import Link from "next/link";
-import { easeInOut } from "framer-motion";
 import {
 	FaWind,
 	FaSeedling,
@@ -12,43 +11,121 @@ import {
 	FaHandsHelping,
 } from "react-icons/fa";
 
-
 export default function Hero() {
 	return (
-		<section className="h-screen w-screen bg-linear-to-b/hsl from-orange-300 from-[25%] via-white via-50% to-green-400 to-75% flex items-center justify-center">
-			<div className="max-w-screen-xl w-full mx-auto px-4 py-10 flex flex-col items-center text-center">
-				<h4 className="text-3xl sm:text-4xl font-semibold text-white uppercase tracking-widest mb-3">
+		<section className="relative min-h-[100svh] w-full bg-linear-to-b/hsl from-orange-300 from-[25%] via-white via-50% to-green-400 to-75% flex items-center">
+			<div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 flex flex-col items-center text-center">
+				<h1 className="mb-1 sm:mb-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#963132] uppercase tracking-widest">
 					VR KISAN PARIVAAR
-				</h4>
-
-				<h1 className="text-4xl md:text-5xl font-extrabold text-[#001f3f] leading-tight mb-4">
-					Building Sustainable Futures for Rural India
 				</h1>
 
-				<p className="text-zinc-700 text-base md:text-lg max-w-2xl mb-8">
+				<h4 className="mb-2 sm:mb-3 text-2xl sm:text-3xl md:text-4xl font-semibold text-[#001f3f] leading-tight tracking-tight">
+					Building Sustainable Futures for Rural India
+				</h4>
+
+				<p className="mb-5 sm:mb-6 max-w-2xl text-[15px] sm:text-base md:text-lg text-zinc-700">
 					Empowering villages through clean energy, sustainable farming,
 					women-led initiatives, and rural employment. Together, we shape a
 					self-reliant and green Bharat.
 				</p>
 
-				<div className="flex flex-col sm:flex-row gap-4 mb-10">
-					<Link href="/join">
-						<button className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-full font-semibold transition shadow">
+				<div className="mb-6 sm:mb-8 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:gap-4">
+					<Link href="/join" className="w-full sm:w-auto">
+						<button className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-full font-semibold transition shadow">
 							Become a Member
 						</button>
 					</Link>
-					<Link href="/our-work">
-						<button className="bg-[#138808] hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition shadow">
+					<Link href="/our-work" className="w-full sm:w-auto">
+						<button className="w-full sm:w-auto bg-[#138808] hover:bg-green-700 text-white px-6 py-3 rounded-full font-semibold transition shadow">
 							Explore Our Work
 						</button>
 					</Link>
 				</div>
 
-				{/* Single-item, auto-advancing carousel with layered animated backgrounds */}
-				<div className="w-full max-w-3xl">
-					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={10000} />
+				{/* Carousel */}
+				<div className="w-full max-w-3xl mb-2 sm:mb-3">
+					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={3000} />
+				</div>
+
+				{/* Scrolling line (no background) – responsive & seamless */}
+				<div className="w-full overflow-hidden mt-4 sm:mt-6">
+					<div className="marquee-outer">
+						<div className="marquee-inner">
+							<span className="marquee-copy">
+								Be a part of the VR Kisan Parivaar Movement working towards
+								sustainable villages and a stronger rural India.
+							</span>
+							<span aria-hidden className="marquee-copy">
+								Be a part of the VR Kisan Parivaar Movement working towards
+								sustainable villages and a stronger rural India.
+							</span>
+						</div>
+					</div>
 				</div>
 			</div>
+
+			{/* Styles: marquee + bg pans + reduced motion */}
+			<style jsx>{`
+				/* Marquee container ensures the inner track is at least viewport-wide */
+				.marquee-outer {
+					width: 100%;
+				}
+				.marquee-inner {
+					display: inline-flex;
+					min-width: 200%;
+					white-space: nowrap;
+					will-change: transform;
+					animation: marquee 14s linear infinite;
+				}
+				.marquee-copy {
+					display: inline-block;
+					font-weight: 600;
+					font-size: 0.9rem;
+					line-height: 1.5;
+					color: #0b1324;
+					padding-right: 3rem;
+				}
+				@media (min-width: 640px) {
+					.marquee-copy {
+						font-size: 1rem;
+						padding-right: 4rem;
+					}
+				}
+				@keyframes marquee {
+					0% {
+						transform: translateX(0);
+					}
+					100% {
+						transform: translateX(-50%);
+					}
+				}
+
+				/* Background subtle motions for the carousel card */
+				@keyframes panLeft {
+					0% {
+						transform: translateX(0);
+					}
+					100% {
+						transform: translateX(-25%);
+					}
+				}
+				@keyframes panRight {
+					0% {
+						transform: translateX(-25%);
+					}
+					100% {
+						transform: translateX(0);
+					}
+				}
+
+				/* Respect reduced motion */
+				@media (prefers-reduced-motion: reduce) {
+					.marquee-inner {
+						animation: none;
+						transform: translateX(0);
+					}
+				}
+			`}</style>
 		</section>
 	);
 }
@@ -79,7 +156,7 @@ function SingleCarousel({
 	const current = useMemo(() => items[index], [items, index]);
 
 	const variants = {
-		initial: { opacity: 0, x: 12, y: 8, scale: 0.98 },
+		initial: { opacity: 0, x: 10, y: 6, scale: 0.985 },
 		animate: {
 			opacity: 1,
 			x: 0,
@@ -89,18 +166,17 @@ function SingleCarousel({
 		},
 		exit: {
 			opacity: 0,
-			x: -12,
-			y: -8,
-			scale: 0.98,
+			x: -10,
+			y: -6,
+			scale: 0.985,
 			transition: { duration: 0.25, ease: easeInOut },
 		},
 	};
 
 	return (
 		<div className="relative">
-			{/* Layered animated backgrounds (subtle parallax) */}
-			<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-3xl">
-				{/* Soft angled glow band (moves left) */}
+			{/* Layered animated backgrounds */}
+			<div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-2xl sm:rounded-3xl">
 				<div
 					className="absolute -inset-x-1/2 top-0 h-[160%] rotate-6 opacity-30"
 					style={{
@@ -109,7 +185,6 @@ function SingleCarousel({
 						animation: "panLeft 18s linear infinite",
 					}}
 				/>
-				{/* Radial green pulses (moves right) */}
 				<div
 					className="absolute -inset-y-1/2 left-0 w-[180%] opacity-25"
 					style={{
@@ -118,7 +193,6 @@ function SingleCarousel({
 						animation: "panRight 22s linear infinite",
 					}}
 				/>
-				{/* Fine white stripes (very subtle, moves left slower) */}
 				<div
 					className="absolute inset-0 opacity-[0.15]"
 					style={{
@@ -129,7 +203,7 @@ function SingleCarousel({
 				/>
 			</div>
 
-			<div className="rounded-3xl [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
+			<div className="rounded-2xl sm:rounded-3xl [mask-image:linear-gradient(to_bottom,transparent,black_8%,black_92%,transparent)]">
 				<AnimatePresence mode="wait" initial={false}>
 					{current && (
 						<motion.div
@@ -138,14 +212,16 @@ function SingleCarousel({
 							initial="initial"
 							animate="animate"
 							exit="exit">
-							<div className="rounded-2xl border border-zinc-200 bg-white/90 p-6 shadow-sm backdrop-blur text-left">
-								<div className="mb-3 flex items-center gap-3">
-									<current.icon className="h-6 w-6 text-[#138808]" />
-									<h3 className="text-lg font-semibold text-zinc-900">
+							<div className="rounded-2xl border border-zinc-200 bg-white/90 p-4 sm:p-6 shadow-sm backdrop-blur text-left">
+								<div className="mb-2 sm:mb-3 flex items-center gap-3">
+									<current.icon className="h-5 w-5 sm:h-6 sm:w-6 text-[#138808]" />
+									<h3 className="text-base sm:text-lg font-semibold text-zinc-900">
 										{current.title}
 									</h3>
 								</div>
-								<p className="text-sm text-zinc-600">{current.description}</p>
+								<p className="text-[13.5px] sm:text-sm md:text-base text-zinc-600">
+									{current.description}
+								</p>
 							</div>
 						</motion.div>
 					)}
@@ -182,6 +258,6 @@ const CAROUSEL_ITEMS: Item[] = [
 	{
 		icon: FaHandsHelping,
 		title: "Community Health",
-		description: "Sanitation, nutrition, and healthcare awareness initiatives.",
+		description: "Providing quality health care services.",
 	},
 ];
