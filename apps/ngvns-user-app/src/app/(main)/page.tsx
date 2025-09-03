@@ -15,12 +15,14 @@ import News from "../../components/home/News";
 import Achievements from "../../components/home/Achievements";
 import LiveStockEnergy from "../../components/home/LiveStockEnergy";
 import Intro from "../../components/home/Intro";
+import WhatWeDo from "../../components/home/WhatWeDo";
 
 function page() {
 	return (
 		<>
 			<Hero />
 			<Intro />
+			<WhatWeDo />
 			<News />
 			<LiveStockEnergy />
 			<Programs />

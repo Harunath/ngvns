@@ -105,7 +105,7 @@ export default function Footer() {
 						Contact Us
 					</h3>
 					<p className="text-sm text-gray-300 mb-4 leading-relaxed">
-						Email: contact@vrkisanparivaar.com
+						Email: support@vrkisanparivaar.com
 						<br />
 						Phone: +91 9515934289
 					</p>
