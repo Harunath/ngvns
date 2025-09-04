@@ -13,13 +13,51 @@ import {
 
 export default function Hero() {
 	return (
-		<section className="relative min-h-[100svh] w-full bg-linear-to-b/hsl from-orange-300 from-[25%] via-white via-50% to-green-400 to-75% flex items-center">
+		<section className="relative min-h-[calc(100vh-48px)] md:min-h-[calc(100vh-64px)] w-full bg-linear-to-b/hsl from-orange-300 from-[25%] via-white via-50% to-green-400 to-75% flex items-center">
 			<div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-10 flex flex-col items-center text-center">
+				{/* Scrolling line (no background) – responsive & seamless */}
+				<div className="w-full overflow-hidden mb-4 sm:mb-6">
+					<div className="w-full">
+						<div className="inline-flex min-w-[200%] whitespace-nowrap will-change-transform animate-marquee motion-reduce:animate-none">
+							<span className="inline-block font-semibold text-sm sm:text-base leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-gray-800 to-green-500 bg-clip-text text-transparent">
+								Be a part of the VR Kisan Parivaar Movement working towards
+								sustainable villages and a stronger rural India.
+							</span>
+							<span
+								aria-hidden
+								className="inline-block font-semibold text-sm sm:text-base leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-gray-800 to-green-500 bg-clip-text text-transparent">
+								Be a part of the VR Kisan Parivaar Movement working towards
+								sustainable villages and a stronger rural India.
+							</span>
+						</div>
+					</div>
+
+					<style jsx>{`
+						@keyframes marquee {
+							0% {
+								transform: translateX(0);
+							}
+							100% {
+								transform: translateX(-50%);
+							}
+						}
+						.animate-marquee {
+							animation: marquee 14s linear infinite;
+						}
+						@media (prefers-reduced-motion: reduce) {
+							.animate-marquee {
+								animation: none;
+								transform: translateX(0);
+							}
+						}
+					`}</style>
+				</div>
+
 				<h1 className="mb-1 sm:mb-2 text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#963132] uppercase tracking-widest">
 					VR KISAN PARIVAAR
 				</h1>
 
-				<h4 className="mb-2 sm:mb-3 text-2xl sm:text-3xl md:text-4xl font-semibold text-[#001f3f] leading-tight tracking-tight">
+				<h4 className="mb-2 sm:mb-3 text-2xl sm:text-3xl md:text-4xl font-semibold text-green-800 leading-tight tracking-tight">
 					Building Sustainable Futures for Rural India
 				</h4>
 
@@ -28,6 +66,11 @@ export default function Hero() {
 					women-led initiatives, and rural employment. Together, we shape a
 					self-reliant and green Bharat.
 				</p>
+
+				{/* Carousel */}
+				<div className="w-full max-w-3xl mb-2 sm:mb-3">
+					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={3000} />
+				</div>
 
 				<div className="mb-6 sm:mb-8 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:gap-4">
 					<Link href="/join" className="w-full sm:w-auto">
@@ -41,91 +84,7 @@ export default function Hero() {
 						</button>
 					</Link>
 				</div>
-
-				{/* Carousel */}
-				<div className="w-full max-w-3xl mb-2 sm:mb-3">
-					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={3000} />
-				</div>
-
-				{/* Scrolling line (no background) – responsive & seamless */}
-				<div className="w-full overflow-hidden mt-4 sm:mt-6">
-					<div className="marquee-outer">
-						<div className="marquee-inner">
-							<span className="marquee-copy">
-								Be a part of the VR Kisan Parivaar Movement working towards
-								sustainable villages and a stronger rural India.
-							</span>
-							<span aria-hidden className="marquee-copy">
-								Be a part of the VR Kisan Parivaar Movement working towards
-								sustainable villages and a stronger rural India.
-							</span>
-						</div>
-					</div>
-				</div>
 			</div>
-
-			{/* Styles: marquee + bg pans + reduced motion */}
-			<style jsx>{`
-				/* Marquee container ensures the inner track is at least viewport-wide */
-				.marquee-outer {
-					width: 100%;
-				}
-				.marquee-inner {
-					display: inline-flex;
-					min-width: 200%;
-					white-space: nowrap;
-					will-change: transform;
-					animation: marquee 14s linear infinite;
-				}
-				.marquee-copy {
-					display: inline-block;
-					font-weight: 600;
-					font-size: 0.9rem;
-					line-height: 1.5;
-					color: #0b1324;
-					padding-right: 3rem;
-				}
-				@media (min-width: 640px) {
-					.marquee-copy {
-						font-size: 1rem;
-						padding-right: 4rem;
-					}
-				}
-				@keyframes marquee {
-					0% {
-						transform: translateX(0);
-					}
-					100% {
-						transform: translateX(-50%);
-					}
-				}
-
-				/* Background subtle motions for the carousel card */
-				@keyframes panLeft {
-					0% {
-						transform: translateX(0);
-					}
-					100% {
-						transform: translateX(-25%);
-					}
-				}
-				@keyframes panRight {
-					0% {
-						transform: translateX(-25%);
-					}
-					100% {
-						transform: translateX(0);
-					}
-				}
-
-				/* Respect reduced motion */
-				@media (prefers-reduced-motion: reduce) {
-					.marquee-inner {
-						animation: none;
-						transform: translateX(0);
-					}
-				}
-			`}</style>
 		</section>
 	);
 }

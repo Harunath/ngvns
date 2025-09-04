@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 // components/TandC.tsx
 import React, { useState } from "react";
 import toast from "react-hot-toast";
@@ -18,7 +19,10 @@ const TandC = () => {
 	const [accepted, setAccepted] = useState(false);
 	const [showTerms, setShowTerms] = useState(false);
 
+	const router = useRouter();
+
 	const handleContinue = () => {
+		router.push("/join/payment");
 		if (accepted) toast.success("You accepted the Terms & Conditions");
 	};
 

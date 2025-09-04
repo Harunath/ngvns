@@ -113,7 +113,7 @@ export default function Page() {
 
 							{/* Replace the Link href with your payment initiation route when ready */}
 							<Link
-								href="/join/payment"
+								href="/register"
 								className="block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 px-5 py-3 text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-95 active:opacity-90"
 								aria-disabled="true"
 								// onClick={(e) => e.preventDefault()}

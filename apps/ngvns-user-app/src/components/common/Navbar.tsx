@@ -27,15 +27,15 @@ export default function Navbar() {
 
 	return (
 		<header className="bg-transparent text-black sticky top-0 z-50 backdrop-blur-md backdrop-saturate-150 shadow-lg">
-			<div className="w-full px-4 md:px-8 h-24 flex items-center justify-between">
+			<div className="w-full px-4 md:px-8 h-16 md:h-20 flex items-center justify-between">
 				{/* Logo */}
 				<Link href="/" className="flex items-center ml-4 md:ml-8">
 					<Image
-						src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756539882/vr_kp-6_cwoyjy.png"
+						src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756982391/vrKP-4_no_bg_jndjxt.png"
 						alt="VR KP Logo"
 						width={180}
-						height={50}
-						className="h-20 w-auto object-contain"
+						height={60}
+						className="h-12 md:h-16 w-auto object-contain"
 						priority
 					/>
 				</Link>
