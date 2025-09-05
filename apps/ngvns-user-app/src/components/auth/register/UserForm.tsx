@@ -95,6 +95,10 @@ function UserForm() {
 							Check
 						</button>
 					</div>
+					<p className=" text-sm italic">
+						for testing use code :{" "}
+						<span className="text-blue-500">VALID123</span>
+					</p>
 					{errors.referralId && (
 						<p className="text-red-500 text-sm">{errors.referralId.message}</p>
 					)}
