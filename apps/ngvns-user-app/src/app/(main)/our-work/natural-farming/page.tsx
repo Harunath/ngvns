@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-	title: "Natural Farming – Nava Grameen",
+	title: "Natural Farming – VR KISAN PARIVAAR",
 	description: "Farming in harmony with the environment",
 };
 

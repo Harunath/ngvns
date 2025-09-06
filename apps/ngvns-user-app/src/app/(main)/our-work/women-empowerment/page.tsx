@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-	title: "Women Empowerment | Nava Grameen",
+	title: "Women Empowerment | VR KISAN PARIVAAR",
 	description:
 		"Empowering rural women through SHGs, microfinance, leadership training, and enterprise development for sustainable community growth.",
 };

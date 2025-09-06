@@ -2,7 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Green Energy | Nava Grameen",
+	title: "Green Energy | VR KISAN PARIVAAR",
 	description: "Clean, renewable power for a cleaner village life.",
 };
 

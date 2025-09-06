@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-	title: "Livestock Management | Nava Grameen",
+	title: "Livestock Management | VR KISAN PARIVAAR",
 	description:
 		"Supporting rural farmers with veterinary care, training, and better infrastructure for dairy, poultry, and goat rearing.",
 };

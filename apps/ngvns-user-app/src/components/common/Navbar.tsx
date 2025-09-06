@@ -53,7 +53,7 @@ export default function Navbar() {
 
 				{/* Nav Links */}
 				<nav
-					className={`absolute md:static top-24 left-0 w-full md:w-auto px-6 md:px-0 py-4 md:py-0 md:flex items-center gap-6 text-md font-normal ${
+					className={`absolute md:static top-16 left-0 w-full md:w-auto px-6 md:px-0 py-4 md:py-0 md:flex items-center gap-6 text-md  font-semibold ${
 						isOpen ? "block bg-white text-black" : "hidden md:block"
 					}`}>
 					<Link href="/" className="block py-2 md:py-0 hover:text-orange-500">

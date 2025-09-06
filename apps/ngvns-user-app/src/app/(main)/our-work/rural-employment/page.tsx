@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-	title: "Rural Employment | Nava Grameen",
+	title: "Rural Employment | VR KISAN PARIVAAR",
 	description:
 		"Creating jobs and sustainable incomes through skill development, business support, and market linkages.",
 };
@@ -15,7 +15,7 @@ export default function RuralEmploymentPage() {
 						Rural Employment
 					</h1>
 					<p className="text-lg mb-4">
-						At Nava Grameen, we believe that strong villages are built on
+						At VR KISAN PARIVAAR, we believe that strong villages are built on
 						thriving local economies. Our Rural Employment initiatives aim to
 						unlock the potential of rural communities by creating dignified,
 						sustainable livelihood opportunities for all.

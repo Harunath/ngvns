@@ -19,13 +19,13 @@ export default function Hero() {
 				<div className="w-full overflow-hidden mb-4 sm:mb-6">
 					<div className="w-full">
 						<div className="inline-flex min-w-[200%] whitespace-nowrap will-change-transform animate-marquee motion-reduce:animate-none">
-							<span className="inline-block font-semibold text-sm sm:text-base leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
+							<span className="inline-block font-semibold text-xl sm:text-2xl leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
 								Be a part of the VR Kisan Parivaar Movement working towards
 								sustainable villages and a stronger rural India.
 							</span>
 							<span
 								aria-hidden
-								className="inline-block font-semibold text-sm sm:text-base leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
+								className="inline-block font-semibold text-xl sm:text-2xl leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
 								Be a part of the VR Kisan Parivaar Movement working towards
 								sustainable villages and a stronger rural India.
 							</span>
@@ -69,7 +69,7 @@ export default function Hero() {
 
 				{/* Carousel */}
 				<div className="w-full max-w-3xl mb-2 sm:mb-3">
-					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={3000} />
+					<SingleCarousel items={CAROUSEL_ITEMS} intervalMs={10000} />
 				</div>
 
 				<div className="mb-6 sm:mb-8 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:gap-4">

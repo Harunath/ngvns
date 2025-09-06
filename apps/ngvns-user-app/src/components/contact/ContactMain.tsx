@@ -28,7 +28,7 @@ const ContactMain = () => {
 					<hr className="border-t border-orange-500 mb-6" />
 
 					{/* Address */}
-					<div className="flex items-start gap-4 mb-6">
+					{/* <div className="flex items-start gap-4 mb-6">
 						<FaMapMarkerAlt className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Address</h4>
@@ -37,7 +37,7 @@ const ContactMain = () => {
 								Hyderabad, Telangana – 500082
 							</p>
 						</div>
-					</div>
+					</div> */}
 
 					{/* Phone */}
 					{/* <div className="flex items-center gap-4 mb-4">

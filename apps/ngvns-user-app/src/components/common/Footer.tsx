@@ -17,7 +17,7 @@ export default function Footer() {
 				<div>
 					<div className="mb-4">
 						<Image
-							src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756539882/vr_kp-6_cwoyjy.png"
+							src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1756982391/vrKP-4_no_bg_jndjxt.png"
 							alt="VR KP Logo"
 							width={180}
 							height={50}

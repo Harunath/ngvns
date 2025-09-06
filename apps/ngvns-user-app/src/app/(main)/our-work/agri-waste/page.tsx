@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const metadata = {
-	title: "Agri-Waste Management | Nava Grameen",
+	title: "Agri-Waste Management | VR KISAN PARIVAAR",
 	description:
 		"Transforming agricultural waste into wealth through composting, biogas, and eco-friendly residue products in rural India.",
 };

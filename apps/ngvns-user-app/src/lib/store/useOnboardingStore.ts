@@ -1,6 +1,6 @@
 // stores/useOnboardingStore.ts
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+// import { persist } from "zustand/middleware";
 
 type OnboardingData = {
 	referralId: string;
@@ -26,14 +26,14 @@ type OnboardingStore = {
 };
 
 export const useOnboardingStore = create<OnboardingStore>()(
-	persist(
-		(set) => ({
-			data: null,
-			setData: (data) => set({ data }),
-			clearData: () => set({ data: null }),
-		}),
-		{
-			name: "onboarding-data", // key in localStorage
-		}
-	)
+	// persist(
+	(set) => ({
+		data: null,
+		setData: (data) => set({ data }),
+		clearData: () => set({ data: null }),
+	})
+	// {
+	// 	name: "onboarding-data", // key in localStorage
+	// }
+	// )
 );
