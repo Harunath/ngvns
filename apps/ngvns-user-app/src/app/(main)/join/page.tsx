@@ -1,172 +1,210 @@
-import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 
-export default function Page() {
+const COLORS = {
+	saffron: "#FF671F",
+	green: "#046A38",
+	navy: "#0A1F44", // not pure black to avoid gray→black issues on some browsers
+};
+
+export const metadata: Metadata = {
+	title: "Membership Benefits | NGVNS",
+	description:
+		"See what you get with NGVNS membership: land allotment, health coverage, personal accident insurance, and savings on essentials.",
+};
+
+const BENEFITS = [
+	{
+		title: "2 Sq. Yards Land Allotment",
+		desc: "Eligible members receive an allocation of 2 square yards as per program rules.",
+		accent: "land",
+	},
+	{
+		title: "Health Card for 3 Years",
+		desc: "Access partnered healthcare benefits with a 3-year health card.",
+		accent: "health",
+	},
+	{
+		title: "₹5 Lakhs Personal Accidental Insurance (5 Years)",
+		desc: "Coverage up to ₹5,00,000 for accidental events for 5 years, subject to policy terms.",
+		accent: "insurance",
+	},
+	{
+		title: "Discounted Provisions & Cashback Offers",
+		desc: "Save on essentials via partnered provision stores and periodic cashback programs.",
+		accent: "savings",
+	},
+] as const;
+
+function AccentIcon({ kind }: { kind: (typeof BENEFITS)[number]["accent"] }) {
+	// simple inline SVGs (no libraries)
+	const common = "h-5 w-5";
+	switch (kind) {
+		case "land":
+			return (
+				<svg viewBox="0 0 24 24" className={common} aria-hidden>
+					<path
+						fill="currentColor"
+						d="M3 5h18v4H3zM3 11h18v8H3zM7 13h2v4H7zM11 13h2v4h-2zM15 13h2v4h-2z"
+					/>
+				</svg>
+			);
+		case "health":
+			return (
+				<svg viewBox="0 0 24 24" className={common} aria-hidden>
+					<path
+						fill="currentColor"
+						d="M12 21s-7-4.35-7-10a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.65-7 10-7 10s-2-.99-4-2.5"
+					/>
+					<path fill="currentColor" d="M11 8h2v2h2v2h-2v2h-2v-2H9v-2h2z" />
+				</svg>
+			);
+		case "insurance":
+			return (
+				<svg viewBox="0 0 24 24" className={common} aria-hidden>
+					<path
+						fill="currentColor"
+						d="M12 2l7 3v6c0 5-3.8 9.7-7 11-3.2-1.3-7-6-7-11V5l7-3z"
+					/>
+					<path fill="#fff" d="M11 7h2v3h3v2h-3v3h-2v-3H8v-2h3z" />
+				</svg>
+			);
+		case "savings":
+			return (
+				<svg viewBox="0 0 24 24" className={common} aria-hidden>
+					<path
+						fill="currentColor"
+						d="M20 7H4a2 2 0 0 0-2 2v6h2a4 4 0 0 0 8 0h2a4 4 0 0 0 8 0h2V9a2 2 0 0 0-2-2zM8 17a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm10 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zM6 9h12V7H6z"
+					/>
+				</svg>
+			);
+	}
+}
+
+export default async function BenefitsPage() {
 	return (
-		<main className="min-h-[100dvh] bg-neutral-950 text-white">
-			{/* background glow */}
+		<div className="bg-white">
+			{/* tricolor hairline */}
 			<div
-				aria-hidden
-				className="pointer-events-none absolute inset-0 -z-10"
+				className="h-1 w-full"
 				style={{
-					background: `
-            radial-gradient(800px 500px at 20% 10%, rgba(34,197,94,0.25), transparent 70%),
-            radial-gradient(900px 600px at 80% 90%, rgba(59,130,246,0.25), transparent 70%)
-          `,
-					filter: "blur(60px)",
+					background: `linear-gradient(90deg, ${COLORS.saffron}, white 50%, ${COLORS.green})`,
 				}}
 			/>
 
-			<header className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-3">
-						<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-blue-600 font-bold">
-							<span>VR</span>
-						</div>
-						<div>
-							<p className="text-xs uppercase tracking-widest text-emerald-300">
-								VR KISAN PARIVAAR
-							</p>
-							<h1 className="text-lg font-semibold tracking-tight">
-								Membership Checkout
-							</h1>
-						</div>
-					</div>
-
-					<p className="hidden text-sm text-white/70 sm:block">
-						Secure &amp; encrypted checkout
-					</p>
-				</div>
-			</header>
-
-			<section className="mx-auto w-full max-w-6xl px-4 pb-16 sm:px-6 lg:px-8">
-				<div className="grid gap-6 lg:grid-cols-3">
-					{/* Summary / Plan */}
-					<div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.04)_inset] lg:col-span-2">
-						<h2 className="mb-4 text-xl font-semibold tracking-tight">
-							VR KISAN PARIVAAR Membership Summary
-						</h2>
-
-						<div className="mb-6 grid gap-4 sm:grid-cols-2">
-							<div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-								<p className="text-sm text-white/70">Amount</p>
-								<p className="mt-1 text-3xl font-bold">
-									₹ 4,999
-									<span className="ml-2 align-middle text-sm font-medium text-white/60">
-										(+ GST)
-									</span>
-								</p>
-							</div>
-
-							<div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-								<p className="text-sm text-white/70">Plan</p>
-								<p className="mt-1 text-lg font-semibold">VR KISAN PARIVAAR</p>
-								<p className="mt-1 text-sm text-white/70">One-time payment</p>
-							</div>
-						</div>
-
-						<div className="rounded-xl border border-white/10 bg-white/[0.02] p-5">
-							<p className="mb-3 text-sm font-semibold uppercase tracking-wider text-white/70">
-								What you get
-							</p>
-							<ul className="grid gap-2 sm:grid-cols-2">
-								<li className="flex items-start gap-2">
-									<span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-									<span className="text-sm text-white/90">
-										Member-only updates &amp; early access to programs
-									</span>
-								</li>
-								<li className="flex items-start gap-2">
-									<span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-									<span className="text-sm text-white/90">
-										Event invitations &amp; community networking
-									</span>
-								</li>
-								<li className="flex items-start gap-2">
-									<span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-									<span className="text-sm text-white/90">
-										Exclusive resources &amp; guidance
-									</span>
-								</li>
-								<li className="flex items-start gap-2">
-									<span className="mt-1 inline-block h-2 w-2 rounded-full bg-emerald-400" />
-									<span className="text-sm text-white/90">
-										Priority support for members
-									</span>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					{/* CTA / Next Step */}
-					<aside className="rounded-2xl border border-white/10 bg-white/[0.05] p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]">
-						<h3 className="text-lg font-semibold tracking-tight">Next step</h3>
-						<p className="mt-1 text-sm text-white/70">
-							Review the amount and proceed to the payment gateway.
-						</p>
-
-						<div className="mt-6 space-y-3">
-							<div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
-								<span className="text-sm text-white/70">Total</span>
-								<span className="text-xl font-bold">₹ 4,999 + GST</span>
-							</div>
-
-							{/* Replace the Link href with your payment initiation route when ready */}
+			<main className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-10">
+				{/* Breadcrumb */}
+				<nav aria-label="Breadcrumb" className="mb-6">
+					<ol className="flex items-center gap-2 text-sm text-neutral-600">
+						<li>
 							<Link
-								href="/register"
-								className="block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 px-5 py-3 text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-95 active:opacity-90"
-								aria-disabled="true"
-								// onClick={(e) => e.preventDefault()}
-								title="Wire this to your gateway route when ready">
-								Proceed to Payment
+								href="/"
+								className="hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-300 rounded">
+								Home
 							</Link>
+						</li>
+						<li aria-hidden="true">/</li>
+						<li>
+							<Link
+								href="/join"
+								className="hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-300 rounded">
+								Join
+							</Link>
+						</li>
+						<li aria-hidden="true">/</li>
+						<li className="text-neutral-700">Membership Benefits</li>
+					</ol>
+				</nav>
 
-							<p className="text-xs leading-5 text-white/60">
-								By continuing, you agree to our{" "}
-								<Link
-									href="/legals/terms-and-conditions"
-									className="underline decoration-white/30 underline-offset-2">
-									Terms
-								</Link>{" "}
-								and{" "}
-								<Link
-									href="/legals/privacy-policy"
-									className="underline decoration-white/30 underline-offset-2">
-									Privacy Policy
-								</Link>
-								.
-							</p>
-						</div>
+				<header className="mb-8">
+					<h1
+						className="text-3xl sm:text-4xl font-semibold tracking-tight"
+						style={{ color: COLORS.navy }}>
+						Membership Benefits
+					</h1>
+					<div
+						className="mt-3 h-1 w-28 rounded"
+						style={{
+							background: `linear-gradient(90deg, ${COLORS.saffron}, ${COLORS.saffron} 33%, #E5E7EB 33%, #E5E7EB 66%, ${COLORS.green} 66%)`,
+						}}
+						aria-hidden
+					/>
+					<p className="mt-4 max-w-2xl text-neutral-700">
+						Your membership includes long-term value across land, health,
+						insurance, and daily savings. Review the benefits below, then
+						continue to registration.
+					</p>
+				</header>
 
-						<div className="mt-6 rounded-xl border border-white/10 bg-white/[0.03] p-4">
-							<p className="text-xs text-white/70">
-								Need help? Email{" "}
-								<a
-									href="mailto:support@vrkisanparivaar.com"
-									className="font-medium text-white underline decoration-white/30 underline-offset-2">
-									support@vrkisanparivaar.com
-								</a>
-							</p>
-							<p className="mt-2 text-[11px] text-white/50">
-								Payments are processed by a secure PCI-DSS compliant provider.
-							</p>
-						</div>
-					</aside>
+				{/* Benefits Grid */}
+				<section aria-labelledby="benefits" className="mb-10">
+					<h2 id="benefits" className="sr-only">
+						Benefits list
+					</h2>
+					<ul className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+						{BENEFITS.map((b, idx) => (
+							<li
+								key={b.title}
+								className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm hover:shadow-md transition">
+								<div className="flex items-start gap-3">
+									<span
+										className="inline-flex h-9 w-9 items-center justify-center rounded-full text-white shrink-0"
+										style={{
+											background: idx % 2 === 0 ? COLORS.saffron : COLORS.green,
+										}}
+										aria-hidden>
+										<AccentIcon kind={b.accent} />
+									</span>
+									<div>
+										<h3 className="text-lg font-semibold text-neutral-900">
+											{b.title}
+										</h3>
+										<p className="mt-1 text-sm leading-6 text-neutral-700">
+											{b.desc}
+										</p>
+									</div>
+								</div>
+							</li>
+						))}
+					</ul>
+				</section>
+
+				{/* Notes / disclaimers (optional) */}
+				<section aria-label="Notes" className="mb-12">
+					<div className="rounded-xl border border-neutral-200 bg-white p-4">
+						<p className="text-sm text-neutral-700">
+							<strong>Note:</strong> Benefits are provided as per applicable
+							program policies and eligibility. Detailed terms, verification,
+							and onboarding steps will be shown during registration.
+						</p>
+					</div>
+				</section>
+
+				{/* CTA */}
+				<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+					<Link
+						href="/join"
+						className="inline-flex items-center justify-center rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-300">
+						Back
+					</Link>
+					<Link
+						href="/register"
+						className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white"
+						style={{
+							background: `linear-gradient(90deg, ${COLORS.saffron}, ${COLORS.green})`,
+						}}>
+						Continue to Registration
+					</Link>
 				</div>
+			</main>
 
-				{/* Trust row */}
-				<div className="mx-auto mt-10 grid max-w-6xl gap-3 sm:grid-cols-3">
-					<div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/80">
-						256-bit SSL Encryption
-					</div>
-					<div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/80">
-						No hidden fees
-					</div>
-					<div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-center text-sm text-white/80">
-						Instant confirmation
-					</div>
-				</div>
-			</section>
-		</main>
+			{/* bottom tricolor hairline */}
+			<div
+				className="h-1 w-full mt-10"
+				style={{
+					background: `linear-gradient(90deg, ${COLORS.green}, white 50%, ${COLORS.saffron})`,
+				}}
+			/>
+		</div>
 	);
 }
