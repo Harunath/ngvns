@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Page() {
 	return (
-		<main className="min-h-screen bg-white text-gray-800 px-4 py-12 md:px-12">
+		<main className="min-h-screen bg-white text-slate-800 px-4 py-12 md:px-12">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 				{/* Left Content */}
 				<div>
@@ -15,14 +15,14 @@ export default function Page() {
 					<h2 className="text-2xl font-semibold text-orange-600 mb-4">
 						Self-Sustainable Villages
 					</h2>
-					<p className="text-lg mb-6 text-gray-700 leading-relaxed">
+					<p className="text-lg mb-6 text-slate-700 leading-relaxed">
 						We believe that real development begins when villages take charge of
 						their own growth. Through empowerment, innovation, and sustainable
 						practices, we&apos;re transforming rural communities into thriving,
 						self-reliant ecosystems.
 					</p>
 
-					<ul className="list-disc list-inside space-y-2 text-gray-700 font-medium">
+					<ul className="list-disc list-inside space-y-2 text-slate-700 font-medium">
 						<li>
 							<strong>Community Planning & Leadership:</strong> Training
 							villagers to identify, manage, and execute local development.

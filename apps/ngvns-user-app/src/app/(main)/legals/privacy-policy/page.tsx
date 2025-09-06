@@ -4,7 +4,7 @@ export default function PrivacyPolicy() {
 	return (
 		<section className="max-w-5xl mx-auto px-6 py-16">
 			<h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
-			<p className="text-gray-600 mb-4">Effective Date: September 01, 2025</p>
+			<p className="text-slate-600 mb-4">Effective Date: September 01, 2025</p>
 
 			<p className="mb-6">
 				VR Kisan Parivaar ("us", "we", or "our") operates the{" "}

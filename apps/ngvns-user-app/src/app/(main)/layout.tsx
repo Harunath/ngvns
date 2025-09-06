@@ -7,7 +7,7 @@ export default function Layout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<div className=" bg-gray-200">
+		<div className=" bg-slate-300">
 			<Navbar />
 			{children}
 			<Footer />

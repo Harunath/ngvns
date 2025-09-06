@@ -37,7 +37,7 @@
 // 	return (
 // 		<section className="bg-slate-100 py-16 px-6 md:px-12 lg:px-24">
 // 			<div className="max-w-5xl mx-auto">
-// 				<h2 className="text-3xl md:text-4xl font-bold text-[#1a1a1a] mb-3 border-b-2 border-gray-300 pb-2">
+// 				<h2 className="text-3xl md:text-4xl font-bold text-[#1a1a1a] mb-3 border-b-2 border-slate-300 pb-2">
 // 					Welcome to{" "}
 // 					<span className="text-[#ff6600]">
 // 					VR Kisan Parivaar
@@ -49,7 +49,7 @@
 // 					Livelihoods
 // 				</p>
 
-// 				<p className="text-gray-800 text-[17px] mb-10 leading-relaxed">
+// 				<p className="text-slate-800 text-[17px] mb-10 leading-relaxed">
 // 					VR Kisan Parivaar is a rural development organization
 // 					dedicated to empowering villages through sustainable practices and
 // 					community-driven progress.
@@ -60,7 +60,7 @@
 // 						Our Focus Areas
 // 					</h3>
 
-// 					<ul className="space-y-4 text-gray-800 text-[16px]">
+// 					<ul className="space-y-4 text-slate-800 text-[16px]">
 // 						{focusItems.map((item, index) => (
 // 							<li
 // 								key={index}
@@ -133,9 +133,7 @@ const Intro = () => {
 				{/* Heading */}
 				<h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-zinc-900">
 					🌾 Welcome to{" "}
-					<span className="text-orange-600 ">
-						VR Kisan Parivaar
-					</span>
+					<span className="text-orange-600 ">VR Kisan Parivaar</span>
 				</h2>
 
 				{/* Lead copy */}

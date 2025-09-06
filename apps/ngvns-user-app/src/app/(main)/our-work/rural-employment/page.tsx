@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function RuralEmploymentPage() {
 	return (
-		<section className="min-h-screen bg-white text-gray-800 py-16 px-6 md:px-16">
+		<section className="min-h-screen bg-white text-slate-800 py-16 px-6 md:px-16">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
 				<div>
 					<h1 className="text-4xl font-bold text-black mb-6">

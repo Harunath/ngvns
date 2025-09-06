@@ -25,7 +25,7 @@ export default function Footer() {
 							priority
 						/>
 					</div>
-					<p className="text-sm text-gray-300 leading-relaxed">
+					<p className="text-sm text-slate-300 leading-relaxed">
 						Empowering rural India through sustainability, innovation, and
 						inclusion. Together, we build self-reliant villages for a better
 						tomorrow.
@@ -60,7 +60,7 @@ export default function Footer() {
 					<h3 className="text-md font-semibold text-[#FF9933] mb-3">
 						Our Work
 					</h3>
-					<ul className="space-y-2 text-sm text-gray-300">
+					<ul className="space-y-2 text-sm text-slate-300">
 						<li>
 							<Link
 								href="/our-work/self-sustainable-villages"
@@ -104,7 +104,7 @@ export default function Footer() {
 					<h3 className="text-md font-semibold text-[#FF9933] mb-3">
 						Contact Us
 					</h3>
-					{/* <p className="text-sm text-gray-300 mb-4 leading-relaxed">
+					{/* <p className="text-sm text-slate-300 mb-4 leading-relaxed">
 						Email: support@vrkisanparivaar.com
 						<br />
 						Phone: +91 9515934289
@@ -134,7 +134,7 @@ export default function Footer() {
 			</div>
 
 			{/* Bottom Bar */}
-			<div className="border-t border-gray-700 py-4 text-center text-xs text-gray-400 px-4 space-y-2">
+			<div className="border-t border-slate-700 py-4 text-center text-xs text-slate-400 px-4 space-y-2">
 				<div>
 					&copy; {new Date().getFullYear()} VR KISAN PARIVAAR. All rights
 					reserved.

@@ -20,10 +20,10 @@
 // 	return (
 // 		<section className="px-6 py-16 bg-slate-100">
 // 			<div className="max-w-3xl mx-auto">
-// 				<h1 className="text-3xl font-bold text-gray-800 text-center mb-6">
+// 				<h1 className="text-3xl font-bold text-slate-800 text-center mb-6">
 // 					Government Initiatives Blog
 // 				</h1>
-// 				<p className="text-gray-600 text-base text-center mb-12">
+// 				<p className="text-slate-600 text-base text-center mb-12">
 // 					Empowering Rural India through Policy, Progress, and Innovation.
 // 					Explore how government-backed schemes are transforming villages and
 // 					farming communities.
@@ -61,11 +61,11 @@
 // 									</span>
 // 								</div>
 
-// 								<h2 className="text-xl font-semibold text-gray-800 mb-2">
+// 								<h2 className="text-xl font-semibold text-slate-800 mb-2">
 // 									{post.title}
 // 								</h2>
 
-// 								<p className="text-sm text-gray-600 mb-4">{post.description}</p>
+// 								<p className="text-sm text-slate-600 mb-4">{post.description}</p>
 
 // 								<div className="flex flex-wrap gap-2 text-xs text-blue-600 font-medium">
 // 									{hashtags.map((tag, idx) => (

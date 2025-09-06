@@ -24,14 +24,14 @@ const PageHero: React.FC<PageHeroProps> = ({
 				<nav className="text-sm text-white mb-3">
 					<span className="text-orange-500 font-medium">{breadcrumb}</span>
 					&nbsp;&gt;&nbsp;
-					<span className="text-gray-300 font-medium">{title}</span>
+					<span className="text-slate-300 font-medium">{title}</span>
 				</nav>
 				<h1 className="text-4xl md:text-5xl font-extrabold mb-2">
 					<span className="text-orange-500">{title.charAt(0)}</span>
 					{title.slice(1)}
 				</h1>
 				{subtitle && (
-					<p className="text-lg md:text-xl font-light text-gray-200 max-w-3xl mx-auto">
+					<p className="text-lg md:text-xl font-light text-slate-200 max-w-3xl mx-auto">
 						{subtitle}
 					</p>
 				)}

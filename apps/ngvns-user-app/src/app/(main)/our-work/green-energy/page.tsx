@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function GreenEnergyPage() {
 	return (
-		<section className="min-h-screen px-6 py-16 bg-white text-gray-800">
+		<section className="min-h-screen px-6 py-16 bg-white text-slate-800">
 			<h1 className="text-4xl font-bold text-black mb-6 text-center">
 				Green Energy
 			</h1>
@@ -20,7 +20,7 @@ export default function GreenEnergyPage() {
 			</p>
 
 			<div className="grid gap-8 max-w-5xl mx-auto md:grid-cols-2">
-				<div className="bg-gray-100 p-6 rounded-md shadow">
+				<div className="bg-slate-100 p-6 rounded-md shadow">
 					<h3 className="text-xl font-semibold mb-2">🌞 Solar Solutions</h3>
 					<p>
 						Installation of solar lights, water pumps, and microgrids to power
@@ -28,7 +28,7 @@ export default function GreenEnergyPage() {
 					</p>
 				</div>
 
-				<div className="bg-gray-100 p-6 rounded-md shadow">
+				<div className="bg-slate-100 p-6 rounded-md shadow">
 					<h3 className="text-xl font-semibold mb-2">♻️ Biogas Units</h3>
 					<p>
 						Eco-friendly energy generated from organic waste to power kitchens
@@ -36,7 +36,7 @@ export default function GreenEnergyPage() {
 					</p>
 				</div>
 
-				<div className="bg-gray-100 p-6 rounded-md shadow">
+				<div className="bg-slate-100 p-6 rounded-md shadow">
 					<h3 className="text-xl font-semibold mb-2">⚙️ Farm Tools</h3>
 					<p>
 						Providing farmers with energy-efficient agricultural tools to
@@ -44,7 +44,7 @@ export default function GreenEnergyPage() {
 					</p>
 				</div>
 
-				<div className="bg-gray-100 p-6 rounded-md shadow">
+				<div className="bg-slate-100 p-6 rounded-md shadow">
 					<h3 className="text-xl font-semibold mb-2">🌱 Community Education</h3>
 					<p>
 						Training locals to maintain and benefit from green energy systems

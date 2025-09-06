@@ -44,9 +44,9 @@ const OnboardingFlow = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex flex-col bg-gray-100 relative">
+		<div className="min-h-screen flex flex-col bg-slate-100 relative">
 			<header className="w-full py-6 text-center bg-white shadow-sm sticky top-0 z-10">
-				<h1 className="text-3xl font-semibold text-gray-800">
+				<h1 className="text-3xl font-semibold text-slate-800">
 					Welcome to Onboarding
 				</h1>
 			</header>

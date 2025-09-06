@@ -25,7 +25,7 @@ export default function RuralImpactFaq() {
 	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
 	return (
-		<section className="bg-white text-gray-900 px-6 py-16">
+		<section className="bg-white text-slate-900 px-6 py-16">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 				{/* Left Block - Image + Heading + Content + CTA */}
 				<motion.div
@@ -48,7 +48,7 @@ export default function RuralImpactFaq() {
 						Still Have Questions?{" "}
 					</h3>
 
-					<p className="text-gray-600 text-base">
+					<p className="text-slate-600 text-base">
 						We&apos;re here to support you with sustainable development,
 						innovative rural solutions, and community-driven initiatives -
 						empowering villages to thrive.
@@ -76,7 +76,7 @@ export default function RuralImpactFaq() {
 					<h2 className="text-4xl font-bold leading-tight mb-4">
 						FAQs on Rural Development
 					</h2>
-					<p className="text-gray-600 mb-6">
+					<p className="text-slate-600 mb-6">
 						Have questions about our work in rural India? Explore some of our
 						most common queries below.
 					</p>
@@ -94,7 +94,7 @@ export default function RuralImpactFaq() {
 									className={`p-5 rounded-xl cursor-pointer transition flex flex-col gap-2 ${
 										activeIndex === i
 											? "bg-green-600 text-white"
-											: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+											: "bg-slate-100 text-slate-700 hover:bg-slate-200"
 									}`}>
 									<div className="flex items-center justify-between">
 										<h4 className="font-semibold text-lg">{faq.question}</h4>

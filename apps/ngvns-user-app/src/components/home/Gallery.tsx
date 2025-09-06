@@ -51,7 +51,7 @@ export default function Gallery() {
 				{galleryItems.map((item, idx) => (
 					<div
 						key={idx}
-						className="relative group flex flex-col rounded-xl overflow-hidden shadow-md border border-gray-200 bg-white hover:shadow-lg transition duration-300">
+						className="relative group flex flex-col rounded-xl overflow-hidden shadow-md border border-slate-200 bg-white hover:shadow-lg transition duration-300">
 						{/* Image */}
 						<Image
 							src={item.img}
@@ -62,11 +62,11 @@ export default function Gallery() {
 						/>
 
 						{/* Overlay Description - On Hover */}
-					<div className="absolute inset-0 bg-orange-600 bg-opacity-70 flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
-	<p className="text-sm sm:text-base text-white">
-		{item.description}
-	</p>
-</div>
+						<div className="absolute inset-0 bg-orange-600 bg-opacity-70 flex items-center justify-center px-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20">
+							<p className="text-sm sm:text-base text-white">
+								{item.description}
+							</p>
+						</div>
 
 						{/* Title Always Visible - Background */}
 						<div className="absolute bottom-0 left-0 w-full py-3 text-center bg-orange-600 z-10">

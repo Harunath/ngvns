@@ -21,7 +21,7 @@ const WhoWeAre = () => {
 						Who <span className="text-orange-600">We Are</span>
 					</h2>
 
-					<p className="text-gray-800 text-lg mb-6">
+					<p className="text-slate-800 text-lg mb-6">
 						<span className="font-semibold text-[#1a1a1a]">
 							VR Kisan Parivaar
 						</span>{" "}

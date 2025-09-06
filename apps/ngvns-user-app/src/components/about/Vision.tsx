@@ -10,7 +10,7 @@ const Vision = () => {
 				Our <span className="text-orange-600">Vision</span>
 			</h2>
 
-			<div className="max-w-4xl mx-auto bg-green-100 rounded-2xl shadow-md p-6 md:p-10 text-lg text-gray-800 leading-relaxed border border-green-300">
+			<div className="max-w-4xl mx-auto bg-green-100 rounded-2xl shadow-md p-6 md:p-10 text-lg text-slate-800 leading-relaxed border border-green-300">
 				To create villages that are independent, sustainable, and full of
 				opportunities for all.
 			</div>
@@ -18,19 +18,19 @@ const Vision = () => {
 			<div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto text-center">
 				<div>
 					<FaLeaf className="text-green-600 text-4xl mx-auto mb-3" />
-					<p className="text-gray-800 font-medium">
+					<p className="text-slate-800 font-medium">
 						Promote Natural & Smart Farming
 					</p>
 				</div>
 				<div>
 					<FaHandshake className="text-green-600 text-4xl mx-auto mb-3" />
-					<p className="text-gray-800 font-medium">
+					<p className="text-slate-800 font-medium">
 						Connect Rural India to Corporate Sector
 					</p>
 				</div>
 				<div>
 					<FaChartLine className="text-green-600 text-4xl mx-auto mb-3" />
-					<p className="text-gray-800 font-medium">
+					<p className="text-slate-800 font-medium">
 						Drive Profitability & Innovation
 					</p>
 				</div>

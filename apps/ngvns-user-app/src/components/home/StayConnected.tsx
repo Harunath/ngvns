@@ -7,7 +7,7 @@ export default function StayConnected() {
 				Stay Connected
 			</h2>
 
-			<p className="text-base md:text-lg mb-10 text-gray-200 max-w-3xl mx-auto">
+			<p className="text-base md:text-lg mb-10 text-slate-200 max-w-3xl mx-auto">
 				Be part of our mission to build sustainable futures. Get updates on new
 				initiatives, inspiring success stories, and rural innovations.
 			</p>
@@ -22,7 +22,7 @@ export default function StayConnected() {
 					type="email"
 					placeholder="Enter your email address"
 					required
-					className="w-full px-5 py-3 rounded-full bg-white text-black placeholder-gray-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#138808] transition duration-300"
+					className="w-full px-5 py-3 rounded-full bg-white text-black placeholder-slate-500 shadow-md focus:outline-none focus:ring-2 focus:ring-[#138808] transition duration-300"
 				/>
 				<button
 					type="submit"
@@ -31,7 +31,7 @@ export default function StayConnected() {
 				</button>
 			</form>
 
-			<p className="text-sm mt-6 text-gray-300 max-w-xl mx-auto">
+			<p className="text-sm mt-6 text-slate-300 max-w-xl mx-auto">
 				We respect your privacy. No spam – unsubscribe anytime.
 			</p>
 		</section>

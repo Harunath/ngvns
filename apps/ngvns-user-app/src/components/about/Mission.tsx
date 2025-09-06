@@ -61,7 +61,7 @@ export default function Mission() {
 							<div className="mt-8 text-center">
 								<h4 className="text-lg font-semibold mb-2">{item.title}</h4>
 								<div className="h-1 w-10 bg-[#ff7f11] mx-auto mb-4 rounded-full" />
-								<p className="text-sm text-gray-100 leading-relaxed">
+								<p className="text-sm text-slate-100 leading-relaxed">
 									{item.description}
 								</p>
 							</div>

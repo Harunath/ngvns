@@ -82,14 +82,14 @@ export default function Programs() {
 				{programs.map((program, idx) => (
 					<div
 						key={idx}
-						className="bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center p-6 hover:border-orange-500 group">
+						className="bg-white border border-slate-200 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-center p-6 hover:border-orange-500 group">
 						<div className="flex justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
 							{program.icon}
 						</div>
 						<h3 className="text-2xl font-semibold text-black group-hover:text-orange-600 mb-2">
 							{program.title}
 						</h3>
-						<p className="text-lg text-gray-600 mb-4">{program.description}</p>
+						<p className="text-lg text-slate-600 mb-4">{program.description}</p>
 						<Link
 							href={program.link}
 							className="inline-block text-md  font-semibold text-orange-600 ">

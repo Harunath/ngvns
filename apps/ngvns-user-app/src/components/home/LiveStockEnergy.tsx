@@ -14,12 +14,12 @@ export default function LiveStockEnergy() {
 						Livestock-Based Energy for Rural Sustainability
 					</h2>
 
-					<p className="text-gray-700 text-base md:text-lg leading-relaxed mb-4">
+					<p className="text-slate-700 text-base md:text-lg leading-relaxed mb-4">
 						We&apos;re turning livestock movement and waste into clean energy
 						for rural homes, farms, and tools.
 					</p>
 
-					<p className="text-gray-600 text-sm md:text-base leading-relaxed mb-6">
+					<p className="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
 						Through biogas units and rotary systems powered by cows and
 						buffaloes, rural communities are generating electricity, cooking
 						fuel, and reducing dependence on fossil fuels. This also improves
@@ -36,7 +36,7 @@ export default function LiveStockEnergy() {
 								<h4 className="font-semibold text-black mb-1 text-base">
 									Circular Resource Use
 								</h4>
-								<p className="text-sm text-gray-600 leading-relaxed">
+								<p className="text-sm text-slate-600 leading-relaxed">
 									Biogas from livestock waste powers homes and small businesses.
 								</p>
 							</div>
@@ -51,7 +51,7 @@ export default function LiveStockEnergy() {
 								<h4 className="font-semibold text-black mb-1 text-base">
 									Eco-Rotary Power
 								</h4>
-								<p className="text-sm text-gray-600 leading-relaxed">
+								<p className="text-sm text-slate-600 leading-relaxed">
 									Cow-driven devices convert motion into usable mechanical
 									energy.
 								</p>
@@ -59,7 +59,7 @@ export default function LiveStockEnergy() {
 						</div>
 					</div>
 
-					<div className="bg-[#f9f9f9] rounded-xl p-5 text-sm md:text-base text-gray-800 shadow-sm border border-gray-200">
+					<div className="bg-[#f9f9f9] rounded-xl p-5 text-sm md:text-base text-slate-800 shadow-sm border border-slate-200">
 						<strong className="text-black">Trusted Innovation:</strong> Our
 						energy model is community-led, low-cost, and built for rural India.
 					</div>

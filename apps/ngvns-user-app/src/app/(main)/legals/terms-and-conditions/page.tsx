@@ -1,8 +1,8 @@
 export default function Page() {
 	return (
-		<section className="max-w-5xl mx-auto px-6 py-16 text-gray-800">
+		<section className="max-w-5xl mx-auto px-6 py-16 text-slate-800">
 			<h1 className="text-3xl font-bold mb-6">Terms & Conditions</h1>
-			<p className="text-sm text-gray-500 mb-12">
+			<p className="text-sm text-slate-500 mb-12">
 				Effective Date: September 01, 2025
 			</p>
 

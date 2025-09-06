@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
 	return (
-		<section className="min-h-screen bg-white text-gray-800 py-16 px-6 md:px-16">
+		<section className="min-h-screen bg-white text-slate-800 py-16 px-6 md:px-16">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
 				<div>
 					<h1 className="text-4xl font-bold text-black mb-6">
@@ -23,7 +23,7 @@ export default function Page() {
 						<li>Fodder cultivation support and better shelter facilities</li>
 						<li>Training in dairy farming, poultry, and goat care</li>
 					</ul>
-					<p className="mt-4 text-base text-gray-700">
+					<p className="mt-4 text-base text-slate-700">
 						We work with farmers to improve animal productivity and livelihoods,
 						while promoting sustainable and ethical livestock practices.
 					</p>

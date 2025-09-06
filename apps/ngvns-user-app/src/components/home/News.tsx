@@ -44,7 +44,7 @@ export default function News() {
 				{news.map((item, index) => (
 					<div
 						key={index}
-						className="bg-[#fefefe] border border-gray-300 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
+						className="bg-[#fefefe] border border-slate-300 rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all duration-300">
 						<div className="relative h-48 w-full">
 							<Image
 								src={item.image}
@@ -54,11 +54,11 @@ export default function News() {
 							/>
 						</div>
 						<div className="p-5 text-left">
-							<p className="text-xs text-gray-500 mb-1">{item.date}</p>
+							<p className="text-xs text-slate-500 mb-1">{item.date}</p>
 							<h3 className="text-lg font-semibold text-black mb-2">
 								{item.title}
 							</h3>
-							<p className="text-sm text-gray-800 mb-4">{item.summary}</p>
+							<p className="text-sm text-slate-800 mb-4">{item.summary}</p>
 							<Link
 								href={item.link}
 								className="text-sm font-medium text-orange-600 hover:underline">

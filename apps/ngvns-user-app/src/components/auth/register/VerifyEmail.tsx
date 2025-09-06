@@ -54,14 +54,14 @@ function VerifyEmail() {
 			<h2 className="text-lg font-semibold mb-4">Email Verification</h2>
 
 			<div className="mb-4">
-				<label className="block text-sm font-medium text-gray-700 mb-1">
+				<label className="block text-sm font-medium text-slate-700 mb-1">
 					Email
 				</label>
 				<input
 					type="email"
 					value={email}
 					readOnly
-					className="w-full border px-3 py-2 rounded-md bg-gray-100 cursor-not-allowed"
+					className="w-full border px-3 py-2 rounded-md bg-slate-100 cursor-not-allowed"
 				/>
 			</div>
 
@@ -77,7 +77,7 @@ function VerifyEmail() {
 			{otpSent && (
 				<>
 					<div className="mt-4">
-						<label className="block text-sm font-medium text-gray-700 mb-1">
+						<label className="block text-sm font-medium text-slate-700 mb-1">
 							Enter OTP
 						</label>
 						<input

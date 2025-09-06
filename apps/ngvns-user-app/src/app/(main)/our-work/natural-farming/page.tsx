@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function NaturalFarmingPage() {
 	return (
-		<main className="min-h-screen bg-white text-gray-900 px-6 py-16">
+		<main className="min-h-screen bg-white text-slate-900 px-6 py-16">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
 				<div>
 					<h1 className="text-4xl font-bold mb-4 text-black">
@@ -19,7 +19,7 @@ export default function NaturalFarmingPage() {
 						biodiversity, and ensures healthier livelihoods.
 					</p>
 
-					<ul className="list-disc list-inside space-y-2 text-base text-gray-800">
+					<ul className="list-disc list-inside space-y-2 text-base text-slate-800">
 						<li>
 							<strong>Organic training programs:</strong> Educating farmers on
 							natural cultivation techniques, without chemicals.

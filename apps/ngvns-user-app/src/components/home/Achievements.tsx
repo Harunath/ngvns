@@ -45,12 +45,12 @@ export default function Achievements() {
 				{stats.map((item, idx) => (
 					<div
 						key={idx}
-						className="bg-[#f9f9f9] rounded-2xl shadow-md border border-gray-100 p-6 text-center transition hover:-translate-y-1 hover:shadow-lg duration-300">
+						className="bg-[#f9f9f9] rounded-2xl shadow-md border border-slate-100 p-6 text-center transition hover:-translate-y-1 hover:shadow-lg duration-300">
 						<div className="flex justify-center mb-4">
 							<div className={`text-4xl ${item.color}`}>{item.icon}</div>
 						</div>
 						{/* <h3 className="text-3xl font-extrabold text-black">{item.value}</h3> */}
-						<p className="mt-2 text-sm text-gray-700 font-medium">
+						<p className="mt-2 text-sm text-slate-700 font-medium">
 							{item.label}
 						</p>
 					</div>

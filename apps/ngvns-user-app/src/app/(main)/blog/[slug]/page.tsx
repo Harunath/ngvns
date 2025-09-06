@@ -29,14 +29,14 @@
 // 	const Icon = iconMap[blog.icon] || FaIcons.FaRegNewspaper;
 
 // 	return (
-// 		<main className="max-w-4xl mx-auto px-6 py-16 text-gray-800">
-// 			<article className="bg-gray-50 rounded-xl shadow-md p-6 md:p-10">
+// 		<main className="max-w-4xl mx-auto px-6 py-16 text-slate-800">
+// 			<article className="bg-slate-50 rounded-xl shadow-md p-6 md:p-10">
 // 				<header className="mb-8">
 // 					<div className="flex items-center gap-4 mb-4">
 // 						<Icon className="text-4xl text-green-700" />
 // 						<h1 className="text-3xl md:text-4xl font-bold">{blog.title}</h1>
 // 					</div>
-// 					<p className="text-lg text-gray-600">{blog.description}</p>
+// 					<p className="text-lg text-slate-600">{blog.description}</p>
 // 				</header>
 
 // 				{blog.image && (
@@ -52,7 +52,7 @@
 // 				)}
 
 // 				<section className="mb-10">
-// 					<h2 className="text-xl font-semibold text-gray-800 mb-4">
+// 					<h2 className="text-xl font-semibold text-slate-800 mb-4">
 // 						Useful Resources
 // 					</h2>
 // 					<ul className="space-y-3">
@@ -73,7 +73,7 @@
 
 // 				{blog.hashtags?.length > 0 && (
 // 					<section>
-// 						<h3 className="text-md font-medium text-gray-700 mb-2">Tags:</h3>
+// 						<h3 className="text-md font-medium text-slate-700 mb-2">Tags:</h3>
 // 						<div className="flex flex-wrap gap-2">
 // 							{blog.hashtags.map((tag) => (
 // 								<span

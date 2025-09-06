@@ -20,7 +20,7 @@ const ContactMain = () => {
 					<h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
 						Let’s Start a Conversation
 					</h2>
-					<p className="text-gray-600 mb-6 leading-relaxed">
+					<p className="text-slate-600 mb-6 leading-relaxed">
 						Have questions or inquiries? We're here to help. Reach out to us
 						anytime and we'll respond promptly.
 					</p>
@@ -32,7 +32,7 @@ const ContactMain = () => {
 						<FaMapMarkerAlt className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Address</h4>
-							<p className="text-gray-700 leading-relaxed">
+							<p className="text-slate-700 leading-relaxed">
 								#101, Dwarakapuri Colony, <br />
 								Hyderabad, Telangana – 500082
 							</p>
@@ -44,7 +44,7 @@ const ContactMain = () => {
 						<FaPhoneAlt className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Phone</h4>
-							<p className="text-gray-700">+91 9515934289</p>
+							<p className="text-slate-700">+91 9515934289</p>
 						</div>
 					</div> */}
 
@@ -53,7 +53,7 @@ const ContactMain = () => {
 						<FaEnvelope className="text-orange-500 text-xl min-w-[24px]" />
 						<div>
 							<h4 className="font-bold text-black">Email</h4>
-							<p className="text-gray-700">support@vrkisanparivaar.com</p>
+							<p className="text-slate-700">support@vrkisanparivaar.com</p>
 						</div>
 					</div>
 
@@ -85,7 +85,7 @@ const ContactMain = () => {
 								<input
 									type="text"
 									placeholder="Your Name"
-									className="w-full px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
 								/>
 							</div>
 							<div>
@@ -95,7 +95,7 @@ const ContactMain = () => {
 								<input
 									type="email"
 									placeholder="Your Email"
-									className="w-full px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
 								/>
 							</div>
 							<div>
@@ -105,7 +105,7 @@ const ContactMain = () => {
 								<input
 									type="tel"
 									placeholder="Your Mobile Number"
-									className="w-full px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
 									pattern="[0-9]{10}"
 									maxLength={10}
 									required
@@ -119,7 +119,7 @@ const ContactMain = () => {
 							<textarea
 								rows={6}
 								placeholder="Your Message"
-								className="w-full px-4 py-2 rounded border border-gray-300 bg-white text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
+								className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
 						</div>
 						<button
 							type="submit"

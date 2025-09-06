@@ -14,7 +14,7 @@ import Link from "next/link";
 
 export default function BecomeMember() {
 	return (
-		<section className="bg-emerald-50 py-20 px-6 md:px-12 lg:px-28 text-gray-800">
+		<section className="bg-emerald-50 py-20 px-6 md:px-12 lg:px-28 text-slate-800">
 			<div className="max-w-6xl mx-auto text-center">
 				<motion.h2
 					initial={{ opacity: 0, y: 20 }}
@@ -28,7 +28,7 @@ export default function BecomeMember() {
 					initial={{ opacity: 0, y: 20 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					transition={{ delay: 0.2, duration: 0.5 }}
-					className="text-lg md:text-xl font-medium text-gray-700 mb-12 leading-relaxed">
+					className="text-lg md:text-xl font-medium text-slate-700 mb-12 leading-relaxed">
 					<span className="block font-semibold text-2xl text-green-900 mb-2">
 						Join the Movement. Grow with Us.
 					</span>
@@ -101,7 +101,7 @@ function FeatureItem({ icon, text }: { icon: React.ReactNode; text: string }) {
 			<div className="p-3 bg-emerald-100 rounded-full shadow-sm text-xl">
 				{icon}
 			</div>
-			<p className="text-gray-800 text-base md:text-lg leading-relaxed">
+			<p className="text-slate-800 text-base md:text-lg leading-relaxed">
 				{text}
 			</p>
 		</motion.div>
