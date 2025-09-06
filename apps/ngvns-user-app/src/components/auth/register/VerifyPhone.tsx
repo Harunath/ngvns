@@ -54,7 +54,7 @@ function VerifyPhone() {
 			<h2 className="text-lg font-semibold mb-4">Phone Verification</h2>
 
 			<div className="mb-4">
-				<label className="block text-sm font-medium text-slate-700 mb-1">
+				<label className="block text-sm font-medium text-neutral-700 mb-1">
 					Phone Number
 				</label>
 				<input
