@@ -1,8 +1,18 @@
-import React from "react";
+// app/(auth)/login/page.tsx
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+import { Suspense } from "react";
 import LoginWithPhone from "../../../components/auth/login/LoginPage";
 
-function page() {
-	return <LoginWithPhone />;
+export default function Page() {
+	return (
+		<Suspense fallback={<Loading />}>
+			<LoginWithPhone />
+		</Suspense>
+	);
 }
 
-export default page;
+function Loading() {
+	return <div>Loading...</div>;
+}

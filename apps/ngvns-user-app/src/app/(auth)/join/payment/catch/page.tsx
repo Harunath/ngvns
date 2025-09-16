@@ -1,11 +1,5 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
-function page() {
-	return (
-		<div>
-			<p className="text-center p-4">Processing payment...</p>
-		</div>
-	);
+export default function page() {
+	redirect("/login");
 }
-
-export default page;

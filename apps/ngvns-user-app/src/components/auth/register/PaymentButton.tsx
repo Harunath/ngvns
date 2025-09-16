@@ -1,14 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
-import { redirect, useRouter } from "next/navigation";
-import PaymentStatusPoller from "./PaymentStatusPoller";
+import { useRouter } from "next/navigation";
 
 const PaymentButton = () => {
 	const { data } = useOnboardingStore();
 	const router = useRouter();
-	const [open, setOpen] = useState(false);
-	const [order_Id, setOrderId] = useState<string | null>(null);
 	useEffect(() => {
 		if (!data?.phone) {
 			router.push("/unauthorized");
@@ -28,11 +25,8 @@ const PaymentButton = () => {
 			}
 			const paymentData = await res.json();
 			console.log("Payment session created:", paymentData);
-			const { orderId, url } = paymentData;
-			setOrderId(orderId);
+			const { url } = paymentData;
 			if (url) {
-				console.log("Redirecting to payment URL:", url);
-				setOpen(true);
 				window.location.href = url; // Redirect to payment gateway
 			} else {
 				console.error("Payment URL not found in response");
@@ -41,9 +35,6 @@ const PaymentButton = () => {
 			console.error("Error initiating payment:", e);
 		}
 	};
-	if (open) {
-		return <PaymentStatusPoller paymentId={order_Id ? order_Id : ""} />;
-	}
 	return (
 		<button
 			onClick={handlePayment}

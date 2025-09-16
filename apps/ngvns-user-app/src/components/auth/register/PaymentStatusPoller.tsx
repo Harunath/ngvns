@@ -1,9 +1,9 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
-	paymentId: string;
 	intervalMs?: number; // polling interval (default: 5s)
 	maxAttempts?: number; // max attempts (default: 12 ~1 min)
 };
@@ -11,10 +11,15 @@ type Props = {
 type PaymentStatus = "INITIATED" | "PENDING" | "SUCCESS" | "FAILED" | string;
 
 export default function PaymentStatusPoller({
-	paymentId,
 	intervalMs = 5000,
 	maxAttempts = 12,
 }: Props) {
+	const { order_id: paymentId } = useParams<{ order_id: string }>();
+
+	if (!paymentId) {
+		return null;
+	}
+
 	const [status, setStatus] = useState<PaymentStatus>("INITIATED");
 	const [error, setError] = useState<string | null>(null);
 

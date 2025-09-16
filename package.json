@@ -2,6 +2,7 @@
 	"name": "navagrameen-platform",
 	"private": true,
 	"scripts": {
+		"postinstall": "prisma generate  --schema=./packages/db/prisma/schema.prisma",
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"lint": "turbo run lint",
