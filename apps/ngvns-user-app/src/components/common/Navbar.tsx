@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import AuthButton from "../auth/login/AuthButton";
 
 export default function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -118,11 +119,12 @@ export default function Navbar() {
 					</Link>
 
 					{/* Become a Member */}
-					<Link href="/member">
+					{/* <Link href="/member">
 						<button className="mt-4 md:mt-0 bg-[#138808] hover:bg-green-700 text-white px-4 py-2 rounded-full transition">
 							Become a Member
 						</button>
-					</Link>
+					</Link> */}
+					<AuthButton />
 				</nav>
 			</div>
 		</header>

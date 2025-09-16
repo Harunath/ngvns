@@ -33,6 +33,7 @@ model User {
   emailVerified    Boolean
   aadhaar          String
   aadhaarVerified  Boolean
+  password         String
   gender           GenderType     @default(None)
   userPhoto        String
   vrKpId           String         @unique
