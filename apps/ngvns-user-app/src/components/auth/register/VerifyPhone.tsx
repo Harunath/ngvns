@@ -6,13 +6,14 @@ import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 
 type Props = {
 	onVerified?: () => void; // optional callback for parent flow
+	goNext: () => void; // optional callback for parent flow
 };
 
 const RESEND_COOLDOWN = 30; // seconds
 const OTP_LENGTH = 6;
 const MOCK_OTP = "123456"; // local-only, change for demos if needed
 
-export default function VerifyPhone({ onVerified }: Props) {
+export default function VerifyPhone({ onVerified, goNext }: Props) {
 	const { data } = useOnboardingStore();
 	const phone = data?.phone || "";
 
@@ -49,7 +50,17 @@ export default function VerifyPhone({ onVerified }: Props) {
 		}
 		try {
 			setSending(true);
-			await new Promise((r) => setTimeout(r, 600)); // simulate
+			// await new Promise((r) => setTimeout(r, 600)); // simulate
+			const result = await fetch("/api/auth/onboarding/phone-otp", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ phone }),
+			});
+			if (!result.ok) throw new Error("Failed to send OTP");
+			const resData = await result.json();
+
+			console.log("OTP sent:", resData);
+			// assume success
 			setOtpSent(true);
 			setCooldown(RESEND_COOLDOWN);
 			setDigits(Array(OTP_LENGTH).fill(""));
@@ -109,13 +120,26 @@ export default function VerifyPhone({ onVerified }: Props) {
 			return;
 		}
 		try {
-			setVerifying(true);
-			await new Promise((r) => setTimeout(r, 600)); // simulate
-			if (code === MOCK_OTP) {
-				toast.success("Phone verified successfully!");
-				onVerified?.();
+			if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
+				const result = await fetch("/api/auth/onboarding/phone-otp/verify", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ phone, code }),
+				});
+				if (!result.ok) throw new Error("Failed to verify OTP");
+				const resData = await result.json();
+				console.log("OTP verify response:", resData);
+				setVerifying(true);
+				goNext();
 			} else {
-				toast.error("Invalid OTP");
+				// await new Promise((r) => setTimeout(r, 600)); // simulate
+				if (code === MOCK_OTP) {
+					toast.success("Phone verified successfully!");
+					onVerified?.();
+					goNext();
+				} else {
+					toast.error("Invalid OTP");
+				}
 			}
 		} catch {
 			toast.error("Verification failed");
@@ -130,7 +154,7 @@ export default function VerifyPhone({ onVerified }: Props) {
 				<div className="border-b border-slate-200 px-4 py-3 sm:px-6">
 					<h3 className="text-lg font-semibold">Phone Verification</h3>
 					<p className="mt-1 text-sm text-slate-700">
-						We’ll send a 6-digit code to your phone number.
+						We&apos;ll send a 6-digit code to your phone number.
 					</p>
 				</div>
 

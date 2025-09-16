@@ -6,13 +6,14 @@ import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 
 type Props = {
 	onVerified?: () => void;
+	goNext: () => void; // optional callback for parent flow
 };
 
 const RESEND_COOLDOWN = 30;
 const OTP_LENGTH = 6;
 const MOCK_OTP = "654321";
 
-export default function VerifyEmail({ onVerified }: Props) {
+export default function VerifyEmail({ onVerified, goNext }: Props) {
 	const { data } = useOnboardingStore();
 	const email = data?.email || "";
 
@@ -47,7 +48,16 @@ export default function VerifyEmail({ onVerified }: Props) {
 		}
 		try {
 			setSending(true);
-			await new Promise((r) => setTimeout(r, 600)); // simulate
+			// await new Promise((r) => setTimeout(r, 600)); // simulate
+			const result = await fetch("/api/auth/onboarding/email-otp", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email }),
+			});
+			if (!result.ok) throw new Error("Failed to send OTP");
+			const resData = await result.json();
+			console.log("OTP send response:", resData);
+
 			setOtpSent(true);
 			setCooldown(RESEND_COOLDOWN);
 			setDigits(Array(OTP_LENGTH).fill(""));
@@ -106,11 +116,23 @@ export default function VerifyEmail({ onVerified }: Props) {
 			return;
 		}
 		try {
-			setVerifying(true);
-			await new Promise((r) => setTimeout(r, 600)); // simulate
+			// await new Promise((r) => setTimeout(r, 600)); // simulate
+			if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
+				const result = await fetch("/api/auth/onboarding/email-otp/verify", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ email, code }),
+				});
+				if (!result.ok) throw new Error("Failed to verify OTP");
+				const resData = await result.json();
+				console.log("OTP verify response:", resData);
+				setVerifying(true);
+				goNext();
+			}
 			if (code === MOCK_OTP) {
 				toast.success("Email verified successfully!");
 				onVerified?.();
+				goNext();
 			} else {
 				toast.error("Invalid OTP");
 			}

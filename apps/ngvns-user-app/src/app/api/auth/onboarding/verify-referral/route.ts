@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
 		// Step 1: Check User table for exact matches
 		const existingUser = await prisma.user.findFirst({
 			where: {
-				referralId: referralId,
+				vrKpId: referralId,
 			},
 		});
 

@@ -1,17 +1,39 @@
-// app/api/onboarding/create/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import prisma from "@ngvns2025/db/client";
+// app/api/onboarding/init/route.ts
+import { NextRequest } from "next/server";
+import prisma, { RelationType } from "@ngvns2025/db/client";
+import { onboardingSchema } from "../../../../lib/validators/onboarding";
+import { ok, bad } from "../../../../lib/responses";
 
 export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
-		const { phone, aadhaar, email } = body;
+		const data = onboardingSchema.parse(body);
 
-		// Step 1: Check User table for exact matches
+		const { phone, aadhaar, email, relationType } = data;
+
+		const state = await prisma.states.findUnique({
+			where: { id: data.address.stateId },
+			select: { name: true },
+		});
+		let purerelationType = "";
+		if (relationType == "s/o") purerelationType = "So";
+		else if (relationType == "d/o") purerelationType = "Do";
+		else purerelationType = "Wo";
+
+		if (!state) {
+			return bad("Invalid state selected.", 400, { field: "address.stateId" });
+		}
+
+		// 1) Hard conflicts in main User
 		const existingUser = await prisma.user.findFirst({
 			where: {
-				OR: [{ phone }, { aadhaar }, { email }],
+				OR: [
+					{ phone: phone ?? undefined },
+					{ aadhaar: aadhaar ?? undefined },
+					{ email: email ?? undefined },
+				],
 			},
+			select: { id: true, phone: true, aadhaar: true, email: true },
 		});
 
 		if (existingUser) {
@@ -22,73 +44,112 @@ export async function POST(req: NextRequest) {
 						? "aadhaar"
 						: "email";
 
-			return NextResponse.json(
-				{
-					success: false,
-					message: `User already exists in main system with ${conflict}.`,
-					conflict,
-				},
-				{ status: 409 }
-			);
+			return bad(`User already exists in main system with ${conflict}.`, 409, {
+				conflict,
+			});
 		}
 
-		// 🔍 Optimized: Single call to check for onboarding conflicts
-		const onboardingConflicts = await prisma.onboarding.findMany({
+		// 2) Conflicts within Onboarding
+		const conflicts = await prisma.onboarding.findMany({
 			where: {
-				OR: [{ phone }, { aadhaar }, { email }],
+				OR: [
+					{ phone: phone ?? undefined },
+					{ aadhaar: aadhaar ?? undefined },
+					{ email: email ?? undefined },
+				],
 			},
 		});
 
-		for (const record of onboardingConflicts) {
-			if (record.aadhaar === aadhaar && record.onBoardingFinished) {
-				return NextResponse.json(
-					{
-						success: false,
-						message: "User with this Aadhaar already onboarded.",
-						conflict: "aadhaar",
-					},
-					{ status: 409 }
-				);
+		for (const r of conflicts) {
+			if (r.aadhaar && r.aadhaar === aadhaar && r.onBoardingFinished) {
+				return bad("User with this Aadhaar already onboarded.", 409, {
+					conflict: "aadhaar",
+				});
 			}
-			if (record.phone === phone) {
-				if (!record.onBoardingFinished) {
-					return NextResponse.json(
+			if (r.phone && r.phone === phone) {
+				if (!r.onBoardingFinished) {
+					return bad(
+						"User already started onboarding. Please verify OTP to continue.",
+						409,
 						{
-							success: false,
-							message:
-								"User already started onboarding. Please verify OTP to continue.",
-							phone: record.phone,
+							phone: r.phone,
 							conflict: "phone",
 							resume: true,
-						},
-						{ status: 409 }
+							onboardingId: r.id,
+						}
 					);
 				}
 			}
-			if (record.email === email && record.onBoardingFinished) {
-				return NextResponse.json(
-					{
-						success: false,
-						message: "User with this email already onboarded.",
-						conflict: "email",
-					},
-					{ status: 409 }
-				);
+			if (r.email && r.email === email && r.onBoardingFinished) {
+				return bad("User with this email already onboarded.", 409, {
+					conflict: "email",
+				});
 			}
 		}
 
-		return NextResponse.json({
-			success: true,
-			message: "No conflicts with current data.",
+		const result = await prisma.$transaction(async (tx) => {
+			// 1) Upsert the onboarding draft by unique phone
+			const draft = await tx.onboarding.upsert({
+				where: { phone: phone ?? "" }, // phone must be unique in the schema
+				update: {
+					...data,
+					referralId: "",
+					dob: ymdToUTCDate(data.dob),
+					nominieeDob: ymdToUTCDate(data.nominieeDob),
+					address: undefined,
+					relationType: purerelationType as RelationType,
+					phoneVerified: false,
+					emailVerified: false,
+					aadhaarVerified: false,
+				},
+				create: {
+					...data,
+					relationType: purerelationType as RelationType,
+					dob: ymdToUTCDate(data.dob),
+					nominieeDob: ymdToUTCDate(data.nominieeDob),
+					address: undefined,
+					phoneVerified: false,
+					emailVerified: false,
+					aadhaarVerified: false,
+					email: data.email ?? "",
+				},
+			});
+
+			// 2) Upsert the address tied to this onboarding (prevents duplicates on resume)
+			console.log(process.env.DATABASE_URL);
+			const address = await tx.address.upsert({
+				where: { onboardingId: draft.id }, // needs @unique in your schema
+				update: {
+					addressLine: data.address.addressLine1,
+					addressLine2: data.address.addressLine2,
+					StateId: data.address.stateId,
+					pincode: data.address.pincode,
+				},
+				create: {
+					addressLine: data.address.addressLine1,
+					addressLine2: data.address.addressLine2,
+					StateId: data.address.stateId,
+					onboardingId: draft.id,
+					pincode: data.address.pincode,
+				},
+			});
+
+			return { draft, address };
 		});
-	} catch (error) {
-		console.error("Onboarding creation error:", error);
-		return NextResponse.json(
-			{
-				success: false,
-				message: "Something went wrong. Please try again later.",
-			},
-			{ status: 500 }
-		);
+
+		return ok({
+			message: "Draft created. Proceed to phone OTP.",
+		});
+	} catch (e: any) {
+		console.error("onboarding/init error", e);
+		return bad("Something went wrong. Please try again later.", 500);
 	}
+}
+
+// Converts "1999-06-06" -> Date at 00:00:00Z
+function ymdToUTCDate(ymd: string): Date {
+	const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(ymd);
+	if (!m) throw new Error("Invalid YYYY-MM-DD");
+	const [_, y, mo, d] = m;
+	return new Date(Date.UTC(+y!, +mo! - 1, +d!));
 }

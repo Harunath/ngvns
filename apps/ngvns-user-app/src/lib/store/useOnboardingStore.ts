@@ -1,40 +1,25 @@
 // stores/useOnboardingStore.ts
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { z } from "zod";
 
-// ---- Bring the schema type in from wherever it lives ----
-/**
- * If this file is next to your schema, you can import it:
- *   import { schema } from "./schema";
- * But since you already have the schema in a component file, just
- * export its inferred type from there and import here:
- *
- *   export type FormData = z.infer<typeof schema>;
- *   // then:
- *   import type { FormData } from "@/path/to/that/file";
- */
+type AddressType = {
+	addressLine1: string;
+	addressLine2?: string;
+	stateId: string;
+	pincode: string;
+};
 
-// If you already exported FormData from the schema file, import it here:
-// import type { FormData } from "@/lib/validation/onboarding";
-
-// If not, and you only have 'schema' available here, uncomment and wire:
-// import { schema } from "@/lib/validation/onboarding";
-// type FormData = z.infer<typeof schema>;
-
-// ---- TEMP: define the FormData here to keep this file self-contained ----
-// Remove this block if you import FormData from your schema file.
 type FormData = {
 	referralId: string;
 	fullname: string;
 	relationType: "" | "s/o" | "d/o" | "w/o";
 	relationName: string;
 	dob: string;
-	address: string;
+	address: AddressType;
 	phone: string;
 	email: string;
 	aadhaar: string;
-	gender: "None" | "Male" | "Female" | "Other";
+	gender: "None" | "Male" | "Female" | "Others";
 	userPhoto: string;
 	nominieeName: string;
 	nominieeDob: string;

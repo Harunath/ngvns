@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import PaymentButton from "../../../../components/auth/register/PaymentButton";
 
 export default function Page() {
 	return (
@@ -112,14 +113,7 @@ export default function Page() {
 							</div>
 
 							{/* Replace the Link href with your payment initiation route when ready */}
-							<Link
-								href="/join/payment/in-progress"
-								className="block w-full rounded-xl bg-gradient-to-r from-emerald-500 to-blue-600 px-5 py-3 text-center text-sm font-semibold tracking-wide text-white transition hover:opacity-95 active:opacity-90"
-								aria-disabled="true"
-								// onClick={(e) => e.preventDefault()}
-								title="Wire this to your gateway route when ready">
-								Proceed to Payment
-							</Link>
+							<PaymentButton />
 
 							<p className="text-xs leading-5 text-white/60">
 								By continuing, you agree to our{" "}

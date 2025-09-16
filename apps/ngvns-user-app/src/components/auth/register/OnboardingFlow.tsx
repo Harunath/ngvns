@@ -11,11 +11,13 @@ import VerifyEmail from "./VerifyEmail";
 import TandC from "./TandC";
 
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
+import UserOnboardingForm from "./onBoarding/UserOnboardingForm";
+import { useStepState } from "../../../lib/store/useStepState";
 
 const steps = ["form", "phone", "email", "tandc"] as const;
 type Step = (typeof steps)[number];
 
-const stepLabels: Record<Step, string> = {
+export const stepLabels: Record<Step, string> = {
 	form: "Your Details",
 	phone: "Verify Phone",
 	email: "Verify Email",
@@ -28,25 +30,14 @@ const pageVariants = {
 	exit: { opacity: 0, y: -16 },
 };
 
-export default function OnboardingFlow() {
+export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 	const { data } = useOnboardingStore();
-
-	// local step state + persistence (you can also mirror this into Zustand if you prefer)
-	const [step, setStep] = useState<Step>("form");
+	const { step, setStep } = useStepState();
 
 	// local, no-API gate flags for demo
 	const [phoneVerified, setPhoneVerified] = useState(false);
 	const [emailVerified, setEmailVerified] = useState(false);
 	const [acceptedTnC, setAcceptedTnC] = useState(false);
-
-	// Persist/restore step
-	useEffect(() => {
-		const saved = localStorage.getItem("onboarding-step") as Step | null;
-		if (saved && steps.includes(saved)) setStep(saved);
-	}, []);
-	useEffect(() => {
-		localStorage.setItem("onboarding-step", step);
-	}, [step]);
 
 	// Completion guards (no APIs)
 	const canProceed = useMemo(() => {
@@ -86,7 +77,7 @@ export default function OnboardingFlow() {
 	};
 
 	const renderStepper = () => (
-		<ol className="flex w-full max-w-3xl items-center gap-2">
+		<ol className="flex w-full max-w-3xl items-center gap-2 overflow-x-auto md:w-full">
 			{steps.map((s, i) => {
 				const isActive = s === step;
 				const isDone = i < currentIndex;
@@ -134,24 +125,6 @@ export default function OnboardingFlow() {
 
 	return (
 		<div className="min-h-screen w-full bg-white text-slate-900">
-			{/* Header */}
-			<header className="w-full border-b border-slate-200 bg-white">
-				<div className="mx-auto flex max-w-5xl items-center justify-between p-4 sm:p-6">
-					<div>
-						<h1 className="text-xl font-semibold tracking-tight sm:text-2xl">
-							Welcome to Onboarding
-						</h1>
-						<p className="mt-0.5 text-sm text-slate-700">
-							Complete each step to activate your membership.
-						</p>
-					</div>
-					{/* Optional brand slot */}
-					<div className="hidden sm:block text-sm font-medium text-slate-600">
-						VR KISAN PARIVAAR
-					</div>
-				</div>
-			</header>
-
 			{/* Stepper */}
 			<div className="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
 				{renderStepper()}
@@ -163,7 +136,7 @@ export default function OnboardingFlow() {
 					<div className="border-b border-slate-200 px-4 py-3 sm:px-6">
 						<h2 className="text-lg font-semibold">{stepLabels[step]}</h2>
 					</div>
-
+					{step}
 					<div className="p-4 sm:p-6">
 						<AnimatePresence mode="wait">
 							{step === "form" && (
@@ -175,8 +148,9 @@ export default function OnboardingFlow() {
 									exit="exit"
 									transition={{ duration: 0.3 }}
 									className="space-y-6">
-									<UserForm />
+									{/* <UserForm /> */}
 									{/* Next button enabled only if store has data */}
+									<UserOnboardingForm goNext={goNext} />
 								</motion.div>
 							)}
 
@@ -189,7 +163,16 @@ export default function OnboardingFlow() {
 									exit="exit"
 									transition={{ duration: 0.3 }}
 									className="space-y-6">
-									<VerifyPhone onVerified={() => setPhoneVerified(true)} />
+									{data.phone ? (
+										<VerifyPhone
+											onVerified={() => setPhoneVerified(true)}
+											goNext={goNext}
+										/>
+									) : (
+										<p className=" text-sm text-red-600">
+											Phone number not found...!
+										</p>
+									)}
 								</motion.div>
 							)}
 
@@ -202,7 +185,14 @@ export default function OnboardingFlow() {
 									exit="exit"
 									transition={{ duration: 0.3 }}
 									className="space-y-6">
-									<VerifyEmail onVerified={() => setEmailVerified(true)} />
+									{data.email ? (
+										<VerifyEmail
+											onVerified={() => setEmailVerified(true)}
+											goNext={goNext}
+										/>
+									) : (
+										<p className=" text-sm text-red-600">Email not found...!</p>
+									)}
 								</motion.div>
 							)}
 
@@ -215,7 +205,16 @@ export default function OnboardingFlow() {
 									exit="exit"
 									transition={{ duration: 0.3 }}>
 									{/* T&C returns a boolean via prop; no API */}
-									<TandC onAccept={(v: boolean) => setAcceptedTnC(v)} />
+									{data.phone ? (
+										<TandC
+											onAccept={(v: boolean) => setAcceptedTnC(v)}
+											onBoardingPhone={data.phone}
+										/>
+									) : (
+										<p className=" text-sm text-red-600">
+											Phone number not found...!
+										</p>
+									)}
 								</motion.div>
 							)}
 						</AnimatePresence>

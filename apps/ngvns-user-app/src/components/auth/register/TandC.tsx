@@ -1,65 +1,84 @@
 "use client";
 import { useRouter } from "next/navigation";
 // components/TandC.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 type Props = {
 	onAccept?: (accepted: boolean) => void;
+	onBoardingPhone: string;
 };
 
-const termsContent = [
-	"You agree to provide accurate and complete information during onboarding.",
-	"Your data will be used for identity verification and service enhancement.",
-	"You may not use our platform for any unlawful or harmful activity.",
-	"You consent to receive communications regarding verification and services.",
-	"We are not liable for third-party misuse or external data breaches.",
-	"You can contact us anytime to request deletion of your data.",
-	"Continued use implies acceptance of all policy changes.",
-	"All disputes will be governed by applicable local laws.",
-];
-
-export default function TandC({ onAccept }: Props) {
+export default function TandC({ onAccept, onBoardingPhone }: Props) {
 	const [accepted, setAccepted] = useState(false);
 	const [showTerms, setShowTerms] = useState(false);
+	const [terms, setTerms] = useState({
+		id: "",
+		version: "",
+		content: "",
+		active: false,
+		createdAt: "",
+		updatedAt: "",
+	});
+	const [Loading, setLoading] = useState(false);
 	const router = useRouter();
 	const handleAcceptChange = (checked: boolean) => {
 		setAccepted(checked);
 		onAccept?.(checked);
-		router.push("/join/payment");
 	};
 
-	const handleContinue = () => {
-		if (accepted) {
-			toast.success("You accepted the Terms & Conditions");
-			// navigation is handled by parent (OnboardingFlow)
-		} else {
-			toast.error("You must accept to continue");
+	const handleContinue = async () => {
+		try {
+			if (accepted) {
+				toast.success("You accepted the Terms & Conditions");
+				const res = await fetch("/api/auth/onboarding/tc", {
+					method: "POST",
+					body: JSON.stringify({
+						phone: onBoardingPhone,
+						accepted: true,
+						tcId: terms.id,
+					}),
+				});
+				if (!res.ok) {
+					toast.error("Failed to record acceptance");
+					return;
+				}
+				if (res) {
+					router.push("/join/payment");
+					toast.success("Proceeding to payment");
+				} else {
+					toast.error("Failed to record acceptance");
+				}
+			} else {
+				toast.error("You must accept to continue");
+			}
+		} catch (error) {
+			toast.error("Error accepting Terms & Conditions");
 		}
 	};
+	const getTc = async () => {
+		try {
+			setLoading(true);
+			const res = await fetch("/api/t-and-c");
+			if (res.ok) {
+				const data = await res.json();
+				setTerms(data.tc);
+			} else {
+				console.error("Failed to fetch Terms & Conditions");
+			}
+		} catch (error) {
+			console.error("Error fetching Terms & Conditions:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+	useEffect(() => {
+		getTc();
+	}, []);
 
 	return (
 		<div className="mx-auto max-w-lg">
 			<div className="rounded-2xl border border-slate-200 bg-white shadow-sm p-6">
-				<h2 className="text-lg font-semibold">Terms & Conditions</h2>
-				<p className="mt-1 text-sm text-slate-700">
-					Please review and accept our terms before continuing.
-				</p>
-				<div className="flex items-center justify-center px-4">
-					<div className="w-full max-w-lg rounded-2xl bg-white ">
-						<div className="border-b border-slate-200 px-6 py-4">
-							<h3 className="text-lg font-semibold">Terms & Conditions</h3>
-						</div>
-
-						<div className="max-h-[70vh] overflow-y-auto px-6 py-4">
-							<ol className="list-decimal space-y-3 pl-4 text-sm text-slate-700">
-								{termsContent.map((item, i) => (
-									<li key={i}>{item}</li>
-								))}
-							</ol>
-						</div>
-					</div>
-				</div>
 				<div className="mt-4 flex items-start gap-2">
 					<input
 						type="checkbox"
@@ -94,31 +113,60 @@ export default function TandC({ onAccept }: Props) {
 			</div>
 
 			{/* Modal for Terms */}
-			{showTerms && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-					<div className="relative w-full max-w-lg rounded-2xl bg-white shadow-xl">
-						<div className="border-b border-slate-200 px-6 py-4">
-							<h3 className="text-lg font-semibold">Terms & Conditions</h3>
-						</div>
+			{!Loading ? (
+				showTerms && (
+					<div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+						<div className="relative w-full max-w-lg rounded-2xl bg-white shadow-xl">
+							<div className="border-b border-slate-200 px-6 py-4">
+								<h3 className="text-lg font-semibold">
+									Terms & Conditions{" "}
+									<span>
+										{terms.version
+											? "version : " + terms.version
+											: "loading..."}
+									</span>
+								</h3>
+							</div>
 
-						<div className="max-h-[70vh] overflow-y-auto px-6 py-4">
-							<ol className="list-decimal space-y-3 pl-4 text-sm text-slate-700">
+							<div className="max-h-[70vh] overflow-y-auto px-6 py-4">
+								{/* <ol className="list-decimal space-y-3 pl-4 text-sm text-slate-700">
 								{termsContent.map((item, i) => (
 									<li key={i}>{item}</li>
 								))}
-							</ol>
-						</div>
+							</ol> */}
+								<div className="list-decimal space-y-3 pl-4 text-sm text-slate-700">
+									{terms.content.length > 0 ? (
+										terms.content.split("\n").map((line, index) => (
+											<p key={index} className="mb-2">
+												{line}
+											</p>
+										))
+									) : (
+										<p className=" text-sm text-red-600">
+											something went wrong...!
+										</p>
+									)}
+								</div>
+								<div>
+									<p className="mt-4 text-xs text-slate-400">
+										Updated at: {terms.updatedAt}
+									</p>
+								</div>
+							</div>
 
-						<div className="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
-							<button
-								type="button"
-								onClick={() => setShowTerms(false)}
-								className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
-								Close
-							</button>
+							<div className="flex justify-end gap-3 border-t border-slate-200 px-6 py-4">
+								<button
+									type="button"
+									onClick={() => setShowTerms(false)}
+									className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50">
+									Close
+								</button>
+							</div>
 						</div>
 					</div>
-				</div>
+				)
+			) : (
+				<p>Loading...</p>
 			)}
 		</div>
 	);
