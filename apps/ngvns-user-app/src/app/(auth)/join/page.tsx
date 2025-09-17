@@ -182,11 +182,11 @@ export default async function BenefitsPage() {
 
 				{/* CTA */}
 				<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-					<Link
+					{/* <Link
 						href="/"
 						className="inline-flex items-center justify-center rounded-xl border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-300">
 						Back to home
-					</Link>
+					</Link> */}
 					<Link
 						href="/register"
 						className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white"

@@ -42,7 +42,6 @@ export default function Footer() {
 							[
 								["Home", "/"],
 								["About Us", "/about"],
-								["Impact", "/impact"],
 								["Contact", "/contact"],
 							] as [string, string][]
 						).map(([label, href]) => (
@@ -104,11 +103,11 @@ export default function Footer() {
 					<h3 className="text-md font-semibold text-[#FF9933] mb-3">
 						Contact Us
 					</h3>
-					{/* <p className="text-sm text-slate-300 mb-4 leading-relaxed">
+					<p className="text-sm text-slate-300 mb-4 leading-relaxed">
 						Email: support@vrkisanparivaar.com
-						<br />
-						Phone: +91 9515934289
-					</p> */}
+						{/* <br />
+						Phone: +91 9515934289 */}
+					</p>
 					{/* <a
 						href="tel:+919515934289"
 						className="inline-block mb-4 px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition">
@@ -149,7 +148,7 @@ export default function Footer() {
 						Privacy Policy
 					</Link>
 				</div>
-				<div>
+				{/* <div>
 					Developed by{" "}
 					<a
 						href="https://www.hsdev.in"
@@ -158,7 +157,7 @@ export default function Footer() {
 						className="text-[#72d275] hover:underline">
 						HSDev
 					</a>
-				</div>
+				</div> */}
 			</div>
 		</footer>
 	);

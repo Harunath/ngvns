@@ -12,13 +12,13 @@ const faqs = [
 	{
 		question: "How can I contribute or volunteer?",
 		answer:
-			"You can join as a volunteer, donate resources, or partner with us through CSR initiatives to create real rural impact.",
+			"You can join as a volunteer, or partner with us through CSR initiatives to create real rural impact.",
 	},
-	{
-		question: "Are your initiatives eco-friendly?",
-		answer:
-			"Yes, every project is designed with environmental sustainability in mind — from green energy to zero-waste agri practices.",
-	},
+	// {
+	// 	question: "Are your initiatives eco-friendly?",
+	// 	answer:
+	// 		"Yes, every project is designed with environmental sustainability in mind — from green energy to zero-waste agri practices.",
+	// },
 ];
 
 export default function RuralImpactFaq() {
@@ -53,11 +53,11 @@ export default function RuralImpactFaq() {
 						innovative rural solutions, and community-driven initiatives -
 						empowering villages to thrive.
 					</p>
-					<a
+					{/* <a
 						href="tel:+919515934289"
 						className="inline-block w-fit px-4 py-2 bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-600 transition">
 						Call Support
-					</a>
+					</a> */}
 				</motion.div>
 
 				{/* Right Block - FAQ */}
