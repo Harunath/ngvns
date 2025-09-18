@@ -130,6 +130,7 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 				const resData = await result.json();
 				console.log("OTP verify response:", resData);
 				setVerifying(true);
+				onVerified?.();
 				goNext();
 			} else {
 				// await new Promise((r) => setTimeout(r, 600)); // simulate
