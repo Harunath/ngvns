@@ -129,9 +129,9 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 				if (!result.ok) throw new Error("Failed to verify OTP");
 				const resData = await result.json();
 				console.log("OTP verify response:", resData);
-				setVerifying(true);
 				onVerified?.();
 				goNext();
+				setVerifying(false);
 			} else {
 				// await new Promise((r) => setTimeout(r, 600)); // simulate
 				if (code === MOCK_OTP) {
