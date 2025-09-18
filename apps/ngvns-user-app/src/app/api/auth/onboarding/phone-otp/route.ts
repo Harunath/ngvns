@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
 		const date = new Date();
 		const expiresAt = new Date(date.getTime() + 10 * 60 * 1000);
 		console.log(`phone code for ${phone} is ${code}`);
+
 		const url = OTPURI({
 			username: process.env.SMS_USERNAME!,
 			apikey: process.env.SMS_API_KEY!,

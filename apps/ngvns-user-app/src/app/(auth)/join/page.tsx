@@ -20,7 +20,7 @@ const BENEFITS = [
 		accent: "land",
 	},
 	{
-		title: "Health Card for 3 Years",
+		title: "Health Care Services for 3 Years",
 		desc: "Access partnered healthcare benefits with a 3-year health card.",
 		accent: "health",
 	},
