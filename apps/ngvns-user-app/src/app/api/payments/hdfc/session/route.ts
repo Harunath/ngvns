@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
 		}
 
 		const orderId = makeGatewayOrderId(); // <-- your util
-		const amount = "4999"; // "10.0" etc. Keep as string for gateway
+		const amount = "10"; // "10.0" etc. Keep as string for gateway
 
 		const result = await createHdfcSession(
 			{
