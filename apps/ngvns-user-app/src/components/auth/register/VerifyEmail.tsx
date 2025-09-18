@@ -125,7 +125,6 @@ export default function VerifyEmail({ onVerified, goNext }: Props) {
 				});
 				if (!result.ok) throw new Error("Failed to verify OTP");
 				const resData = await result.json();
-				console.log("OTP verify response:", resData);
 				setVerifying(true);
 				goNext();
 			}

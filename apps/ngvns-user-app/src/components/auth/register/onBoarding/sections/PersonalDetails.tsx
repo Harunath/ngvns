@@ -58,7 +58,7 @@ export default function PersonalDetails({
 				label="Gender *"
 				error={errors.gender}
 				{...register("gender")}>
-				<option value="None">None</option>
+				<option value="None">Select Gender</option>
 				<option value="Male">Male</option>
 				<option value="Female">Female</option>
 				<option value="Others">Others</option>

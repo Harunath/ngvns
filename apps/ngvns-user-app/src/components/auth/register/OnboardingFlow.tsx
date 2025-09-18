@@ -136,7 +136,6 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 					<div className="border-b border-slate-200 px-4 py-3 sm:px-6">
 						<h2 className="text-lg font-semibold">{stepLabels[step]}</h2>
 					</div>
-					{step}
 					<div className="p-4 sm:p-6">
 						<AnimatePresence mode="wait">
 							{step === "form" && (
@@ -221,7 +220,7 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 					</div>
 
 					{/* Footer controls */}
-					<div className="flex items-center justify-between gap-3 border-t border-slate-200 px-4 py-3 sm:px-6">
+					{/* <div className="flex items-center justify-between gap-3 border-t border-slate-200 px-4 py-3 sm:px-6">
 						<button
 							type="button"
 							onClick={goPrev}
@@ -242,7 +241,7 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 							].join(" ")}>
 							{step === "tandc" ? "Finish" : "Next"}
 						</button>
-					</div>
+					</div> */}
 				</div>
 			</main>
 		</div>

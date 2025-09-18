@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
 		// Issue OTP (store a hashed code + TTL in a table or KV; here simplified)
 		// const otp =
-		// 	process.env.NODE_ENV === "development"
+		// 	process.env.NEXT_PUBLIC_NODE_ENV === "development"
 		// 		? "111111"
 		// 		: Math.floor(100000 + Math.random() * 900000).toString();
 		const code = generateOtp(6);
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 			},
 		});
 
-		if (process.env.NODE_ENV === "development")
+		if (process.env.NEXT_PUBLIC_NODE_ENV === "development")
 			return NextResponse.json({
 				ok: true,
 				message: "OTP sent",

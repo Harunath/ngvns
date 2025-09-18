@@ -46,10 +46,11 @@ export async function POST(req: NextRequest) {
 		}
 
 		const { user, code } = parsed.data;
-
+		console.log("Parsed code:", code);
 		const phoneOtp = await prisma.phoneVerificationCode.findUnique({
 			where: { phone: user.phone },
 		});
+		console.log("Fetched phoneOtp:", phoneOtp);
 
 		if (!phoneOtp || !phoneOtp.expiresAt) {
 			return NextResponse.json(

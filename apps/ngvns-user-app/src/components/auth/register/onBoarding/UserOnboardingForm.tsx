@@ -54,7 +54,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 				addressLine1: "",
 				addressLine2: "",
 				stateId: "",
-				pincode: "0000000",
+				pincode: "000000",
 			},
 		},
 	});
@@ -94,8 +94,6 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			toast.error("Please validate your referral ID first");
 			return;
 		}
-		console.log("Submitting form data:", data);
-		console.log("Environment:", process.env.NEXT_PUBLIC_NODE_ENV);
 		if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
 			const result = await fetch("/api/auth/onboarding", {
 				method: "POST",
@@ -119,7 +117,6 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			toast.success("Form saved locally!");
 			goNext();
 		} else {
-			console.log("Form data (not sent in dev):", data);
 			setData(data);
 			toast.success("Form saved locally!");
 			goNext();

@@ -30,7 +30,6 @@ export default function TandC({ onAccept, onBoardingPhone }: Props) {
 	const handleContinue = async () => {
 		try {
 			if (accepted) {
-				toast.success("You accepted the Terms & Conditions");
 				const res = await fetch("/api/auth/onboarding/tc", {
 					method: "POST",
 					body: JSON.stringify({
@@ -44,8 +43,9 @@ export default function TandC({ onAccept, onBoardingPhone }: Props) {
 					return;
 				}
 				if (res) {
-					router.push("/join/payment");
+					toast.success("You accepted the Terms & Conditions");
 					toast.success("Proceeding to payment");
+					router.push("/join/payment");
 				} else {
 					toast.error("Failed to record acceptance");
 				}

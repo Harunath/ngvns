@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
 				},
 				create: {
 					...data,
+					referralId: "",
 					relationType: purerelationType as RelationType,
 					dob: ymdToUTCDate(data.dob),
 					nominieeDob: ymdToUTCDate(data.nominieeDob),

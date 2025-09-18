@@ -17,13 +17,26 @@ export default function AddressFields({
 		Array<{ id: string; name: string }>
 	>([]);
 	useEffect(() => {
-		const result = async () => {
-			const res = await fetch("/api/states");
-			const data = await res.json();
-			console.log("States data:", data);
-			setStates(data);
-		};
-		result();
+		if (process.env.NEXT_PUBLIC_NODE_ENV) {
+			const result = async () => {
+				const res = await fetch("/api/states");
+				const data = await res.json();
+				console.log("States data:", data);
+				setStates(data);
+			};
+			result();
+		} else {
+			setStates([
+				{
+					id: "123",
+					name: "telangana",
+				},
+				{
+					id: "124",
+					name: "AP",
+				},
+			]);
+		}
 	}, []);
 	return (
 		<div className="md:col-span-2 grid grid-cols-1 gap-4 md:grid-cols-2">

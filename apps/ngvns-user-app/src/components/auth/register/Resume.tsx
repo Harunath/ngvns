@@ -34,7 +34,8 @@ export default function ResumePage() {
 			if (!res.ok || json?.ok === false) {
 				throw new Error(json?.error || "Failed to send OTP");
 			}
-			process.env.NODE_ENV === "development" && setSampleOtp(json.otp);
+			process.env.NEXT_PUBLIC_NODE_ENV === "development" &&
+				setSampleOtp(json.otp);
 			setMode("otp");
 			setMsg("OTP sent. Please check your phone.");
 		} catch (e: any) {
@@ -84,7 +85,7 @@ export default function ResumePage() {
 			{mode === "phone" && (
 				<div className="space-y-4">
 					<label className="block">
-						<span className="text-sm text-gray-600">Phone number</span>
+						<span className="text-sm text-neutral-700">Phone number</span>
 						<input
 							type="tel"
 							value={phone}
@@ -97,7 +98,7 @@ export default function ResumePage() {
 					<button
 						onClick={sendOtp}
 						disabled={loading}
-						className="w-full rounded-xl border p-3 font-medium hover:bg-gray-50 active:scale-[0.99] disabled:opacity-60">
+						className="w-full rounded-xl border p-3 font-medium hover:bg-neutral-50 active:scale-[0.99] disabled:opacity-60">
 						{loading ? "Sending…" : "Send OTP"}
 					</button>
 				</div>
@@ -130,7 +131,7 @@ export default function ResumePage() {
 					</button>
 				</div>
 			)}
-			{process.env.NODE_ENV === "development" && sampleOtp && (
+			{process.env.NEXT_PUBLIC_NODE_ENV === "development" && sampleOtp && (
 				<p className="mt-2 text-sm text-gray-500">
 					<em>Sample OTP (dev only): {sampleOtp}</em>
 				</p>

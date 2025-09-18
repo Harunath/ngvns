@@ -61,7 +61,7 @@ async function createHdfcSession(
 	reqId: string
 ): Promise<HdfcOk> {
 	const baseUrl = coerceBaseUrl(
-		process.env.NODE_ENV == "production"
+		process.env.NEXT_PUBLIC_NODE_ENV == "production"
 			? mustGetEnv("PAYMENT_GATEWAY_BASE_URL_SANDBOX")
 			: mustGetEnv("PAYMENT_GATEWAY_BASE_URL")
 	);
@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
 				customerEmail: onb.email ?? "",
 				customerPhone: phone,
 				returnUrl:
-					process.env.NODE_ENV == "production"
+					process.env.NEXT_PUBLIC_NODE_ENV == "production"
 						? mustGetEnv("PAYMENT_GATEWAY_RETURN_URL")
 						: mustGetEnv("PAYMENT_GATEWAY_RETURN_URL_local"),
 				description: `Payment for Order ${orderId}`,

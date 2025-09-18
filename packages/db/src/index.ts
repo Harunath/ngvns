@@ -16,7 +16,8 @@ const prisma: ReturnType<typeof prismaClientSingleton> =
 export default prisma;
 
 // prevent creating multiple instances in dev
-if (process.env.NODE_ENV !== "production") globalThis.prismaGlobal = prisma;
+if (process.env.NEXT_PUBLIC_NODE_ENV !== "production")
+	globalThis.prismaGlobal = prisma;
 
 // Re-export all generated Prisma exports
 export * from "@prisma/client";

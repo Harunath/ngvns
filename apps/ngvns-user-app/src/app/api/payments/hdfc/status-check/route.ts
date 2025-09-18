@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
 		}
 
 		const baseUrl =
-			process.env.NODE_ENV == "development"
+			process.env.NEXT_PUBLIC_NODE_ENV == "development"
 				? process.env.PAYMENT_GATEWAY_BASE_URL_SANDBOX!
 				: process.env.PAYMENT_GATEWAY_BASE_URL;
 		const merchantId = process.env.PAYMENT_GATEWAY_MERCHANT_ID!;
