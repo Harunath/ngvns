@@ -65,8 +65,8 @@ export default function ResumePage() {
 			const { user, currentStep } = json;
 			setData(user);
 			if (currentStep) {
-				setStep(currentStep);
-				console.log("Resuming at step:", currentStep);
+				if (currentStep === "tandc") setStep(currentStep);
+				else router.push("/join/payment");
 			}
 
 			// go to the right step page

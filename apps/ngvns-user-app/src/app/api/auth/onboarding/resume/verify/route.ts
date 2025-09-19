@@ -50,6 +50,7 @@ export async function POST(req: NextRequest) {
 		const onboardingUser = await prisma.onboarding.update({
 			where: { phone },
 			data: { phoneVerified: true },
+			include: { TnCAcceptance: true },
 		});
 		if (!onboardingUser) {
 			return NextResponse.json(
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
 				{ status: 404 }
 			);
 		}
-		const currentStep = onboardingUser.emailVerified ? "tandc" : "email";
+		const currentStep = onboardingUser.TnCAcceptance ? "tandc" : "payment";
 		return NextResponse.json({
 			success: true,
 			message: "Onboarding user is registered",

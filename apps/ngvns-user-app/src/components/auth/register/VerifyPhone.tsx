@@ -236,10 +236,12 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 								{verifying ? "Verifying…" : "Submit OTP"}
 							</button>
 
-							<p className="mt-3 text-center text-xs text-slate-600">
-								Demo code for testing:{" "}
-								<span className="font-semibold">123456</span>
-							</p>
+							{process.env.NEXT_PUBLIC_NODE_ENV !== "production" && (
+								<p className="mt-3 text-center text-xs text-slate-600">
+									Demo code for testing:{" "}
+									<span className="font-semibold">123456</span>
+								</p>
+							)}
 						</>
 					)}
 				</div>
