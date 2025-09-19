@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 				{ status: 404 }
 			);
 		}
-		const currentStep = onboardingUser.TnCAcceptance ? "tandc" : "payment";
+		const currentStep = onboardingUser.TnCAcceptance ? "payment" : "tandc";
 		return NextResponse.json({
 			success: true,
 			message: "Onboarding user is registered",

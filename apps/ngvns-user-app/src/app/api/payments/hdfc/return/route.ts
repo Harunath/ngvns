@@ -1,4 +1,3 @@
-import prisma from "@ngvns2025/db/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
