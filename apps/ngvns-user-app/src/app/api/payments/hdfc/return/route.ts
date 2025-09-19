@@ -13,17 +13,6 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// 1. Look up order in DB
-		const order = await prisma.order.findUnique({
-			where: { orderId },
-		});
-
-		if (!order) {
-			return NextResponse.redirect(
-				new URL("/payment/error?reason=not-found", req.url)
-			);
-		}
-
 		return NextResponse.redirect(
 			new URL(`/join/payment/catch/${orderId}`, req.url)
 		);
