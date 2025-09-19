@@ -54,20 +54,47 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 				addressLine1: "",
 				addressLine2: "",
 				stateId: "",
-				pincode: "000000",
+				pincode: "",
 			},
 		},
 	});
+
+	const verifyReferral = async () => {
+		const refId = (watch("referralId") || "").toUpperCase().trim();
+		if (!refId) {
+			setError("referralId", {
+				type: "manual",
+				message: "Please enter a referral ID",
+			});
+			setReferralValid(false);
+			return;
+		}
+		const res = await fetch("/api/auth/onboarding/verify-referral", {
+			method: "POST",
+			body: JSON.stringify({ referralId: refId }),
+			headers: { "Content-Type": "application/json" },
+		});
+		if (!res.ok) {
+			const data = await res.json();
+			setError("referralId", {
+				type: "manual",
+				message: data?.message || "Referral ID is invalid",
+			});
+			setReferralValid(false);
+			toast.error(data?.message || "Referral ID is invalid");
+			return;
+		}
+		setReferralValid(true);
+		toast.success("Referral ID is valid!");
+	};
 
 	// reflect referral from URL
 	useEffect(() => {
 		if (!referralFromUrl) return;
 		setValue("referralId", referralFromUrl);
 		if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
-			// Replace with your real API check later
-			setReferralValid(true);
+			verifyReferral();
 			setCheckedOnce(true);
-			toast.success("Referral ID auto-validated from URL");
 		} else {
 			const ok = validateReferralLocally(referralFromUrl);
 			setReferralValid(ok);

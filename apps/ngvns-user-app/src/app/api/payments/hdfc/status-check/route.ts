@@ -1,4 +1,3 @@
-// apps/..../app/api/payments/checkStatus/route.ts
 import prisma, { PaymentStatus } from "@ngvns2025/db/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,81 +8,138 @@ function buildHdfcAuthHeader() {
 	return `Basic ${Buffer.from(raw).toString("base64")}`;
 }
 
+function normalizeGatewayStatus(
+	json: any
+): PaymentStatus | "PENDING" | "FAILED" | "SUCCESS" {
+	const status = (json.status || json.txn_status || "UNKNOWN").toUpperCase();
+	if (status === "CHARGED" || status === "SUCCESS") return "SUCCESS";
+	if (status === "FAILED" || status === "CANCELLED") return "FAILED";
+	return "PENDING";
+}
+
 export async function GET(req: NextRequest) {
 	try {
 		const { searchParams } = new URL(req.url);
-		const paymentId = searchParams.get("paymentId");
+		const paymentId = searchParams.get("paymentId"); // your "orderId" from client
 
 		if (!paymentId) {
 			return NextResponse.json({ error: "Missing paymentId" }, { status: 400 });
 		}
 
-		const payment = await prisma.order.findUnique({
+		// Load our order/payment session
+		const session = await prisma.order.findUnique({
 			where: { orderId: paymentId },
+			select: {
+				id: true,
+				orderId: true,
+				onBoardingId: true,
+				totalAmount: true,
+				currency: true,
+			},
 		});
-		if (!payment) {
+
+		if (!session) {
 			return NextResponse.json({ error: "Payment not found" }, { status: 404 });
 		}
 
+		// ---------- 1) External fetch (outside tx) ----------
 		const baseUrl =
-			process.env.NEXT_PUBLIC_NODE_ENV == "development"
+			process.env.NEXT_PUBLIC_NODE_ENV === "development"
 				? process.env.PAYMENT_GATEWAY_BASE_URL_SANDBOX!
-				: process.env.PAYMENT_GATEWAY_BASE_URL;
+				: process.env.PAYMENT_GATEWAY_BASE_URL!;
 		const merchantId = process.env.PAYMENT_GATEWAY_MERCHANT_ID!;
 		const authHeader = buildHdfcAuthHeader();
 
-		const res = await fetch(`${baseUrl}/orders/${payment.orderId}`, {
+		const gwRes = await fetch(`${baseUrl}/orders/${session.orderId}`, {
 			method: "GET",
 			headers: {
 				Authorization: authHeader,
 				version: "2023-06-30",
 				"Content-Type": "application/x-www-form-urlencoded",
 				"x-merchantid": merchantId,
-				"x-customerid": payment.onBoardingId,
+				"x-customerid": session.onBoardingId,
 			},
 			cache: "no-store",
 		});
 
-		const text = await res.text();
-		let json: any;
-		console.log("text ", text);
+		const rawText = await gwRes.text();
+		let gwJson: any;
 		try {
-			json = JSON.parse(text);
+			gwJson = JSON.parse(rawText);
 		} catch {
 			return NextResponse.json(
-				{ error: "Invalid response from HDFC", raw: text },
+				{ error: "Invalid response from gateway", raw: rawText },
 				{ status: 502 }
 			);
 		}
 
-		// Extract status
-		const status = json.status || json.txn_status || "UNKNOWN";
-		let dbStatus: PaymentStatus = "PENDING";
-		if (status == "FAILED" || status == "CANCELLED") dbStatus = "FAILED";
-		else if (status == "CHARGED") dbStatus = PaymentStatus.SUCCESS;
-		else if (status == "INITIATED" || status == "PENDING") dbStatus = "PENDING";
+		const nextStatus = normalizeGatewayStatus(gwJson); // "PENDING" | "FAILED" | "SUCCESS"
 
-		// Update DB
-		await prisma.$transaction(async (tx) => {
-			await tx.payment.create({
-				data: {
-					orderId: payment.id,
-					status: dbStatus,
-					amount: payment.totalAmount,
-					currency: payment.currency,
-					paymentOrderId: json.order_id || payment.orderId,
-					processedAt: new Date(),
-					paymentMethod: json.payment_method || null,
-					gatewayResponse: JSON.stringify(json),
-					paymentSessionId: payment.id,
-				},
-			});
-			await tx.order.update({
-				where: { id: payment.id },
-				data: { status: "PAID" },
-			});
-		});
-		return NextResponse.json({ status, response: json });
+		// ---------- 2) DB-only transaction ----------
+		const { changedToSuccess } = await prisma.$transaction(
+			async (tx) => {
+				// Read existing payment row (by a unique idempotency key)
+				const existing = await tx.payment.findUnique({
+					where: { paymentSessionId: session.id }, // ensure unique index on this
+					select: { status: true },
+				});
+				const transitionedToSuccess = nextStatus === "SUCCESS";
+
+				// idempotent write via upsert
+				await tx.payment.upsert({
+					where: { paymentSessionId: session.id },
+					create: {
+						orderId: session.id, // or session.orderId if that’s your external ref
+						status: nextStatus,
+						amount: session.totalAmount,
+						currency: session.currency,
+						paymentOrderId: gwJson.order_id || session.orderId,
+						processedAt: new Date(),
+						paymentMethod: gwJson.payment_method || null,
+						gatewayResponse: JSON.stringify(gwJson), // consider trimming if too big
+						paymentSessionId: session.id,
+					},
+					update: {
+						status: nextStatus,
+						processedAt: new Date(),
+						paymentMethod: gwJson.payment_method || null,
+						gatewayResponse: JSON.stringify(gwJson),
+					},
+				});
+
+				// keep Order in sync
+				await tx.order.update({
+					where: { id: session.id },
+					data: {
+						status:
+							nextStatus === "SUCCESS"
+								? "PAID"
+								: nextStatus === "FAILED"
+									? "FAILED"
+									: "PENDING",
+					},
+				});
+
+				return { changedToSuccess: transitionedToSuccess };
+			},
+			// If you have concurrent poll + webhook hits, SERIALIZABLE reduces race issues.
+			{ isolationLevel: "Serializable" }
+		);
+		console.log("changedToSuccess ", changedToSuccess);
+		// ---------- 3) Side-effects AFTER commit ----------
+		if (changedToSuccess) {
+			fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/create`, {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					onboardingId: session.onBoardingId,
+					orderId: session.orderId,
+				}),
+				// You can ignore the response; add a .catch for logs if you want.
+			}).catch((e) => console.error("post-commit user/create failed", e));
+		}
+
+		return NextResponse.json({ status: nextStatus, response: gwJson });
 	} catch (error) {
 		console.error("Error in GET /api/payments/checkStatus:", error);
 		return NextResponse.json(

@@ -177,15 +177,17 @@ export async function POST(req: NextRequest) {
 	if (needsUserCreate && onboardingIdToCreate) {
 		// Prefer calling a local service function, not HTTP.
 		// If you must call HTTP, use a BASE URL + internal token.
-		const base =
-			process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_APP_URL;
+		const base = process.env.NEXT_PUBLIC_BASE_URL;
 		try {
-			const res = await fetch("/api/user/create", {
+			const res = await fetch(`${base}/api/user/create`, {
 				method: "POST",
 				headers: {
 					"content-type": "application/json",
 				},
-				body: JSON.stringify({ onboardingId: onboardingIdToCreate, paymentId }),
+				body: JSON.stringify({
+					onboardingId: onboardingIdToCreate,
+					orderId: orderId,
+				}),
 			});
 			if (!res.ok) {
 				return NextResponse.json(

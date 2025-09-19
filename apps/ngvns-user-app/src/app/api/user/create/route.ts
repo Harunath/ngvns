@@ -47,6 +47,20 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		const order = await prisma.order.findUnique({
+			where: { orderId },
+		});
+		if (
+			!order ||
+			order.onBoardingId !== onboardingId ||
+			order.status !== "PAID"
+		) {
+			return NextResponse.json(
+				{ ok: false, error: "order_invalid_or_not_paid" },
+				{ status: 400 }
+			);
+		}
+
 		// Optional: ensure onboarding finished flag (if you want to gate creation)
 		// if (!ob.onBoardingFinished) {
 		//   return NextResponse.json(
@@ -147,8 +161,7 @@ export async function POST(req: NextRequest) {
 							nominieeDob: ob.nominieeDob,
 							relationship: ob.relationship,
 							onBoardingId: ob.id,
-							orderId, // the paid order id (string, unique)
-							// referral/parent link
+							orderId: order.id,
 							parentReferralId: ob.parentreferralId ?? null,
 							// defaults: deleted=false, deactivated=false, healthCard=false
 						},

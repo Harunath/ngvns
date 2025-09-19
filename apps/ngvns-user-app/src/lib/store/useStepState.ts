@@ -2,13 +2,18 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-export const steps = ["form", "phone", "email", "tandc"] as const;
+export const steps = [
+	"form",
+	"phone",
+	// "email",
+	"tandc",
+] as const;
 export type Step = (typeof steps)[number];
 
 export const stepLabels: Record<Step, string> = {
 	form: "Your Details",
 	phone: "Verify Phone",
-	email: "Verify Email",
+	// email: "Verify Email",
 	tandc: "Terms & Conditions",
 };
 

@@ -5,22 +5,26 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import toast from "react-hot-toast";
 
-import UserForm from "./UserForm";
 import VerifyPhone from "./VerifyPhone";
-import VerifyEmail from "./VerifyEmail";
+// import VerifyEmail from "./VerifyEmail";
 import TandC from "./TandC";
 
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 import UserOnboardingForm from "./onBoarding/UserOnboardingForm";
 import { useStepState } from "../../../lib/store/useStepState";
 
-const steps = ["form", "phone", "email", "tandc"] as const;
+const steps = [
+	"form",
+	"phone",
+	// "email",
+	"tandc",
+] as const;
 type Step = (typeof steps)[number];
 
 export const stepLabels: Record<Step, string> = {
 	form: "Your Details",
 	phone: "Verify Phone",
-	email: "Verify Email",
+	// email: "Verify Email",
 	tandc: "Terms & Conditions",
 };
 
@@ -30,7 +34,7 @@ const pageVariants = {
 	exit: { opacity: 0, y: -16 },
 };
 
-export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
+export default function OnboardingFlow() {
 	const { data } = useOnboardingStore();
 	const { step, setStep } = useStepState();
 
@@ -41,9 +45,9 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 
 	// Completion guards (no APIs)
 	const canProceed = useMemo(() => {
-		if (step === "form") return Boolean(data); // form saved to store
+		if (step === "form") return Boolean(data);
 		if (step === "phone") return phoneVerified;
-		if (step === "email") return emailVerified;
+		// if (step === "email") return emailVerified;
 		if (step === "tandc") return acceptedTnC;
 		return false;
 	}, [step, data, phoneVerified, emailVerified, acceptedTnC]);
@@ -58,17 +62,40 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 				setStep(nextStep);
 			}
 		} else {
-			toast.success("🎉 Onboarding completed successfully!");
 			localStorage.removeItem("onboarding-step");
 		}
 	};
 
-	const goPrev = () => {
-		if (currentIndex > 0) {
-			const prevStep = steps[currentIndex - 1];
-			if (prevStep !== undefined) setStep(prevStep);
+	const advance = () => {
+		if (currentIndex < steps.length - 1) {
+			const nextStep = steps[currentIndex + 1];
+			if (nextStep !== undefined) {
+				setStep(nextStep);
+			}
+		} else {
+			localStorage.removeItem("onboarding-step");
 		}
 	};
+
+	// ❗ effects watch the guard and step; when it flips true, auto-advance
+	useEffect(() => {
+		if (step === "form" && Boolean(data) && data.phone) advance();
+	}, [step, data]);
+
+	useEffect(() => {
+		if (step === "phone" && phoneVerified) advance();
+	}, [step, phoneVerified]);
+
+	useEffect(() => {
+		if (step === "tandc" && acceptedTnC) advance();
+	}, [step, acceptedTnC]);
+
+	// const goPrev = () => {
+	// 	if (currentIndex > 0) {
+	// 		const prevStep = steps[currentIndex - 1];
+	// 		if (prevStep !== undefined) setStep(prevStep);
+	// 	}
+	// };
 
 	const goTo = (target: Step) => {
 		const targetIdx = steps.indexOf(target);
@@ -175,7 +202,7 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 								</motion.div>
 							)}
 
-							{step === "email" && (
+							{/* {step === "email" && (
 								<motion.div
 									key="email"
 									variants={pageVariants}
@@ -193,7 +220,7 @@ export default function OnboardingFlow({ step: initialStep }: { step?: Step }) {
 										<p className=" text-sm text-red-600">Email not found...!</p>
 									)}
 								</motion.div>
-							)}
+							)} */}
 
 							{step === "tandc" && (
 								<motion.div

@@ -8,21 +8,21 @@ export async function POST(req: NextRequest) {
 		const { referralId } = body;
 
 		// Step 1: Check User table for exact matches
-		// const existingUser = await prisma.user.findFirst({
-		// 	where: {
-		// 		vrKpId: referralId,
-		// 	},
-		// });
+		const existingUser = await prisma.user.findFirst({
+			where: {
+				vrKpId: referralId,
+			},
+		});
 
-		// if (!existingUser) {
-		// 	return NextResponse.json(
-		// 		{
-		// 			success: false,
-		// 			message: `No user exists with the referral Id ${referralId}.`,
-		// 		},
-		// 		{ status: 404 }
-		// 	);
-		// }
+		if (!existingUser) {
+			return NextResponse.json(
+				{
+					success: false,
+					message: `No user exists with the referral Id ${referralId}.`,
+				},
+				{ status: 404 }
+			);
+		}
 
 		return NextResponse.json({
 			success: true,

@@ -51,11 +51,12 @@ export default function Page() {
 						<div className="mb-6 grid gap-4 sm:grid-cols-2">
 							<div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
 								<p className="text-sm text-white/70">Amount</p>
-								<p className="mt-1 text-3xl font-bold">
-									₹ 4,999
-									<span className="ml-2 align-middle text-sm font-medium text-white/60">
-										(+ GST)
-									</span>
+								<p className="mt-1 text-3xl font-bold">₹ 4,999</p>
+								<p className="ml-1 align-middle text-sm font-medium text-white/60">
+									(+ GST 5% = ₹ 249.95)
+								</p>
+								<p className="mt-1 align-middle text-sm font-medium text-white/60">
+									Total ₹ 5,248.95
 								</p>
 							</div>
 
@@ -109,7 +110,7 @@ export default function Page() {
 						<div className="mt-6 space-y-3">
 							<div className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3">
 								<span className="text-sm text-white/70">Total</span>
-								<span className="text-xl font-bold">₹ 4,999 + GST</span>
+								<span className="text-xl font-bold">₹ 5,248.95</span>
 							</div>
 
 							{/* Replace the Link href with your payment initiation route when ready */}

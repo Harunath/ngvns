@@ -23,8 +23,16 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 	const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(""));
 	const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 	const [verifying, setVerifying] = useState(false);
+	const [verified, setVerified] = useState(false);
 
 	const [cooldown, setCooldown] = useState(0);
+
+	useEffect(() => {
+		if (verified) {
+			onVerified;
+			goNext();
+		}
+	}, [verified, onVerified, goNext]);
 
 	// Mask phone for display
 	const maskedPhone = useMemo(() => {
@@ -59,7 +67,6 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 			if (!result.ok) throw new Error("Failed to send OTP");
 			const resData = await result.json();
 
-			console.log("OTP sent:", resData);
 			// assume success
 			setOtpSent(true);
 			setCooldown(RESEND_COOLDOWN);
@@ -129,6 +136,7 @@ export default function VerifyPhone({ onVerified, goNext }: Props) {
 				if (!result.ok) throw new Error("Failed to verify OTP");
 				const resData = await result.json();
 				console.log("OTP verify response:", resData);
+				setVerified(true);
 				onVerified?.();
 				goNext();
 				setVerifying(false);

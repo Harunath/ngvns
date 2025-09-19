@@ -8,9 +8,9 @@ const COLORS = {
 };
 
 export const metadata: Metadata = {
-	title: "Membership Benefits | NGVNS",
+	title: "Membership Benefits | VRKP",
 	description:
-		"See what you get with NGVNS membership: land allotment, health coverage, personal accident insurance, and savings on essentials.",
+		"See what you get with VRKP membership: land allotment, health coverage, personal accident insurance, and savings on essentials.",
 };
 
 const BENEFITS = [
@@ -21,12 +21,12 @@ const BENEFITS = [
 	},
 	{
 		title: "Health Care Services for 3 Years",
-		desc: "Access partnered healthcare benefits with a 3-year health card.",
+		desc: "Access partnered healthcare benefits with a 3-year health care services.",
 		accent: "health",
 	},
 	{
 		title: "₹5 Lakhs Personal Accidental Insurance (5 Years)",
-		desc: "Coverage up to ₹5,00,000 for accidental events for 5 years, subject to policy terms.",
+		desc: "Coverage up to ₹5,00,000/- for accident;  permanent and partial disabilities also covered",
 		accent: "insurance",
 	},
 	{
