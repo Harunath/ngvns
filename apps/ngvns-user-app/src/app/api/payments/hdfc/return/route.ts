@@ -8,17 +8,21 @@ export async function POST(req: NextRequest) {
 
 		if (!orderId) {
 			return NextResponse.redirect(
-				new URL("/payment/error?reason=missing-order", req.url)
+				new URL("/payment/error?reason=missing-order", req.url),
+				303
 			);
 		}
 
+		// 🔑 Force GET here (303), do NOT use the default 307
 		return NextResponse.redirect(
-			new URL(`/join/payment/catch/${orderId}`, req.url)
+			new URL(`join/payment/catch/${orderId}`, req.url),
+			303
 		);
 	} catch (err) {
 		console.error("Return URL error:", err);
 		return NextResponse.redirect(
-			new URL("/payment/error?reason=server", req.url)
+			new URL("/payment/error?reason=server", req.url),
+			303
 		);
 	}
 }

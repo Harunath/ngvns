@@ -72,6 +72,7 @@ export async function GET(req: NextRequest) {
 				{ status: 502 }
 			);
 		}
+		console.log("Gateway response:", gwJson);
 
 		const nextStatus = normalizeGatewayStatus(gwJson); // "PENDING" | "FAILED" | "SUCCESS"
 

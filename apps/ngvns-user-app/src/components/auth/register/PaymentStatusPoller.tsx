@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import PaymentButton from "./PaymentButton";
 
 type Props = {
 	intervalMs?: number; // polling interval (default: 5s)
@@ -93,7 +92,7 @@ export default function PaymentStatusPoller({
 
 	// UI
 	return (
-		<div className="absolute inset-0 flex flex-col items-center justify-center pt-24 p-6 border rounded shadow bg-white">
+		<div className="absolute inset-0 z-50 flex flex-col items-center justify-center pt-24 p-6 border rounded shadow bg-white">
 			{error ? (
 				<PaymentError />
 			) : (
