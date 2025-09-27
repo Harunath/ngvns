@@ -8,6 +8,7 @@ import { useStepState } from "../../../lib/store/useStepState";
 export default function ResumePage() {
 	const router = useRouter();
 	const setData = useOnboardingStore((s) => s.setData);
+	const data = useOnboardingStore((s) => s.data);
 	const { setStep } = useStepState();
 
 	const [mode, setMode] = useState<"phone" | "otp">("phone");
@@ -63,10 +64,14 @@ export default function ResumePage() {
 			}
 			const json = await res.json();
 			const { user, currentStep } = json;
+			console.log("Resume verify response:", json);
+			console.log("Current Step:", currentStep);
 			setData(user);
+			console.log("Onboarding data set from resume:", data);
 			if (currentStep) {
 				if (currentStep == "tandc") {
 					setStep(currentStep);
+					router.push("/register");
 					return;
 				} else {
 					router.push("/join/payment");

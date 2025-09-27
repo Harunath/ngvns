@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 import { useRouter } from "next/navigation";
 
@@ -8,32 +8,33 @@ const PaymentButton = () => {
 	const router = useRouter();
 	useEffect(() => {
 		if (!data?.phone) {
-			router.push("/unauthorized");
+			router.push("/register/resume");
 		}
 	}, [data]);
 	const handlePayment = async () => {
-		try {
-			const res = await fetch("/api/payments/hdfc/session", {
-				method: "POST",
-				body: JSON.stringify({
-					phone: data?.phone,
-				}),
-			});
-			if (!res.ok) {
-				console.error("Failed to create payment session");
-				return;
-			}
-			const paymentData = await res.json();
-			console.log("Payment session created:", paymentData);
-			const { url } = paymentData;
-			if (url) {
-				window.location.href = url; // Redirect to payment gateway
-			} else {
-				console.error("Payment URL not found in response");
-			}
-		} catch (e) {
-			console.error("Error initiating payment:", e);
-		}
+		// try {
+		// 	const res = await fetch("/api/payments/hdfc/session", {
+		// 		method: "POST",
+		// 		body: JSON.stringify({
+		// 			phone: data?.phone,
+		// 		}),
+		// 	});
+		// 	if (!res.ok) {
+		// 		console.error("Failed to create payment session");
+		// 		return;
+		// 	}
+		// 	const paymentData = await res.json();
+		// 	console.log("Payment session created:", paymentData);
+		// 	const { url } = paymentData;
+		// 	if (url) {
+		// 		window.location.href = url; // Redirect to payment gateway
+		// 	} else {
+		// 		console.error("Payment URL not found in response");
+		// 	}
+		// } catch (e) {
+		// 	console.error("Error initiating payment:", e);
+		// }
+		router.push("/join/payment/in-progress");
 	};
 	return (
 		<button

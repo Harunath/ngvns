@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import PaymentButton from "../../../../components/auth/register/PaymentButton";
+import RazorpayButton from "../../../../components/rzp/RazorpayButton";
 
 export default function Page() {
 	return (
@@ -114,7 +115,8 @@ export default function Page() {
 							</div>
 
 							{/* Replace the Link href with your payment initiation route when ready */}
-							<PaymentButton />
+							{/* <PaymentButton /> */}
+							<RazorpayButton />
 
 							<p className="text-xs leading-5 text-white/60">
 								By continuing, you agree to our{" "}

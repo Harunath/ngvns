@@ -18,12 +18,15 @@ export default function PaymentStatusPoller({
 	intervalMs = 5000,
 	maxAttempts = 12,
 }: Props) {
-	const { order_id: paymentId } = useParams<{ order_id: string }>();
+	const { order_id: orderId, payment_id } = useParams<{
+		order_id: string;
+		payment_id: string;
+	}>();
 
-	if (!paymentId) {
+	if (!orderId) {
 		return null;
 	}
-
+	console.log("Polling payment status for order:", orderId, payment_id);
 	const [status, setStatus] = useState<PaymentStatus>("INITIATED");
 	const [error, setError] = useState<string | null>(null);
 	const [onBoardingId, setOnBoardingId] = useState<string | null>(null);
@@ -32,40 +35,43 @@ export default function PaymentStatusPoller({
 	const intervalRef = useRef<NodeJS.Timeout | null>(null);
 	const isMounted = useRef(true);
 
+	const pollPaymentStatus = async () => {
+		try {
+			const res = await fetch(
+				// `/api/payments/hdfc/status-check?orderId=${orderId}`
+				`/api/payments/rzp/status?orderId=${orderId}&paymentId=${payment_id}`
+			);
+			const data = await res.json();
+			console.log("data is :", data);
+			if (!res.ok) throw new Error(data.error || "Unexpected response");
+			if (!isMounted.current) return;
+			setStatus(data.status);
+			if (data?.response?.customer_id)
+				setOnBoardingId(data.response.customer_id);
+			// stop polling if status is final
+			console.log("status is ", data.status);
+			if (data.status == "SUCCESS" || data.status == "FAILED") {
+				console.log("stop pooling with status : ", data.status);
+				stopPolling();
+			}
+		} catch (err) {
+			console.error("Payment status check failed", err);
+			if (err instanceof Error) {
+				if (!isMounted.current) return;
+				setError(err.message);
+				// soft-fail: show error but keep trying unless maxAttempts exceeded
+				setError(`Retrying… (${err.message})`);
+			} else setError("An unknown error occurred");
+			toast.error(`Payment status check failed`);
+		}
+	};
+
+	const stopPolling = () => {
+		if (intervalRef.current) clearInterval(intervalRef.current);
+		intervalRef.current = null;
+	};
 	useEffect(() => {
 		isMounted.current = true;
-
-		const pollPaymentStatus = async () => {
-			try {
-				const res = await fetch(
-					`/api/payments/hdfc/status-check?paymentId=${paymentId}`
-				);
-				const data = await res.json();
-
-				if (!res.ok) throw new Error(data.error || "Unexpected response");
-				if (!isMounted.current) return;
-				setStatus(data.status);
-				if (data.response.customer_id)
-					setOnBoardingId(data.response.customer_id);
-				// stop polling if status is final
-				if (data.status == "SUCCESS" || data.status == "FAILED") {
-					stopPolling();
-				}
-			} catch (err) {
-				if (err instanceof Error) {
-					if (!isMounted.current) return;
-					setError(err.message);
-					// soft-fail: show error but keep trying unless maxAttempts exceeded
-					setError(`Retrying… (${err.message})`);
-				} else setError("An unknown error occurred");
-				toast.error(`Payment status check failed`);
-			}
-		};
-
-		const stopPolling = () => {
-			if (intervalRef.current) clearInterval(intervalRef.current);
-			intervalRef.current = null;
-		};
 
 		// run once immediately
 		pollPaymentStatus();
@@ -88,13 +94,17 @@ export default function PaymentStatusPoller({
 			isMounted.current = false;
 			stopPolling();
 		};
-	}, [paymentId, intervalMs, maxAttempts]);
+	}, [orderId, intervalMs, maxAttempts]);
 
 	// UI
 	return (
 		<div className="absolute inset-0 z-50 flex flex-col items-center justify-center pt-24 p-6 border rounded shadow bg-white">
 			{error ? (
-				<PaymentError />
+				<>
+					{status}
+
+					<PaymentError />
+				</>
 			) : (
 				<>
 					{status == "INITIATED" && (
@@ -108,7 +118,6 @@ export default function PaymentStatusPoller({
 						{status === "PENDING" && <PaymentPending />}
 						{status === "SUCCESS" && <PaymentCharged />}
 						{status === "FAILED" && <PaymentFailed />}
-
 						{!["INITIATED", "PENDING", "SUCCESS", "FAILED"].includes(status) &&
 							`ℹ️ Status: ${status}`}
 					</p>
