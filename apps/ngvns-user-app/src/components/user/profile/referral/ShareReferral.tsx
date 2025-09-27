@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 type Props = { referralUrl: string; code: string };
 
 export default function ShareReferral({ referralUrl, code }: Props) {
+	9;
 	const [copied, setCopied] = useState(false);
 
 	const copy = async () => {
@@ -21,7 +22,7 @@ export default function ShareReferral({ referralUrl, code }: Props) {
 		if (navigator.share) {
 			try {
 				await navigator.share({
-					title: "Join Biz-Network",
+					title: "Join VR KISAN PARIVAAR",
 					text: "Use my referral link to join!",
 					url: referralUrl,
 				});

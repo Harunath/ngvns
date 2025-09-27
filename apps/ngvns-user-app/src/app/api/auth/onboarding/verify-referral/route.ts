@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
 	try {
 		const body = await req.json();
 		const { referralId } = body;
-
+		console.log("Verifying referral Id : ", referralId);
 		// Step 1: Check User table for exact matches
 		const existingUser = await prisma.user.findFirst({
 			where: {

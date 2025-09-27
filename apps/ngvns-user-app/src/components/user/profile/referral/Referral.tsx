@@ -5,21 +5,13 @@ import Link from "next/link";
 import ShareReferral from "./ShareReferral";
 import { authOptions } from "../../../../lib/auth/auth";
 
-import { headers } from "next/headers";
-
-export async function getBaseUrl() {
-	const h = await headers(); // 👈 await here
-
-	const env = process.env.NEXT_PUBLIC_APP_URL;
-	if (env) return env.endsWith("/") ? env : env + "/";
-
-	const host = h.get("x-forwarded-host") ?? h.get("host") ?? "localhost:3000";
-	const proto =
-		h.get("x-forwarded-proto") ??
-		(host.includes("localhost") ? "http" : "https");
-
-	return `${proto}://${host}/`;
-}
+// export async function getBaseUrl() {
+// 	const env = process.env.NEXT_PUBLIC_BASE_URL;
+// 	if (!env) {
+// 		throw new Error("NEXT_PUBLIC_BASE_URL is not set");
+// 	}
+// 	return `${env.endsWith("/") ? env : env + "/"}`;
+// }
 
 export default async function Referral() {
 	const session = await getServerSession(authOptions);
@@ -37,8 +29,9 @@ export default async function Referral() {
 	}
 
 	const code = user.vrKpId || user.id;
-	const base = getBaseUrl();
-	const referralUrl = `${base}join?ref=${encodeURIComponent(code)}`;
+	const base = process.env.NEXT_PUBLIC_BASE_URL;
+	console.log("base url resolved to : ", base);
+	const referralUrl = `${base}/register?ref=${encodeURIComponent(code)}`;
 
 	return (
 		<div className="p-6">
