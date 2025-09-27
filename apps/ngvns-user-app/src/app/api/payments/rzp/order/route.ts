@@ -13,7 +13,7 @@ const RZ_KEY_SECRET =
 		? process.env.RZP_TEST_KEY_SECRET!
 		: process.env.RZP_LIVE_KEY_SECRET!;
 
-const amount = 5249.95; // INR in paise
+const amount = 524995; // INR in paise
 
 export async function POST(req: NextRequest) {
 	try {
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
 		});
 
 		const r = await instance.orders.create({
-			amount: 5250,
+			amount: amount,
 			currency: "INR",
 			notes: { source: "web", project: "VRKP" },
 			receipt: `${onboarding.id}`,
