@@ -4,11 +4,11 @@ import prisma from "@ngvns2025/db/client";
 import Razorpay from "razorpay";
 
 const RZ_KEY_ID =
-	process.env.NEXT_PUBLIC_NODE_ENV == "development"
+	process.env.NEXT_PUBLIC_GATEWAY_MODE == "TEST"
 		? process.env.NEXT_PUBLIC_RZP_TEST_KEY_ID!
 		: process.env.NEXT_PUBLIC_RZP_LIVE_KEY_ID!;
 const RZ_KEY_SECRET =
-	process.env.NEXT_PUBLIC_NODE_ENV == "development"
+	process.env.NEXT_PUBLIC_GATEWAY_MODE == "TEST"
 		? process.env.RZP_TEST_KEY_SECRET!
 		: process.env.RZP_LIVE_KEY_SECRET!;
 

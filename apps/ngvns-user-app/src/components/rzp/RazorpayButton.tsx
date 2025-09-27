@@ -55,7 +55,7 @@ export default function RazorpayButton() {
 			console.log(data);
 			const options: any = {
 				key:
-					process.env.NODE_ENV == "production"
+					process.env.NEXT_PUBLIC_GATEWAY_MODE == "LIVE"
 						? process.env.NEXT_PUBLIC_RZP_LIVE_KEY_ID
 						: process.env.NEXT_PUBLIC_RZP_TEST_KEY_ID,
 				amount: data.amount,
