@@ -1,6 +1,7 @@
 import React from "react";
 import { authOptions } from "../../../lib/auth/auth";
 import { getServerSession } from "next-auth";
+import Referral from "../../../components/user/profile/referral/Referral";
 
 const page = async () => {
 	const session = await getServerSession(authOptions);
@@ -14,6 +15,7 @@ const page = async () => {
 						<p>Welcome, {session.user?.name}</p>
 						<p>Email: {session.user?.email}</p>
 						<p>Phone: {session.user?.phone}</p>
+						<Referral />
 					</div>
 				) : (
 					<p>You are not logged in.</p>
