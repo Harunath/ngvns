@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { AnimatePresence, motion } from "motion/react";
 
 import { useOnboardingStore } from "../../../../lib/store/useOnboardingStore";
@@ -33,7 +33,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 		].filter(Boolean) as string[];
 		return (candidates[0] ?? "").toUpperCase();
 	}, [searchParams]);
-
+	const [refLoading, setRefLoading] = useState(false);
 	const [referralValid, setReferralValid] = useState(false);
 	const [checkedOnce, setCheckedOnce] = useState(false);
 
@@ -61,6 +61,8 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 
 	const verifyReferral = async () => {
 		const refId = (watch("referralId") || "").toUpperCase().trim();
+		console.log("Verifying referral... " + refId);
+
 		if (!refId) {
 			setError("referralId", {
 				type: "manual",
@@ -74,14 +76,17 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			body: JSON.stringify({ referralId: refId }),
 			headers: { "Content-Type": "application/json" },
 		});
+		console.log("Referral verify response", res);
 		if (!res.ok) {
 			const data = await res.json();
+			setData({ ...data, referralId: refId });
+			setReferralValid(false);
+
+			toast.error(data?.message || "Referral ID is invalid inside res");
 			setError("referralId", {
 				type: "manual",
 				message: data?.message || "Referral ID is invalid",
 			});
-			setReferralValid(false);
-			toast.error(data?.message || "Referral ID is invalid");
 			return;
 		}
 		setReferralValid(true);
@@ -91,13 +96,18 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 	// reflect referral from URL
 	useEffect(() => {
 		if (!referralFromUrl) return;
+		setRefLoading(false);
 		setValue("referralId", referralFromUrl);
 		if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
+			setRefLoading(true);
 			verifyReferral();
+			setRefLoading(false);
 			setCheckedOnce(true);
 		} else {
+			setRefLoading(true);
 			const ok = validateReferralLocally(referralFromUrl);
 			setReferralValid(ok);
+			setRefLoading(false);
 			setCheckedOnce(true);
 			if (ok) toast.success("Referral ID auto-validated from URL");
 			else {
@@ -179,6 +189,8 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 							setReferralValid={setReferralValid}
 							checkedOnce={checkedOnce}
 							setCheckedOnce={setCheckedOnce}
+							refLoading={refLoading}
+							verifyReferral={verifyReferral}
 						/>
 					)}
 				</AnimatePresence>

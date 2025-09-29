@@ -1,0 +1,5 @@
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_parentBId_fkey" FOREIGN KEY ("parentBId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "User" ADD CONSTRAINT "User_parentCId_fkey" FOREIGN KEY ("parentCId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

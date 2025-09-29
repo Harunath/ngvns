@@ -1,9 +1,9 @@
 "use client";
 
 import { motion } from "motion/react";
-import toast from "react-hot-toast";
 import StepHeader from "./StepHeader";
 import React from "react";
+import { toast } from "react-toastify";
 import {
 	FieldError,
 	UseFormRegister,
@@ -23,6 +23,8 @@ export default function ReferralValidator({
 	setReferralValid,
 	checkedOnce,
 	setCheckedOnce,
+	refLoading,
+	verifyReferral,
 }: {
 	referralId: string;
 	register: UseFormRegister<OnboardingFormData>;
@@ -33,19 +35,14 @@ export default function ReferralValidator({
 	setReferralValid: (v: boolean) => void;
 	checkedOnce: boolean;
 	setCheckedOnce: (v: boolean) => void;
+	refLoading?: boolean;
+	verifyReferral: () => Promise<void>;
 }) {
-	const checkReferral = () => {
-		const isValid = validateReferralLocally(referralId.toUpperCase());
-		setReferralValid(isValid);
+	const checkReferral = async () => {
+		// const isValid = validateReferralLocally(referralId.toUpperCase());
+		// setReferralValid(isValid);
+		await verifyReferral();
 		setCheckedOnce(true);
-		if (isValid) toast.success("Referral ID is valid");
-		else {
-			setError("referralId", {
-				type: "manual",
-				message: "Invalid Referral ID",
-			});
-			toast.error("Invalid Referral ID");
-		}
 	};
 
 	const resetReferral = () => {
@@ -71,12 +68,11 @@ export default function ReferralValidator({
 						</span>
 					) : checkedOnce ? (
 						<span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-700">
-							Not valid
+							{refLoading ? "Checking..." : "Invalid"}
 						</span>
 					) : null
 				}
 			/>
-
 			<div className="grid gap-3 sm:grid-cols-[1fr_auto]">
 				<input
 					type="text"
@@ -103,12 +99,14 @@ export default function ReferralValidator({
 				</div>
 			</div>
 
-			<p className="mt-2 text-sm">
-				For testing, try:{" "}
-				<span className="font-semibold text-blue-700">VALID123</span>,{" "}
-				<span className="font-semibold text-blue-700">TEST999</span>,{" "}
-				<span className="font-semibold text-blue-700">DEMO777</span>
-			</p>
+			{process.env.NEXT_PUBLIC_NODE_ENV !== "production" && (
+				<p className="mt-2 text-sm">
+					For testing, try:{" "}
+					<span className="font-semibold text-blue-700">VALID123</span>,{" "}
+					<span className="font-semibold text-blue-700">TEST999</span>,{" "}
+					<span className="font-semibold text-blue-700">DEMO777</span>
+				</p>
+			)}
 
 			{error && !referralValid && checkedOnce && (
 				<p className="mt-2 text-sm font-medium text-rose-600">

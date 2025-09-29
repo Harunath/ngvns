@@ -56,6 +56,11 @@ model User {
   onBoarding       Onboarding     @relation("UserOnboarding", fields: [onBoardingId], references: [id])
   order            Order          @relation("paymentOrder", fields: [orderId], references: [id])
   joinedBy         User?          @relation("UserDirectJoin", fields: [parentReferralId], references: [vrKpId])
+  parentB          User?          @relation("B LEVEL",fields: [parentBId],references: [id])
+  parentC          User?          @relation("C LEVEL",fields: [parentCId],references: [id])
+
+  childB           User[]         @relation("B LEVEL")
+  childC           User[]         @relation("C LEVEL")
   directJoin       User[]         @relation("UserDirectJoin")
   directJoinOnBoarding       Onboarding[]         @relation("parentreferral")
   

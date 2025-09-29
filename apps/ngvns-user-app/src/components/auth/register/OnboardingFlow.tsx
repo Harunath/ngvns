@@ -3,7 +3,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import toast from "react-hot-toast";
+import toast from "react-toastify";
 
 import VerifyPhone from "./VerifyPhone";
 // import VerifyEmail from "./VerifyEmail";

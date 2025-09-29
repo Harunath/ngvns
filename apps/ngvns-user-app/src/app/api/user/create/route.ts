@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
 			where: { id: onboardingId },
 			include: {
 				address: true, // assumes Address model exists & relation name "OnboardingAddress"
+				parentrederral: true,
 				user: true,
 			},
 		});
@@ -61,26 +62,6 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
-		// Optional: ensure onboarding finished flag (if you want to gate creation)
-		// if (!ob.onBoardingFinished) {
-		//   return NextResponse.json(
-		//     { ok: false, error: "onboarding_not_finished" },
-		//     { status: 400 }
-		//   );
-		// }
-
-		// Optional: if you want to ensure the order belongs to this onboarding & is paid
-		// const order = await prisma.order.findFirst({
-		//   where: { id: orderId, onboardingId: onboardingId, status: "SUCCESS" },
-		// });
-		// if (!order) {
-		//   return NextResponse.json(
-		//     { ok: false, error: "order_invalid_or_not_paid" },
-		//     { status: 400 }
-		//   );
-		// }
-
-		// 2) Basic duplicate checks (email/phone unique in User)
 		// You can relax or change this to merge logic if desired.
 		const [existingByPhone, existingByEmail, existingOrder] = await Promise.all(
 			[
@@ -110,6 +91,20 @@ export async function POST(req: NextRequest) {
 				{ status: 409 }
 			);
 		}
+		if (!ob.parentreferralId) {
+			return NextResponse.json(
+				{ ok: false, error: "parent_referral_id_missing_in_onboarding" },
+				{ status: 400 }
+			);
+		}
+		const parents = await prisma.user.findFirst({
+			where: { vrKpId: ob.parentreferralId! },
+			select: {
+				id: true,
+				parentB: { select: { id: true } },
+				joinedBy: { select: { id: true } },
+			},
+		});
 
 		// 4) Create user in a transaction with vrKpId collision retries
 		const MAX_RETRIES = 5;
@@ -162,7 +157,10 @@ export async function POST(req: NextRequest) {
 							relationship: ob.relationship,
 							onBoardingId: ob.id,
 							orderId: order.id,
-							parentReferralId: ob.parentreferralId ?? null,
+							parentReferralId: ob.parentreferralId,
+							parentBId: parents?.id ?? null,
+							parentCId: parents?.parentB?.id ?? null,
+
 							// defaults: deleted=false, deactivated=false, healthCard=false
 						},
 					});

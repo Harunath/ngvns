@@ -9,7 +9,20 @@ export async function POST(req: NextRequest) {
 		const body = await req.json();
 		const data = onboardingSchema.parse(body);
 
-		const { phone, aadhaar, email, relationType } = data;
+		const { phone, aadhaar, email, relationType, referralId } = data;
+
+		if (!referralId) {
+			return bad("Referral ID is required.", 400, { field: "referralId" });
+		}
+
+		const parent = await prisma.user.findUnique({
+			where: { vrKpId: referralId },
+			select: { id: true, vrKpId: true },
+		});
+
+		if (!parent) {
+			return bad("Invalid Referral ID.", 400, { field: "referralId" });
+		}
 
 		const state = await prisma.states.findUnique({
 			where: { id: data.address.stateId },
@@ -93,7 +106,6 @@ export async function POST(req: NextRequest) {
 				where: { phone: phone ?? "" }, // phone must be unique in the schema
 				update: {
 					...data,
-					referralId: null,
 					dob: ymdToUTCDate(data.dob),
 					nominieeDob: ymdToUTCDate(data.nominieeDob),
 					address: undefined,
@@ -104,7 +116,6 @@ export async function POST(req: NextRequest) {
 				},
 				create: {
 					...data,
-					referralId: null,
 					relationType: purerelationType as RelationType,
 					dob: ymdToUTCDate(data.dob),
 					nominieeDob: ymdToUTCDate(data.nominieeDob),

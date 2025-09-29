@@ -162,6 +162,17 @@ export default async function BenefitsPage() {
 										<p className="mt-1 text-sm leading-6 text-neutral-700">
 											{b.desc}
 										</p>
+										{idx == 2 && (
+											<div className="mt-2 text-xs text-neutral-500">
+												Tieup with{" "}
+												<Link
+													href="/healthcare-tieup"
+													className="font-medium text-blue-600 hover:underline">
+													Unity Life Health Care
+												</Link>{" "}
+												for health services and insurance.
+											</div>
+										)}
 									</div>
 								</div>
 							</li>

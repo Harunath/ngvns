@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 // components/TandC.tsx
 import React, { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 
 type Props = {
 	onAccept?: (accepted: boolean) => void;

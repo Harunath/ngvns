@@ -1,7 +1,7 @@
 "use client";
 // components/VerifyEmail.tsx
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { useOnboardingStore } from "../../../lib/store/useOnboardingStore";
 
 type Props = {
