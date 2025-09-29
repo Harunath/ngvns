@@ -106,6 +106,8 @@ export async function POST(req: NextRequest) {
 				where: { phone: phone ?? "" }, // phone must be unique in the schema
 				update: {
 					...data,
+					referralId: null,
+					parentreferralId: parent.vrKpId,
 					dob: ymdToUTCDate(data.dob),
 					nominieeDob: ymdToUTCDate(data.nominieeDob),
 					address: undefined,
@@ -116,6 +118,8 @@ export async function POST(req: NextRequest) {
 				},
 				create: {
 					...data,
+					referralId: null,
+					parentreferralId: parent.vrKpId,
 					relationType: purerelationType as RelationType,
 					dob: ymdToUTCDate(data.dob),
 					nominieeDob: ymdToUTCDate(data.nominieeDob),

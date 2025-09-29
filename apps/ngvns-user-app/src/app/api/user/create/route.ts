@@ -36,12 +36,14 @@ export async function POST(req: NextRequest) {
 		});
 
 		if (!ob) {
+			console.error("Onboarding not found", { onboardingId });
 			return NextResponse.json(
 				{ ok: false, error: "onboarding_not_found" },
 				{ status: 404 }
 			);
 		}
 		if (ob.user) {
+			console.error("User already exists for onboarding", { onboardingId });
 			return NextResponse.json(
 				{ ok: false, error: "user_already_created_for_onboarding" },
 				{ status: 409 }
@@ -92,6 +94,9 @@ export async function POST(req: NextRequest) {
 			);
 		}
 		if (!ob.parentreferralId) {
+			console.error("parent_referral_id_missing_in_onboarding", {
+				onboardingId,
+			});
 			return NextResponse.json(
 				{ ok: false, error: "parent_referral_id_missing_in_onboarding" },
 				{ status: 400 }
@@ -177,6 +182,7 @@ export async function POST(req: NextRequest) {
 				break; // success -> exit retry loop
 			} catch (err: any) {
 				// On unique collision for vrKpId, retry
+				console.error(`Attempt ${attempt} to create user failed`, err);
 				if (err?.code === "P2002" && err?.meta?.target?.includes("vrKpId")) {
 					if (attempt === MAX_RETRIES) throw err;
 					continue;
@@ -204,6 +210,7 @@ export async function POST(req: NextRequest) {
 			{ status: 201 }
 		);
 	} catch (e: any) {
+		console.error("create-user caught error", e);
 		// Zod errors
 		if (e.name === "ZodError") {
 			return NextResponse.json(
