@@ -37,7 +37,7 @@ export async function POST(req: Request) {
 				senderid: process.env.SMS_SENDER_ID!,
 				mobile: phone,
 				message: `Dear member, your OTP for phone number verification to the vrkisanparivaar Application is ${code}. It is valid for 10 minutes. Please do not share it with anyone.`,
-				templateid: process.env.SMS_TEMPLATE_ID!,
+				templateid: process.env.SMS_OTP_TEMPLATE_ID!,
 			});
 			const response = await fetch(url);
 			const data = await response.text();

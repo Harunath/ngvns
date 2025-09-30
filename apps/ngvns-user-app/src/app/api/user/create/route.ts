@@ -178,6 +178,26 @@ export async function POST(req: NextRequest) {
 
 					return user;
 				});
+				if (createdUser) {
+					console.log("User created", {
+						id: createdUser.id,
+						name: createdUser.fullname,
+						vrKpId: createdUser.vrKpId,
+					});
+					const res = await fetch(
+						`${process.env.NEXT_PUBLIC_BASE_URL}/api/notifications/sms/welcome`,
+						{
+							method: "POST",
+							body: JSON.stringify({
+								mobile: createdUser.phone,
+								memberIdPassword: createdUser.vrKpId, // fill {#var#}
+								idempotencyKey: `${createdUser.vrKpId}`, // prevents duplicates
+							}),
+							headers: { "Content-Type": "application/json" },
+						}
+					);
+					return res.json();
+				}
 
 				break; // success -> exit retry loop
 			} catch (err: any) {

@@ -255,3 +255,29 @@ enum PaymentStatus {
   FAILED
   FLAGGED
 }
+
+enum SmsStatus {
+  QUEUED
+  SUBMITTED
+  DELIVERED
+  FAILED
+}
+
+model SmsMessage {
+  id               String    @id @default(cuid())
+  mobile           String    @db.VarChar(15)
+  templateId       String
+  text             String
+  campId           String?   @unique
+  status           SmsStatus @default(QUEUED)
+  attempts         Int       @default(0)
+  lastError        String?
+  idempotencyKey   String?
+  processingToken  String?
+  processingExpiresAt    DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([mobile, status])
+  @@index([idempotencyKey])
+}
