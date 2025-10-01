@@ -6,15 +6,18 @@ import type { OnboardingFormData } from "../../../../../lib/validators/onboardin
 import TextInput from "../fields/TextInput";
 import RadioGroup from "../fields/RadioGroup";
 import SelectInput from "../fields/SelectInput";
+import SingleImageUpload from "../fields/ImageUpload";
 
 export default function PersonalDetails({
 	register,
 	errors,
 	watch,
+	setUploading,
 }: {
 	register: UseFormRegister<OnboardingFormData>;
 	errors: FieldErrors<OnboardingFormData>;
 	watch: UseFormWatch<OnboardingFormData>;
+	setUploading: (uploading: boolean) => void;
 }) {
 	const relType = watch("relationType");
 
@@ -65,10 +68,16 @@ export default function PersonalDetails({
 			</SelectInput>
 
 			<div className="md:col-span-2">
-				<TextInput
+				{/* <TextInput
 					label="User Photo URL *"
 					error={errors.userPhoto}
 					{...register("userPhoto")}
+				/> */}
+				<SingleImageUpload
+					setValue={register}
+					error={errors.userPhoto}
+					onUploadingChange={setUploading}
+					// optional: initialUrl={watch("userPhoto")}  // if editing an existing value
 				/>
 			</div>
 		</div>

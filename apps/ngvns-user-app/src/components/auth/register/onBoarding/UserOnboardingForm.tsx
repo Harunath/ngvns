@@ -26,16 +26,13 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 	const { setData } = useOnboardingStore();
 
 	const referralFromUrl = useMemo(() => {
-		const candidates = [
-			searchParams?.get("ref"),
-			searchParams?.get("refId"),
-			searchParams?.get("referralId"),
-		].filter(Boolean) as string[];
+		const candidates = [searchParams?.get("ref")].filter(Boolean) as string[];
 		return (candidates[0] ?? "").toUpperCase();
 	}, [searchParams]);
 	const [refLoading, setRefLoading] = useState(false);
 	const [referralValid, setReferralValid] = useState(false);
 	const [checkedOnce, setCheckedOnce] = useState(false);
+	const [uploading, setUploading] = useState(false);
 
 	const {
 		register,
@@ -60,6 +57,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 	});
 
 	const verifyReferral = async () => {
+		setRefLoading(() => true);
 		const refId = (watch("referralId") || "").toUpperCase().trim();
 		console.log("Verifying referral... " + refId);
 
@@ -69,6 +67,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 				message: "Please enter a referral ID",
 			});
 			setReferralValid(false);
+			setRefLoading(() => false);
 			return;
 		}
 		const res = await fetch("/api/auth/onboarding/verify-referral", {
@@ -81,7 +80,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			const data = await res.json();
 			setData({ ...data, referralId: refId });
 			setReferralValid(false);
-
+			setRefLoading(() => false);
 			toast.error(data?.message || "Referral ID is invalid inside res");
 			setError("referralId", {
 				type: "manual",
@@ -90,34 +89,19 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			return;
 		}
 		setReferralValid(true);
+		setRefLoading(() => false);
 		toast.success("Referral ID is valid!");
 	};
 
 	// reflect referral from URL
 	useEffect(() => {
+		console.log("triggring useEffect for referral from URL", {
+			referralFromUrl,
+		});
 		if (!referralFromUrl) return;
-		setRefLoading(false);
 		setValue("referralId", referralFromUrl);
-		if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
-			setRefLoading(true);
-			verifyReferral();
-			setRefLoading(false);
-			setCheckedOnce(true);
-		} else {
-			setRefLoading(true);
-			const ok = validateReferralLocally(referralFromUrl);
-			setReferralValid(ok);
-			setRefLoading(false);
-			setCheckedOnce(true);
-			if (ok) toast.success("Referral ID auto-validated from URL");
-			else {
-				setError("referralId", {
-					type: "manual",
-					message: "Referral in URL is invalid. Please check it.",
-				});
-				toast.error("Referral in URL is invalid. Please check it.");
-			}
-		}
+		verifyReferral();
+		setCheckedOnce(true);
 	}, [referralFromUrl, setValue, setError]);
 
 	const referralId = (watch("referralId") || "").toUpperCase();
@@ -215,6 +199,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 									register={register}
 									errors={errors}
 									watch={watch}
+									setUploading={setUploading}
 								/>
 								<AddressFields register={register} errors={errors} />
 								<IdentityFields register={register} errors={errors} />
@@ -223,9 +208,11 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 								<div className="md:col-span-2 flex items-center justify-end">
 									<button
 										type="submit"
-										disabled={isSubmitting}
+										disabled={isSubmitting || uploading}
 										className="inline-flex items-center rounded-lg bg-emerald-600 px-5 py-2.5 font-medium text-white hover:bg-emerald-700 disabled:opacity-60">
-										{isSubmitting ? "Saving…" : "Submit"}
+										{isSubmitting
+											? "Saving…"
+											: `${uploading ? "image uploading…" : "Submit"}`}
 									</button>
 								</div>
 							</div>

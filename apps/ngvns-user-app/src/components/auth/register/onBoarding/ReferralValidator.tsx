@@ -67,8 +67,16 @@ export default function ReferralValidator({
 							Valid
 						</span>
 					) : checkedOnce ? (
-						<span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-700">
-							{refLoading ? "Checking..." : "Invalid"}
+						<span>
+							{refLoading ? (
+								<span className="rounded-full bg-neutral-500 px-3 py-1 text-xs font-medium text-yellow-300">
+									Checking...
+								</span>
+							) : (
+								<span className="rounded-full bg-rose-100 px-3 py-1 text-xs font-medium text-rose-700">
+									"Invalid "
+								</span>
+							)}
 						</span>
 					) : null
 				}

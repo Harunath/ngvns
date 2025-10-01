@@ -14,7 +14,7 @@ const RZ_KEY_SECRET =
 		: process.env.RZP_LIVE_KEY_SECRET!;
 
 // const amount = 524995; // INR in paise
-const amount = 100;
+const amount = process.env.NEXT_PUBLIC_AMOUNT || 524995;
 
 export async function POST(req: NextRequest) {
 	try {
