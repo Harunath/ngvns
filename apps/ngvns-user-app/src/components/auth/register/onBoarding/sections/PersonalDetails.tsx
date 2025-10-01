@@ -1,7 +1,12 @@
 "use client";
 
 import React from "react";
-import { UseFormRegister, FieldErrors, UseFormWatch } from "react-hook-form";
+import {
+	UseFormRegister,
+	FieldErrors,
+	UseFormWatch,
+	UseFormSetValue,
+} from "react-hook-form";
 import type { OnboardingFormData } from "../../../../../lib/validators/onboarding";
 import TextInput from "../fields/TextInput";
 import RadioGroup from "../fields/RadioGroup";
@@ -13,11 +18,13 @@ export default function PersonalDetails({
 	errors,
 	watch,
 	setUploading,
+	setValue,
 }: {
 	register: UseFormRegister<OnboardingFormData>;
 	errors: FieldErrors<OnboardingFormData>;
 	watch: UseFormWatch<OnboardingFormData>;
 	setUploading: (uploading: boolean) => void;
+	setValue: UseFormSetValue<OnboardingFormData>;
 }) {
 	const relType = watch("relationType");
 
@@ -74,10 +81,12 @@ export default function PersonalDetails({
 					{...register("userPhoto")}
 				/> */}
 				<SingleImageUpload
-					setValue={register}
+					label="Profile Photo"
+					hint="Upload a clear photo. You can also capture from camera."
+					name="userPhoto"
+					setValue={setValue}
 					error={errors.userPhoto}
 					onUploadingChange={setUploading}
-					// optional: initialUrl={watch("userPhoto")}  // if editing an existing value
 				/>
 			</div>
 		</div>

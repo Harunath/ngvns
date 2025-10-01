@@ -20,6 +20,7 @@ import IdentityFields from "./sections/IdentityFields";
 import NomineeFields from "./sections/NomineeFields";
 import { validateReferralLocally } from "../../../../utils/referral";
 import Link from "next/link";
+import UserForm from "../UserForm";
 
 export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 	const searchParams = useSearchParams();
@@ -180,6 +181,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 				</AnimatePresence>
 
 				{/* Step 2: Details */}
+
 				<AnimatePresence>
 					<motion.form
 						onSubmit={handleSubmit(onSubmit)}
@@ -200,6 +202,7 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 									errors={errors}
 									watch={watch}
 									setUploading={setUploading}
+									setValue={setValue}
 								/>
 								<AddressFields register={register} errors={errors} />
 								<IdentityFields register={register} errors={errors} />
