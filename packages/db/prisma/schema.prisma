@@ -275,6 +275,7 @@ model SmsMessage {
   idempotencyKey   String?
   processingToken  String?
   processingExpiresAt    DateTime?
+  fakeTrigger      String?
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
