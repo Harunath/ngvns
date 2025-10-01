@@ -6,10 +6,10 @@ import "react-toastify/dist/ReactToastify.css"; // Import CSS
 
 const Providers = ({ children }: { children: ReactNode }) => {
 	return (
-		<div className="text-neutral-950">
+		<div className="text-neutral-950 bg-neutral-200">
 			<ToastContainer
 				position="top-right"
-				autoClose={5000} // Close after 5 seconds
+				autoClose={2000} // Close after 5 seconds
 				hideProgressBar={false}
 				newestOnTop={false}
 				closeOnClick

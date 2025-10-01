@@ -163,7 +163,7 @@ export async function POST(req: NextRequest) {
 							onBoardingId: ob.id,
 							orderId: order.id,
 							parentReferralId: ob.parentreferralId,
-							parentBId: parents?.id ?? null,
+							parentBId: parents?.joinedBy?.id ?? null,
 							parentCId: parents?.parentB?.id ?? null,
 
 							// defaults: deleted=false, deactivated=false, healthCard=false
