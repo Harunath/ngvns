@@ -89,7 +89,7 @@ export default function ResumePage() {
 	};
 
 	return (
-		<div className="mx-auto max-w-md p-6">
+		<div className="mx-auto max-w-md p-6 bg-neutral-100">
 			<h1 className="text-2xl font-semibold mb-4">Resume Onboarding</h1>
 
 			{mode === "phone" && (
@@ -108,7 +108,7 @@ export default function ResumePage() {
 					<button
 						onClick={sendOtp}
 						disabled={loading}
-						className="w-full rounded-xl border p-3 font-medium hover:bg-neutral-50 active:scale-[0.99] disabled:opacity-60">
+						className="w-full rounded-xl border p-3 font-medium hover:bg-neutral-200 active:scale-[0.99] disabled:opacity-60">
 						{loading ? "Sending…" : "Send OTP"}
 					</button>
 				</div>

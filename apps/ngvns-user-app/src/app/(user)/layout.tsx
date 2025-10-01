@@ -15,7 +15,7 @@ export default async function RootLayout({
 		redirect("/login");
 	}
 	return (
-		<div className="min-h-screen w-screen">
+		<div className="min-h-screen w-screen bg-neutral-100">
 			<UserNavbar />
 			<div className="min-h-[80vh]">{children}</div>
 			<Footer />
