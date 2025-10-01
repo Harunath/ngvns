@@ -17,12 +17,6 @@ jobs:
         run: npm install
 
       - name: Deploy Prisma Migrations
-        run: |
-          if git diff --name-only HEAD~1 HEAD | grep -q packages/db/prisma/migrations; then
-            echo "New migrations found. Deploying..."
-            npx prisma migrate deploy --schema=packages/db/prisma/schema.prisma
-          else
-            echo "No new migrations. Skipping deploy."
-          fi
+        run: npx prisma migrate deploy --schema=packages/db/prisma/schema.prisma
         env:
           DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
