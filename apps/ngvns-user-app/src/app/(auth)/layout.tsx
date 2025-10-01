@@ -9,7 +9,8 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }>) {
 	const session = await getServerSession(authOptions);
-	if (session?.user?.id) {
+	if (session?.user.id) {
+		console.log("User is logged in, redirecting to dashboard");
 		redirect("/dashboard");
 	}
 	return (
