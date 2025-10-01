@@ -9,7 +9,7 @@ const page = async () => {
 	const session = await getServerSession(authOptions);
 
 	return (
-		<div className="mx-auto max-w-2xl px-4 py-10 bg-neutral-200">
+		<div className="mx-auto max-w-2xl px-4 py-10 bg-neutral-100">
 			<div className="flex items-center justify-between">
 				<h1 className=" ">Dashboard</h1>
 				<Link href="/settings" className="text-emerald-600 hover:underline">

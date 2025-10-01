@@ -63,10 +63,49 @@ model User {
   childC           User[]         @relation("C LEVEL")
   directJoin       User[]         @relation("UserDirectJoin")
   directJoinOnBoarding       Onboarding[]         @relation("parentreferral")
-  
+
+
+  UserPayments     UserPayments[] @relation("payment-user")
   
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+
+  @@index([id])
+  @@index([vrKpId])
+  @@index([phone])
+}
+
+enum UserPaymentsType {
+  LEVEL1
+  LEVEL2
+  LEVEL3
+  L1BAR
+  L2BAR
+  L3BAR
+}
+
+model UserPayments{
+  id                 String        @id @default(uuid())
+  userId             String
+
+  type               UserPaymentsType
+  amount             Decimal
+
+  status             PaymentStatus @default(INITIATED)
+
+  paymentDetails     Json?
+
+  user               User           @relation("payment-user",fields: [userId],references: [id])
+
+  paymentDate        DateTime?
+
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([userId, status, type])
+  @@index([userId])
+  @@index([status])
+  @@index([type])
 }
 
 model Onboarding {
@@ -100,6 +139,10 @@ model Onboarding {
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 
+
+  @@index([id, phone])
+  @@index([id])
+  @@index([phone])
 }
 
 model Address {
@@ -175,6 +218,8 @@ model Order {
   onBoarding          Onboarding  @relation("OnBoardingPaymentOrder", fields: [onBoardingId], references: [id])
   payments            Payment[]
   user                User?       @relation("paymentOrder")
+
+  @@index([orderId])
 }
 
 model Payment {
