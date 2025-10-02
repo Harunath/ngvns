@@ -22,7 +22,7 @@ export default function SingleImageUpload({
 	name = "userPhoto",
 	label = "Profile Photo",
 	hint = "Upload a clear photo. You can also capture from camera.",
-	maxSizeMB = 2,
+	maxSizeMB = 5,
 	accept = "image/*",
 	initialUrl,
 	setValue,
