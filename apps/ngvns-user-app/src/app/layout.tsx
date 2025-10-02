@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	title: "VR KISAN PARIVAAR",
-	description: "Created by hsdev.in",
+	description: "Transforming Rural India",
 };
 
 export default function RootLayout({
