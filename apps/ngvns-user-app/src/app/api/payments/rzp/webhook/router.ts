@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import crypto from "crypto";
 import prisma from "@ngvns2025/db/client";
 import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils";
 
-const WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET!;
+const WEBHOOK_SECRET = process.env.RZP_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
 	const raw = await req.json();
@@ -12,11 +11,7 @@ export async function POST(req: NextRequest) {
 
 	if (
 		!signature ||
-		!validateWebhookSignature(
-			raw,
-			signature,
-			process.env.RAZORPAY_WEBHOOK_SECRET!
-		)
+		!validateWebhookSignature(raw, signature, process.env.RZP_WEBHOOK_SECRET!)
 	) {
 		return NextResponse.json(
 			{ ok: false, error: "invalid_signature" },
@@ -102,6 +97,7 @@ export async function POST(req: NextRequest) {
 
 		return NextResponse.json({ ok: true });
 	} catch (e: any) {
+		console.error("Error in rzp webhook:", e);
 		return NextResponse.json({ ok: false, error: e.message }, { status: 500 });
 	}
 }
