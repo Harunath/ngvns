@@ -1,12 +1,14 @@
 import React from "react";
-import Referral from "../../../components/user/profile/referral/Referral";
+import dynamic from "next/dynamic";
 
-const page = () => {
+const ProfileClient = dynamic(
+	() => import("../../../components/user/profile/ProfileClient")
+);
+
+export default function Page() {
 	return (
-		<div>
-			<Referral />
+		<div className="min-h-screen bg-gray-50">
+			<ProfileClient />
 		</div>
 	);
-};
-
-export default page;
+}

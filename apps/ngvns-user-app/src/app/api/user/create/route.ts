@@ -163,18 +163,21 @@ export async function POST(req: NextRequest) {
 							onBoardingId: ob.id,
 							orderId: order.id,
 							parentReferralId: ob.parentreferralId,
-							parentBId: parents?.id ?? null,
+							parentBId: parents?.joinedBy?.id ?? null,
 							parentCId: parents?.parentB?.id ?? null,
 
 							// defaults: deleted=false, deactivated=false, healthCard=false
 						},
+						select: {
+							id: true,
+							vrKpId: true,
+							phone: true,
+							email: true,
+							fullname: true,
+							onBoardingId: true,
+							orderId: true,
+						},
 					});
-
-					// Optional: connect back on Onboarding.user (not required since user has onBoardingId)
-					// await tx.onboarding.update({
-					//   where: { id: ob.id },
-					//   data: { user: { connect: { id: user.id } } },
-					// });
 
 					return user;
 				});
@@ -183,6 +186,7 @@ export async function POST(req: NextRequest) {
 						id: createdUser.id,
 						name: createdUser.fullname,
 						vrKpId: createdUser.vrKpId,
+						phone: createdUser.phone,
 					});
 					const res = await fetch(
 						`${process.env.NEXT_PUBLIC_BASE_URL}/api/notifications/sms/welcome`,
@@ -196,7 +200,14 @@ export async function POST(req: NextRequest) {
 							headers: { "Content-Type": "application/json" },
 						}
 					);
-					return res.json();
+					if (!res.ok) {
+						console.error("Failed to send welcome SMS", {
+							status: res.status,
+							statusText: res.statusText,
+						});
+					} else {
+						console.log("Welcome SMS sent successfully");
+					}
 				}
 
 				break; // success -> exit retry loop
