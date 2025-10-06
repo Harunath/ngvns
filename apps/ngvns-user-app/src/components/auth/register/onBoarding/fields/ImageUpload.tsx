@@ -7,12 +7,12 @@ import type { UseFormSetValue, FieldError } from "react-hook-form";
 import type { OnboardingFormData } from "../../../../../lib/validators/onboarding";
 
 type Props = {
-	name?: "userPhoto"; // locked to userPhoto, but keep override if you want
+	name?: "userPhoto";
 	label?: string;
 	hint?: string;
 	maxSizeMB?: number;
-	accept?: string; // default "image/*"
-	initialUrl?: string; // to show an existing value (e.g., editing)
+	accept?: string;
+	initialUrl?: string;
 	setValue: UseFormSetValue<OnboardingFormData>;
 	error?: FieldError;
 	onUploadingChange?: (uploading: boolean) => void;
@@ -37,6 +37,38 @@ export default function SingleImageUpload({
 	const [progress, setProgress] = useState<number>(0);
 	const [localError, setLocalError] = useState<string | null>(null);
 
+	async function uploadUserPhoto(file: File): Promise<string> {
+		setUploading(true);
+		const fd = new FormData();
+		fd.append("file", file, file.name);
+		let res;
+		if (process.env.NEXT_PUBLIC_UPLOAD_OPTION == "r2") {
+			res = await fetch(
+				`${process.env.NEXT_PUBLIC_BASE_URL}/api/uploads/user-photo/cloudflare`,
+				{
+					method: "POST",
+					body: fd,
+				}
+			);
+		} else {
+			res = await fetch(
+				`${process.env.NEXT_PUBLIC_BASE_URL}/api/uploads/user-photo/cloudnery`,
+				{
+					method: "POST",
+					body: fd,
+				}
+			);
+		}
+		setUploading(false);
+		setProgress(100);
+		if (!res.ok) {
+			throw new Error(await res.text());
+		}
+
+		const { publicUrl } = await res.json();
+		return publicUrl;
+	}
+
 	// Let parent control submit button state
 	const setUploadingState = (v: boolean) => {
 		setUploading(v);
@@ -53,77 +85,6 @@ export default function SingleImageUpload({
 		}
 		return null;
 	};
-
-	// TODO: replace with your actual S3 PutObject flow; return the public URL
-	// in SingleImageUpload.tsx
-	// async function uploadToS3(
-	// 	file: File,
-	// 	onProgress?: (pct: number) => void
-	// ): Promise<string> {
-	// 	// 1) Ask server for a signed PUT URL
-	// 	const ext = file.name.split(".").pop() || "";
-	// 	const res = await fetch("/api/uploads/user-photo", {
-	// 		method: "POST",
-	// 		headers: { "Content-Type": "application/json" },
-	// 		body: JSON.stringify({
-	// 			mime: file.type,
-	// 			ext,
-	// 			buffer: await file.arrayBuffer(),
-	// 		}),
-	// 	});
-	// 	console.log(res);
-	// 	if (!res.ok) {
-	// 		throw new Error("Could not get a signed upload URL");
-	// 	}
-	// 	const { uploadUrl, publicUrl } = await res.json();
-
-	// 	// 2) Upload directly to R2 using XHR for progress
-	// 	// await new Promise<void>((resolve, reject) => {
-	// 	// 	const xhr = new XMLHttpRequest();
-	// 	// 	xhr.open("PUT", uploadUrl);
-	// 	// 	xhr.setRequestHeader("Content-Type", file.type);
-	// 	// 	xhr.upload.onprogress = (evt) => {
-	// 	// 		if (!evt.lengthComputable) return;
-	// 	// 		const pct = Math.round((evt.loaded / evt.total) * 100);
-	// 	// 		onProgress?.(pct);
-	// 	// 	};
-	// 	// 	xhr.onload = () => {
-	// 	// 		if (xhr.status >= 200 && xhr.status < 300) resolve();
-	// 	// 		else reject(new Error(`Upload failed with ${xhr.status}`));
-	// 	// 	};
-	// 	// 	xhr.onerror = () => reject(new Error("Network error during upload"));
-	// 	// 	xhr.send(file);
-	// 	// });
-
-	// 	console.log(publicUrl);
-
-	// 	// 3) Return the public URL to store in your form (userPhoto)
-	// 	console.log("Public URL", publicUrl);
-	// 	return publicUrl;
-	// }
-
-	async function uploadUserPhoto(file: File): Promise<string> {
-		const fd = new FormData();
-		fd.append("file", file, file.name); // don't set Content-Type; the browser will
-		let res;
-		if (process.env.NEXT_PUBLIC_UPLOAD_OPTION == "r2") {
-			res = await fetch("/api/uploads/user-photo/cloudflare", {
-				method: "POST",
-				body: fd,
-			});
-		} else {
-			res = await fetch("/api/uploads/user-photo/cloudnery", {
-				method: "POST",
-				body: fd,
-			});
-		}
-		console.log(res);
-		if (!res.ok) {
-			throw new Error(await res.text());
-		}
-		const { publicUrl } = await res.json();
-		return publicUrl;
-	}
 
 	const handlePick = () => inputRef.current?.click();
 
@@ -145,15 +106,14 @@ export default function SingleImageUpload({
 		try {
 			setUploadingState(true);
 			setProgress(0);
-			// const url = await uploadToS3(file, setProgress);
-			const url = await uploadUserPhoto(file);
-			// IMPORTANT: write back into RHF form
-			setValue(name, url, { shouldValidate: true, shouldDirty: true });
+			const uploadedUrl = await uploadUserPhoto(file);
+			setValue("userPhoto", uploadedUrl, {
+				shouldValidate: true,
+				shouldDirty: true,
+			});
 		} catch (err: any) {
 			setLocalError(err?.message ?? "Upload failed. Please try again.");
-			// rollback preview if needed
 			setPreviewUrl(initialUrl ?? null);
-			setValue(name, "", { shouldValidate: true, shouldDirty: true });
 		} finally {
 			setUploadingState(false);
 		}
@@ -161,7 +121,7 @@ export default function SingleImageUpload({
 
 	const handleRemove = () => {
 		setPreviewUrl(null);
-		setValue(name, "", { shouldValidate: true, shouldDirty: true });
+		setValue(name, null as any, { shouldValidate: true, shouldDirty: true });
 		if (inputRef.current) inputRef.current.value = "";
 	};
 
@@ -245,15 +205,15 @@ export default function SingleImageUpload({
 
 			{hint && <p className="mt-2 text-xs text-gray-500">{hint}</p>}
 
-			{(localError || error) && (
-				<p className="mt-1 text-sm text-red-600">
-					{localError && "localError: "}
-					{error && "error: "}
-					{localError ?? error?.message}
-				</p>
-			)}
-
-			{uploading && (
+			{!uploading ? (
+				(localError || error) && (
+					<p className="mt-1 text-sm text-red-600">
+						{localError && "localError: "}
+						{error && "error: "}
+						{localError ?? error?.message}
+					</p>
+				)
+			) : (
 				<div className="mt-2">
 					<div className="h-2 w-full rounded bg-gray-200">
 						<div

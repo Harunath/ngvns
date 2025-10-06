@@ -50,9 +50,8 @@ export default function PersonalDetails({
 					]}
 				/>
 			</div>
-
 			<TextInput
-				label={`${relType ? relType.toUpperCase() : "Relation"} Name *`}
+				label={`${relType == "s/o" || relType == "d/o" ? "Father name" : relType == "w/o" ? "Husband name" : "Relation Name"} *`}
 				error={errors.relationName}
 				{...register("relationName")}
 			/>

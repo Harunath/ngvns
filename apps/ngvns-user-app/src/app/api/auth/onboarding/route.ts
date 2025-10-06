@@ -23,7 +23,6 @@ export async function POST(req: NextRequest) {
 		if (!parent) {
 			return bad("Invalid Referral ID.", 400, { field: "referralId" });
 		}
-
 		const state = await prisma.states.findUnique({
 			where: { id: data.address.stateId },
 			select: { name: true },
@@ -132,7 +131,6 @@ export async function POST(req: NextRequest) {
 			});
 
 			// 2) Upsert the address tied to this onboarding (prevents duplicates on resume)
-			console.log(process.env.DATABASE_URL);
 			const address = await tx.address.upsert({
 				where: { onboardingId: draft.id }, // needs @unique in your schema
 				update: {
