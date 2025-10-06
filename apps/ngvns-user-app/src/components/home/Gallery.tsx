@@ -30,7 +30,7 @@ const galleryItems = [
 	},
 	{
 		title: "Agri-Waste Management",
-		img: "https://res.cloudinary.com/dgulr1hgd/image/upload/v1751478696/compost-with-agricultural-waste_ennccp.jpg",
+		img: "https://res.cloudinary.com/diaoy3wzi/image/upload/v1759741645/ChatGPT_Image_Oct_6_2025_02_32_28_PM_yazhtp.png",
 		description: "Turning crop waste into compost and energy.",
 	},
 	{

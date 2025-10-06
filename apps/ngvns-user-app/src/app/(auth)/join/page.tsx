@@ -14,16 +14,13 @@ export const metadata: Metadata = {
 };
 
 const BENEFITS = [
-	{
-		title: "2 Sq. Yards Land Allotment",
-		desc: "Eligible members receive an allocation of 2 square yards as per program rules.",
-		accent: "land",
-	},
+
 	{
 		title: "Health Care Services for 3 Years",
 		desc: "Access partnered healthcare benefits with a 3-year health care services.",
 		accent: "health",
 	},
+	
 	{
 		title: "₹5 Lakhs Personal Accidental Insurance (5 Years)",
 		desc: "Coverage up to ₹5,00,000/- for accident;  permanent and partial disabilities also covered",
@@ -33,6 +30,11 @@ const BENEFITS = [
 		title: "Discounted Provisions & Cashback Offers",
 		desc: "Save on essentials via partnered provision stores and periodic cashback programs.",
 		accent: "savings",
+	},
+		{
+		title: "2 Sq. Yards Land Allotment",
+		desc: "Eligible members receive an allocation of 2 square yards as per program rules.",
+		accent: "land",
 	},
 ] as const;
 
@@ -162,7 +164,7 @@ export default async function BenefitsPage() {
 										<p className="mt-1 text-sm leading-6 text-neutral-700">
 											{b.desc}
 										</p>
-										{idx == 2 && (
+										{idx == 0 && (
 											<div className="mt-2 text-xs text-neutral-500">
 												Tieup with{" "}
 												<Link

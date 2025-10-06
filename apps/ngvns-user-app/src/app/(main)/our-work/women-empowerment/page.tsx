@@ -32,7 +32,7 @@ export default function Page() {
 
 				<div className="w-full">
 					<Image
-						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1698410145/women-empowerment-village_qtbmyg.jpg"
+						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1751479105/International-Women_s-Day-22_ji0lt7.jpg"
 						alt="Women Empowerment"
 						width={800}
 						height={450}

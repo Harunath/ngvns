@@ -10,6 +10,7 @@ export default function Page() {
 	return (
 		<section className="min-h-screen bg-white text-slate-800 py-16 px-6 md:px-16">
 			<div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+				{/* Text Content */}
 				<div>
 					<h1 className="text-4xl font-bold text-black mb-6">
 						Agri-Waste Management
@@ -30,9 +31,10 @@ export default function Page() {
 					</p>
 				</div>
 
+				{/* Image */}
 				<div className="w-full">
 					<Image
-						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1698410369/agri-waste-composting_bqg53k.jpg"
+						src="https://res.cloudinary.com/diaoy3wzi/image/upload/v1759741645/ChatGPT_Image_Oct_6_2025_02_32_28_PM_yazhtp.png"
 						alt="Agri-Waste Management"
 						width={800}
 						height={450}

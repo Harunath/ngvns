@@ -74,7 +74,7 @@ export default function Navbar() {
 							Our Work ▾
 						</button>
 						{isDropdownOpen && (
-							<div className="absolute left-0 mt-2 bg-black/90 text-white rounded shadow-lg w-64 z-50">
+							<div className="absolute left-0 mt-2 bg-white text-black rounded shadow-lg w-64 z-50">
 								<ul className="p-2 space-y-1">
 									{(
 										[
@@ -111,7 +111,11 @@ export default function Navbar() {
 						className="block py-2 md:py-0 hover:text-orange-500">
 						Blog
 					</Link> */}
-
+					<Link
+						href="/careers"
+						className="block py-2 md:py-0 hover:text-orange-500">
+						Careers
+					</Link>
 					<Link
 						href="/contact"
 						className="block py-2 md:py-0 hover:text-orange-500">
