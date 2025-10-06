@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@ngvns2025/db/client";
 import { validateWebhookSignature } from "razorpay/dist/utils/razorpay-utils";
 
-const WEBHOOK_SECRET = process.env.RZP_WEBHOOK_SECRET!;
-
 export async function POST(req: NextRequest) {
 	const raw = await req.json();
 	const signature = req.headers.get("x-razorpay-signature") || "";

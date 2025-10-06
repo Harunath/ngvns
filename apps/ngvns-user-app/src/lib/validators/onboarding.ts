@@ -25,7 +25,7 @@ export const onboardingSchema = z.object({
 	email: z.string().email("Invalid email"),
 	aadhaar: z.string().regex(/^\d{12}$/, "Aadhaar must be 12 digits"),
 	gender: z.enum(["None", "Male", "Female", "Others"]),
-	userPhoto: z.string().min(1, "User photo URL required"),
+	userPhoto: z.string().min(1, "User photo is required"),
 	nominieeName: z.string().min(1, "Nominee name is required"),
 	nominieeDob: z.string().min(1, "Nominee DOB is required"),
 	relationship: z.string().min(1, "Relationship is required"),

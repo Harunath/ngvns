@@ -18,9 +18,9 @@ import PersonalDetails from "./sections/PersonalDetails";
 import AddressFields from "./sections/AddressFields";
 import IdentityFields from "./sections/IdentityFields";
 import NomineeFields from "./sections/NomineeFields";
-import { validateReferralLocally } from "../../../../utils/referral";
+// import { validateReferralLocally } from "../../../../utils/referral";
 import Link from "next/link";
-import UserForm from "../UserForm";
+// import UserForm from "../UserForm";
 
 export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 	const searchParams = useSearchParams();
@@ -96,9 +96,6 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 
 	// reflect referral from URL
 	useEffect(() => {
-		console.log("triggring useEffect for referral from URL", {
-			referralFromUrl,
-		});
 		if (!referralFromUrl) return;
 		setValue("referralId", referralFromUrl);
 		verifyReferral();
@@ -127,8 +124,20 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 				return;
 			}
 			toast.success("Form submitted successfully!");
+			let userPhotoString = "";
+			if (data.userPhoto && typeof data.userPhoto !== "string") {
+				const fileReader = new FileReader();
+				userPhotoString = await new Promise<string>((resolve, reject) => {
+					fileReader.onload = () => resolve(fileReader.result as string);
+					fileReader.onerror = () => reject("");
+					fileReader.readAsDataURL(data.userPhoto as unknown as File);
+				});
+			} else {
+				userPhotoString = data.userPhoto as string;
+			}
 			setData({
 				...data,
+				userPhoto: userPhotoString,
 				address: {
 					addressLine1: data.address.addressLine1,
 					addressLine2: data.address.addressLine2,
@@ -139,7 +148,27 @@ export default function UserOnboardingForm({ goNext }: { goNext: () => void }) {
 			toast.success("Form saved locally!");
 			goNext();
 		} else {
-			setData(data);
+			let userPhotoString = "";
+			if (data.userPhoto && typeof data.userPhoto !== "string") {
+				const fileReader = new FileReader();
+				userPhotoString = await new Promise<string>((resolve, reject) => {
+					fileReader.onload = () => resolve(fileReader.result as string);
+					fileReader.onerror = () => reject("");
+					fileReader.readAsDataURL(data.userPhoto as unknown as File);
+				});
+			} else {
+				userPhotoString = data.userPhoto as string;
+			}
+			setData({
+				...data,
+				userPhoto: userPhotoString,
+				address: {
+					addressLine1: data.address.addressLine1,
+					addressLine2: data.address.addressLine2,
+					pincode: String(data.address.pincode),
+					stateId: data.address.stateId,
+				},
+			});
 			toast.success("Form saved locally!");
 			goNext();
 		}
