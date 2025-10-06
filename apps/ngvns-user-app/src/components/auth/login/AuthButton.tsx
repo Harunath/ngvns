@@ -29,7 +29,7 @@ export default function AuthButton() {
 	return (
 		<button
 			onClick={handleClick}
-			className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-black">
+			className="w-full sm:w-auto bg-[#138808] hover:bg-green-700 text-white px-6 py-2 rounded-full font-semibold transition shadow">
 			{session?.user ? "Go to Dashboard" : "Login"}
 		</button>
 	);

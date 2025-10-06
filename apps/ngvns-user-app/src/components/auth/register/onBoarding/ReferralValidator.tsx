@@ -107,14 +107,14 @@ export default function ReferralValidator({
 				</div>
 			</div>
 
-			{process.env.NEXT_PUBLIC_NODE_ENV !== "production" && (
+			{/* {process.env.NEXT_PUBLIC_NODE_ENV !== "production" && (
 				<p className="mt-2 text-sm">
 					For testing, try:{" "}
 					<span className="font-semibold text-blue-700">VALID123</span>,{" "}
 					<span className="font-semibold text-blue-700">TEST999</span>,{" "}
 					<span className="font-semibold text-blue-700">DEMO777</span>
 				</p>
-			)}
+			)} */}
 
 			{error && !referralValid && checkedOnce && (
 				<p className="mt-2 text-sm font-medium text-rose-600">

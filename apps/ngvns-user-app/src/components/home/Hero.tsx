@@ -75,7 +75,7 @@ export default function Hero() {
 				<div className="mb-6 sm:mb-8 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:w-auto sm:flex-row sm:gap-4">
 					<Link href="/join" className="w-full sm:w-auto">
 						<button className="w-full sm:w-auto bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-full font-semibold transition shadow">
-							Become a Member
+							Know More
 						</button>
 					</Link>
 					<Link href="/our-work" className="w-full sm:w-auto">

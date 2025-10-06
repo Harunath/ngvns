@@ -28,7 +28,7 @@ export default function Page() {
 								Partnership Announcement
 							</span>
 							<h1 className="mt-3 text-3xl md:text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-								VR Kisan Parivaar × Unity Life Healthcare
+								VR Kisan Parivaar + Unity Life Healthcare
 							</h1>
 							<p className="mt-3 max-w-2xl text-lg text-slate-700 dark:text-slate-300">
 								We&apos;re happy to share that{" "}
@@ -44,7 +44,7 @@ export default function Page() {
 								href="https://www.unitylifehealthcare.com/"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="inline-flex items-center justify-center rounded-xl border border-slate-900 dark:border-slate-200 bg-slate-900 dark:bg-slate-100 px-4 py-3 text-sm font-medium text-white dark:text-slate-900 hover:-translate-y-0.5 transition">
+								className="inline-flex items-center justify-center rounded-xl border border-[#138808] bg-[#138808] px-4 py-3 text-sm font-medium text-white hover:bg-[#0b5e05] hover:-translate-y-0.5 transition dark:border-[#1aff1a] dark:bg-[#1aff1a] dark:text-slate-900 dark:hover:bg-[#17d117]">
 								Visit Unity Life Healthcare
 							</a>
 						</div>
