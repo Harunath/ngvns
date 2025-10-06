@@ -31,7 +31,7 @@ export default function Page() {
 
 				<div className="w-full">
 					<Image
-						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1698410526/livestock-training-villagers_uspgdn.jpg"
+						src="https://res.cloudinary.com/dgulr1hgd/image/upload/v1751478845/livestock_management_header_xgifse.jpg"
 						alt="Livestock Management"
 						width={800}
 						height={450}

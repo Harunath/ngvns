@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import AuthButton from "../auth/login/AuthButton";
+import { FiUser } from "react-icons/fi";
+import Logout from "../auth/Logout";
 
 export default function UserNavbar() {
 	const [isOpen, setIsOpen] = useState(false);
@@ -61,15 +63,20 @@ export default function UserNavbar() {
 						Home
 					</Link>
 					<Link
-						href="/my-board"
+						href="/my-teams"
 						className="block py-2 md:py-0 hover:text-orange-500">
-						My Board
+						My Teams
+					</Link>
+					<Link
+						href="/my-earnings"
+						className="block py-2 md:py-0 hover:text-orange-500">
+						My Earnings
 					</Link>
 
 					<Link
 						href="/profile"
 						className="block py-2 md:py-0 hover:text-orange-500">
-						Profile
+						My Profile
 					</Link>
 
 					{/* Become a Member */}
@@ -78,7 +85,31 @@ export default function UserNavbar() {
 							Become a Member
 						</button>
 					</Link> */}
-					<AuthButton />
+					{/* <AuthButton /> */}
+					<div className="relative" ref={dropdownRef}>
+						<button
+							onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+							className="mt-4 md:mt-0 bg-[#138808] hover:bg-green-700 text-white px-4 py-2 rounded-full transition">
+							<FiUser />
+						</button>
+						{isDropdownOpen && (
+							<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+								<Link
+									href="/my-docs"
+									className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+									My Documents
+								</Link>
+
+								<Link
+									href="/settings/password"
+									className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+									Change Password
+								</Link>
+
+								<Logout />
+							</div>
+						)}
+					</div>
 				</nav>
 			</div>
 		</header>

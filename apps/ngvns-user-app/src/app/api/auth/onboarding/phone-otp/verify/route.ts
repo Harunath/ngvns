@@ -1,4 +1,4 @@
-import prisma, { GenderType, RelationType } from "@ngvns2025/db/client";
+import prisma from "@ngvns2025/db/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -63,9 +63,14 @@ export async function POST(req: NextRequest) {
 			);
 		}
 
+		await prisma.onboarding.update({
+			where: { phone },
+			data: { phoneVerified: true },
+		});
+
 		return NextResponse.json({
 			success: true,
-			message: "Onboarding user is registered",
+			message: "Phone number verified successfully.",
 		});
 	} catch (error) {
 		console.error("Verifying Phone error:", error);

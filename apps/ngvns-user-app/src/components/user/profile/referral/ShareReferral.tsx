@@ -3,6 +3,13 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import {
+	FaFacebook,
+	FaLinkedin,
+	FaTelegram,
+	FaTwitter,
+	FaWhatsapp,
+} from "react-icons/fa";
 
 type Props = { referralUrl: string; code: string };
 
@@ -38,22 +45,27 @@ export default function ShareReferral({ referralUrl, code }: Props) {
 	const links = [
 		{
 			name: "WhatsApp",
+			icon: <FaWhatsapp className="h-5 w-5 text-green-400" />,
 			href: `https://wa.me/?text=${textEncoded}%20${encoded}`,
 		},
 		{
 			name: "Telegram",
+			icon: <FaTelegram className="h-5 w-5 text-blue-400" />,
 			href: `https://t.me/share/url?url=${encoded}&text=${textEncoded}`,
 		},
 		{
 			name: "Facebook",
+			icon: <FaFacebook className="h-5 w-5 text-blue-600" />,
 			href: `https://www.facebook.com/sharer/sharer.php?u=${encoded}`,
 		},
 		{
 			name: "X (Twitter)",
+			icon: <FaTwitter className="h-5 w-5 text-neutral-900" />,
 			href: `https://twitter.com/intent/tweet?url=${encoded}&text=${textEncoded}`,
 		},
 		{
 			name: "LinkedIn",
+			icon: <FaLinkedin className="h-5 w-5 text-blue-400" />,
 			href: `https://www.linkedin.com/sharing/share-offsite/?url=${encoded}`,
 		},
 	];
@@ -103,7 +115,8 @@ export default function ShareReferral({ referralUrl, code }: Props) {
 							target="_blank"
 							rel="noreferrer"
 							className="rounded-xl border px-3 py-2 text-sm hover:bg-gray-50">
-							{l.name}
+							{l.icon}
+							{/* {l.name} */}
 						</a>
 					))}
 					<button
