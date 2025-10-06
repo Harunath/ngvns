@@ -39,7 +39,7 @@ function Logout() {
 
 	return (
 		<button
-			className="px-2 py-1 text-neutral-300 bg-red-400 hover:text-neutral-800 hover:bg-red-200 rounded"
+			className="mx-auto w-full px-2 py-1 text-neutral-100 bg-red-600 hover:text-neutral-800 hover:bg-red-200 rounded"
 			onClick={() => setOpen(true)}>
 			{loading ? "Signing out..." : "Logout"}
 		</button>

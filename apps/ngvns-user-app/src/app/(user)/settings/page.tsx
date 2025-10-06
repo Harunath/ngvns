@@ -1,6 +1,5 @@
 import Link from "next/link";
 import React from "react";
-import Logout from "../../../components/auth/Logout";
 import { FaAngleRight } from "react-icons/fa";
 
 const page = () => {
@@ -20,7 +19,6 @@ const page = () => {
 						Change Password
 					</Link>
 				</div>
-				<Logout />
 			</div>
 		</div>
 	);

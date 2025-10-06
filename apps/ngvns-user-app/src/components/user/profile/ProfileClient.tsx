@@ -147,7 +147,7 @@ export default function ProfileClient() {
 	if (!user) return null;
 
 	return (
-		<div className="mx-auto max-w-6xl p-4 md:p-8">
+		<div className="mx-auto p-4 md:p-8">
 			{/* Header */}
 			<section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-teal-50 to-white border">
 				<div className="flex flex-col items-center gap-6 p-6 md:flex-row md:items-center md:gap-8 md:p-8">
