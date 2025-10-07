@@ -55,7 +55,7 @@ export default async function Page() {
 			<div className="mx-auto w-full max-w-3xl">
 				<header className="text-center">
 					<h1 className="text-2xl font-semibold text-gray-900">
-						{session.user.fullname}&apos;s Team
+						{session.user.fullname}&apos;s Community
 					</h1>
 					<div className="mx-auto mt-3 grid max-w-xs grid-cols-3 gap-1">
 						<div className="h-1 rounded bg-[#FF9933]" />

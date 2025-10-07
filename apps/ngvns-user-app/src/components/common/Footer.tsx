@@ -88,13 +88,13 @@ export default function Footer() {
 								→ View All Programs
 							</Link>
 						</li>
-						<li>
+						{/* <li>
 							<Link
 								href="/member"
 								className="hover:text-[#FF9933] font-medium text-white">
 								✅ Become a Member
 							</Link>
-						</li>
+						</li> */}
 					</ul>
 				</div>
 

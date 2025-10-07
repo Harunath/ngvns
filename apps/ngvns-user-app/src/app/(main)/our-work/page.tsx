@@ -153,14 +153,14 @@ export default async function OurWorkPage() {
 								className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium border border-neutral-300 text-neutral-800 hover:bg-neutral-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-neutral-300">
 								Contact Us
 							</Link>
-							<Link
+							{/* <Link
 								href="/donate"
 								className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white"
 								style={{
 									background: `linear-gradient(90deg, ${COLORS.saffron}, ${COLORS.green})`,
 								}}>
 								Donate
-							</Link>
+							</Link> */}
 						</div>
 					</div>
 				</section>
