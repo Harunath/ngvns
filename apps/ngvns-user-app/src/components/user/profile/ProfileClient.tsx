@@ -196,11 +196,7 @@ export default function ProfileClient() {
 							<div className="mt-3 flex flex-wrap gap-2 text-sm">
 								<FlagPill label="Gender" value={user.gender} />
 								<FlagPill label="Phone" value={user.phone} />
-								<FlagPill
-									label="Health Care Services"
-									value={user.healthCard ? "Active" : "Inactive"}
-									color={user.healthCard ? GREEN : SAFFRON}
-								/>
+								<FlagPill label="VRKP ID" value={user.vrKpId} />
 								<FlagPill label="Member Since" value={since} />
 							</div>
 						</div>
@@ -220,7 +216,11 @@ export default function ProfileClient() {
 			<section className="mt-6 grid gap-4 md:grid-cols-3">
 				<TriCard title="Email" value={user.email} />
 				<TriCard title="Phone" value={user.phone} />
-				<TriCard title="VRKP ID" value={user.vrKpId} strong />
+				<TriCard
+					title="Health Care Services"
+					value={user.healthCard ? "Active" : "Inactive"}
+					strong
+				/>
 			</section>
 		</div>
 	);

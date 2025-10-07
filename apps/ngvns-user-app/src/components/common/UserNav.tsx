@@ -4,14 +4,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
-import AuthButton from "../auth/login/AuthButton";
 import { FiUser } from "react-icons/fi";
 import Logout from "../auth/Logout";
+import { AnimatePresence } from "motion/react";
+import { motion } from "motion/react";
 
 export default function UserNavbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement>(null);
+
+	const ref = useRef<HTMLDivElement>(null);
+	const [height, setHeight] = useState(0);
+
+	useEffect(() => {
+		if (ref.current) {
+			setHeight(ref.current.scrollHeight);
+		}
+	}, [isDropdownOpen]);
 
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -65,7 +75,7 @@ export default function UserNavbar() {
 					<Link
 						href="/my-teams"
 						className="block py-2 md:py-0 hover:text-orange-500">
-						My Teams
+						My Community
 					</Link>
 					<Link
 						href="/my-earnings"
@@ -92,23 +102,40 @@ export default function UserNavbar() {
 							className="mt-4 md:mt-0 bg-[#138808] hover:bg-green-700 text-white px-4 py-2 rounded-full transition">
 							<FiUser />
 						</button>
-						{isDropdownOpen && (
-							<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50">
-								<Link
-									href="/my-docs"
-									className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-									My Documents
-								</Link>
+						<AnimatePresence initial={false} mode="wait">
+							{isDropdownOpen && (
+								<motion.div
+									initial={{ height: 0, y: -10 }}
+									animate={{ height, y: 0 }}
+									exit={{ height: 0, y: -10 }}
+									transition={{ duration: 0.3, ease: "easeInOut" }}
+									className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden">
+									<div ref={ref}>
+										<Link
+											href="/dashboard"
+											onClick={() => setIsDropdownOpen(false)}
+											className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+											Dashboard
+										</Link>
+										<Link
+											href="/my-docs"
+											onClick={() => setIsDropdownOpen(false)}
+											className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+											My Documents
+										</Link>
 
-								<Link
-									href="/settings/password"
-									className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
-									Change Password
-								</Link>
+										<Link
+											href="/settings/password"
+											onClick={() => setIsDropdownOpen(false)}
+											className="block px-4 py-2 text-gray-800 hover:bg-gray-100">
+											Change Password
+										</Link>
 
-								<Logout />
-							</div>
-						)}
+										<Logout />
+									</div>
+								</motion.div>
+							)}
+						</AnimatePresence>
 					</div>
 				</nav>
 			</div>
