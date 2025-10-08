@@ -1,81 +1,121 @@
 "use client";
-import { FaLeaf, FaBolt, FaUsers, FaFemale, FaHorseHead } from "react-icons/fa";
-
-const missionPoints = [
-	{
-		title: "Eco-friendly and Natural Farming",
-		description:
-			"We promote sustainable, chemical-free farming practices that restore soil health and biodiversity.",
-		icon: <FaLeaf />,
-	},
-	{
-		title: "Clean Energy for Rural Areas",
-		description:
-			"We encourage the adoption of solar and renewable energy in rural homes and agricultural spaces.",
-		icon: <FaBolt />,
-	},
-	{
-		title: "Local Employment & Entrepreneurship",
-		description:
-			"We support rural job creation and self-employment through skill-building and opportunities.",
-		icon: <FaUsers />,
-	},
-	{
-		title: "Women-led Development",
-		description:
-			"We empower women through inclusive growth, leadership, and financial literacy programs.",
-		icon: <FaFemale />,
-	},
-	{
-		title: "Responsible Livestock & Agri Use",
-		description:
-			"We ensure the sustainable use of livestock and agri-resources for long-term productivity.",
-		icon: <FaHorseHead />,
-	},
-];
+import { FaLeaf, FaRecycle, FaBriefcase, FaIndustry, FaGlobeAsia } from "react-icons/fa";
 
 export default function Mission() {
 	return (
-		<section className="bg-white py-20 px-4">
-			<div className="max-w-7xl mx-auto text-center">
-				<h2 className="text-black text-3xl font-bold mb-2 uppercase tracking-wide">
-					Our <span className="text-orange-600">Mission</span>
-				</h2>
-				<h3 className="text-xl font-bold text-[#333] mb-12">
-					Promoting a Sustainable and Inclusive Rural India
-				</h3>
+		<section className="relative overflow-hidden bg-white">
+			{/* soft gradient background */}
+			<div aria-hidden className="pointer-events-none absolute inset-0">
+				<div className="absolute -top-40 -left-40 h-80 w-80 rounded-full bg-emerald-100 blur-3xl opacity-60" />
+				<div className="absolute bottom-0 right-0 h-96 w-96 rounded-full bg-orange-100 blur-3xl opacity-60" />
+			</div>
 
-				<div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-					{missionPoints.map((item, index) => (
+			<div className="mx-auto max-w-7xl px-4 py-20">
+				<header className="text-center">
+					<p className="mx-auto inline-block rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1 text-xs font-semibold tracking-widest text-emerald-800">
+						OUR MISSION
+					</p>
+					<h2 className="mt-4 text-3xl font-extrabold tracking-tight text-neutral-900 sm:text-4xl">
+						Building a sustainable, inclusive rural future
+					</h2>
+				</header>
+
+				{/* centerpiece statement card */}
+				<article className="relative mx-auto mt-10 max-w-5xl overflow-hidden rounded-3xl border border-neutral-200 bg-gradient-to-br from-neutral-50 to-white shadow-xl">
+					{/* accent bar */}
+					<div className="h-1.5 w-full bg-gradient-to-r from-emerald-500 via-orange-500 to-amber-500" />
+
+					<div className="relative p-8 sm:p-12">
+						{/* decorative quote mark */}
 						<div
-							key={index}
-							className="group bg-[#1d6a43] text-white rounded-2xl px-6 py-8 relative flex flex-col items-center justify-between shadow-xl hover:scale-105 transition-transform duration-300">
-							{/* Icon */}
-							<div className="absolute -top-7 bg-[#ff7f11] rounded-full p-4 shadow-md">
-								<span className="text-white text-2xl group-hover:animate-pulse group-hover:scale-125 transition-transform duration-300">
-									{item.icon}
-								</span>
-							</div>
+							aria-hidden
+							className="pointer-events-none absolute -top-10 -left-2 text-8xl font-black leading-none text-emerald-100 select-none"
+						>
+							“
+						</div>
 
-							{/* Title and Description */}
-							<div className="mt-8 text-center">
-								<h4 className="text-lg font-semibold mb-2">{item.title}</h4>
-								<div className="h-1 w-10 bg-[#ff7f11] mx-auto mb-4 rounded-full" />
-								<p className="text-sm text-slate-100 leading-relaxed">
-									{item.description}
-								</p>
-							</div>
+						<p className="text-balance text-xl leading-relaxed text-neutral-800 sm:text-2xl">
+							To{" "}
+							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
+								empower farmers
+							</strong>
+							, promote{" "}
+							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
+								natural farming
+							</strong>
+							, utilize{" "}
+							<strong className="bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
+								bio-waste efficiently
+							</strong>
+							, create{" "}
+							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
+								employment opportunities
+							</strong>
+							, and advance{" "}
+							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
+								food processing
+							</strong>{" "}
+							while expanding{" "}
+							<strong className="bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
+								market opportunities globally
+							</strong>{" "}
+							through{" "}
+							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
+								innovation and sustainability
+							</strong>
+							.
+						</p>
 
-							{/* Arrow */}
-							<div className="mt-6">
-								<span className="inline-block text-[#ff7f11] text-lg transform transition-transform group-hover:translate-x-1">
-									→
-								</span>
+						{/* keyword chips */}
+						<div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+							<Tag icon={<FaLeaf className="size-3.5" />}>Natural Farming</Tag>
+							<Tag icon={<FaRecycle className="size-3.5" />}>Bio-waste</Tag>
+							<Tag icon={<FaBriefcase className="size-3.5" />}>Employment</Tag>
+							<Tag icon={<FaIndustry className="size-3.5" />}>Food Processing</Tag>
+							<Tag icon={<FaGlobeAsia className="size-3.5" />}>Global Markets</Tag>
+						</div>
+
+						{/* subtle progress/impact bar */}
+						<div className="mt-10">
+							<p className="text-center text-xs font-medium uppercase tracking-widest text-neutral-500">
+								Impact pillars
+							</p>
+							<div className="mt-3 grid grid-cols-5 gap-2">
+								{[
+									{ label: "Farmers", tint: "bg-emerald-500" },
+									{ label: "Farming", tint: "bg-emerald-400" },
+									{ label: "Bio-waste", tint: "bg-amber-500" },
+									{ label: "Employment", tint: "bg-emerald-500" },
+									{ label: "Global", tint: "bg-orange-500" },
+								].map((b, i) => (
+									<div key={i} className="rounded-xl border border-neutral-200 p-2">
+										<div className={`h-2 w-full rounded-full ${b.tint}`} />
+										<p className="mt-2 text-center text-[11px] font-medium text-neutral-600">
+											{b.label}
+										</p>
+									</div>
+								))}
 							</div>
 						</div>
-					))}
-				</div>
+					</div>
+				</article>
+
+				{/* bottom note */}
+				<p className="mx-auto mt-8 max-w-3xl text-center text-sm text-neutral-600">
+					Our mission guides programs, partnerships, and investments to uplift rural
+					communities with planet-first growth.
+				</p>
 			</div>
 		</section>
+	);
+}
+
+/* small helper for pill tags */
+function Tag({ children, icon }: { children: React.ReactNode; icon?: React.ReactNode }) {
+	return (
+		<span className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition hover:shadow">
+			{icon}
+			{children}
+		</span>
 	);
 }

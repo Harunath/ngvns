@@ -97,22 +97,22 @@ const pillars = [
 	{
 		icon: <FiFeather />,
 		title: "Natural Farming",
-		text: "Regenerative, chemical-free cultivation that restores soil health and conserves water.",
+		text: " Promoting regenerative, chemical -free cultivation that restores soil health and conserves water.",
 	},
 	{
 		icon: <FiRepeat />,
 		title: "Bio-waste Utilization",
-		text: "Converting crop residue into compost, biogas, and eco-products to reduce pollution.",
+		text: " Converting crop residue into compost, biogas, and eco-products to reduce pollution.",
 	},
 	{
 		icon: <FiPackage />,
 		title: "Food Processing",
-		text: "Nutrition-preserving processing (e.g., dehydration) that boosts shelf life and value.",
+		text: "Implementing nutrition -preserving processing methods, such as dehydration, to boost shelf life and value.",
 	},
 	{
 		icon: <FiGlobe />,
 		title: "Market Access",
-		text: "Connecting farmers to national and global buyers for fair, consistent returns.",
+		text: "Connecting farmers to national and global buyers for fair,consistent returns. ",
 	},
 ];
 
@@ -138,15 +138,14 @@ const Intro = () => {
 
 				{/* Lead copy */}
 				<p className="mt-4 text-[17px] leading-relaxed text-zinc-800">
-					VR Kisan Parivaar is committed to transforming agriculture through
-					sustainable practices that uplift farmers, create rural livelihoods,
-					and protect our environment. By integrating{" "}
+					VR Kisan Parivaar is committed to creating a resilient agricultural
+					ecosystem through sustainable practices that empower farmers, support
+					rural livelihoods, and protect the environment. By integrating{" "}
 					<span className="font-semibold">natural farming</span>,{" "}
-					<span className="font-semibold">bio-waste utilization</span>,{" "}
+					<span className="font-semibold">farm waste management</span>,{" "}
 					<span className="font-semibold">food processing</span>, and{" "}
-					<span className="font-semibold">global market access</span>, we are
-					building a resilient agricultural ecosystem that ensures prosperity
-					for farmers and nourishment for society.
+					<span className="font-semibold">market access</span>, we strive to
+					ensure farmer prosperity and deliver nutritious food to communities.
 				</p>
 
 				{/* Highlights */}
