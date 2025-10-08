@@ -11,8 +11,8 @@ const Vision = () => {
 			</h2>
 
 			<div className="max-w-4xl mx-auto bg-green-100 rounded-2xl shadow-md p-6 md:p-10 text-lg text-slate-800 leading-relaxed border border-green-300">
-				To create villages that are independent, sustainable, and full of
-				opportunities for all.
+				To create a sustainable agricultural ecosystem that empowers farmers and
+				promotes eco-friendly practices for future generations.
 			</div>
 
 			<div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto text-center">
