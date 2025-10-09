@@ -1,133 +1,176 @@
 "use client";
 import React from "react";
-import {
-	FaMapMarkerAlt,
-	FaPhoneAlt,
-	FaEnvelope,
-	FaGlobe,
-	FaPaperPlane,
-} from "react-icons/fa";
+import { FaEnvelope, FaGlobe, FaPaperPlane } from "react-icons/fa";
 
 const ContactMain = () => {
 	return (
-		<section className="bg-white text-black py-16 px-4 md:px-12">
-			<div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12">
-				{/* Left - Contact Info */}
-				<div className="border border-orange-500 p-8 rounded-lg shadow-lg">
-					<h4 className="text-sm text-orange-500 font-semibold uppercase mb-2">
-						Contact Us
-					</h4>
-					<h2 className="text-3xl md:text-4xl font-bold mb-4 text-black">
+		<section className="relative bg-white text-slate-900">
+			{/* background texture */}
+			<div className="absolute inset-0 -z-10 bg-[radial-gradient(70rem_70rem_at_120%_-10%,#fff7ed_10%,transparent_60%),radial-gradient(40rem_40rem_at_-10%_110%,#ecfdf5_10%,transparent_60%)]" />
+
+			<div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-20">
+				{/* header */}
+				<header className="text-center mb-14">
+					<span className="inline-block rounded-full border border-orange-200 bg-orange-50 px-3 py-1 text-[11px] font-semibold tracking-widest text-orange-700">
+						CONTACT
+					</span>
+					<h2 className="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
 						Let’s Start a Conversation
 					</h2>
-					<p className="text-slate-600 mb-6 leading-relaxed">
-						Have questions or inquiries? We're here to help. Reach out to us
-						anytime and we'll respond promptly.
+					<p className="mx-auto mt-3 max-w-2xl text-slate-600">
+						Have questions or want to know more about our initiatives? We’re
+						here to help. Reach out anytime—our team will respond promptly.
 					</p>
+				</header>
 
-					<hr className="border-t border-orange-500 mb-6" />
-
-					{/* Address */}
-					{/* <div className="flex items-start gap-4 mb-6">
-						<FaMapMarkerAlt className="text-orange-500 text-xl min-w-[24px]" />
-						<div>
-							<h4 className="font-bold text-black">Address</h4>
-							<p className="text-slate-700 leading-relaxed">
-								#101, Dwarakapuri Colony, <br />
-								Hyderabad, Telangana – 500082
-							</p>
+				<div className="grid gap-8 md:grid-cols-2">
+					{/* left: contact info */}
+					<div className="flex flex-col justify-center rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
+						<div className="mb-6">
+							<div className="h-1 w-24 rounded-full bg-gradient-to-r from-orange-500 to-emerald-500" />
 						</div>
-					</div> */}
 
-					{/* Phone */}
-					{/* <div className="flex items-center gap-4 mb-4">
-						<FaPhoneAlt className="text-orange-500 text-xl min-w-[24px]" />
-						<div>
-							<h4 className="font-bold text-black">Phone</h4>
-							<p className="text-slate-700">+91 9515934289</p>
-						</div>
-					</div> */}
+						<div className="space-y-6">
+							<div className="flex items-start gap-4">
+								<div className="rounded-lg bg-orange-100 p-3 text-orange-600">
+									<FaEnvelope className="text-xl" />
+								</div>
+								<div>
+									<h3 className="text-sm font-semibold text-slate-900">
+										Email
+									</h3>
+									<a
+										href="mailto:support@vrkisanparivaar.com"
+										className="text-slate-700 hover:text-slate-900 hover:underline">
+										support@vrkisanparivaar.com
+									</a>
+								</div>
+							</div>
 
-					{/* Email */}
-					<div className="flex items-center gap-4 mb-4">
-						<FaEnvelope className="text-orange-500 text-xl min-w-[24px]" />
-						<div>
-							<h4 className="font-bold text-black">Email</h4>
-							<p className="text-slate-700">support@vrkisanparivaar.com</p>
+							<div className="flex items-start gap-4">
+								<div className="rounded-lg bg-emerald-100 p-3 text-emerald-700">
+									<FaGlobe className="text-xl" />
+								</div>
+								<div>
+									<h3 className="text-sm font-semibold text-slate-900">
+										Website
+									</h3>
+									<a
+										href="https://www.vrkisanparivaar.com/"
+										target="_blank"
+										rel="noreferrer"
+										className="text-blue-700 hover:underline break-all">
+										www.vrkisanparivaar.com
+									</a>
+								</div>
+							</div>
 						</div>
+
+						<p className="mt-10 text-sm text-slate-500">
+							We typically reply within 1–2 business days.
+						</p>
 					</div>
 
-					{/* Website */}
-					<div className="flex items-center gap-4">
-						<FaGlobe className="text-orange-500 text-xl min-w-[24px]" />
-						<div>
-							<h4 className="font-bold text-black">Website</h4>
-							<p className="text-blue-700 hover:underline">
-								<a
-									href="https://www.vrkisanparivaar.com/"
-									target="_blank"
-									rel="noreferrer">
-									www.vrkisanparivaar.com
-								</a>
-							</p>
-						</div>
-					</div>
-				</div>
+					{/* right: form */}
+					<div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
+						<form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+								<div>
+									<label
+										htmlFor="name"
+										className="mb-1 block text-sm font-semibold text-slate-800">
+										Name <span className="text-orange-600">*</span>
+									</label>
+									<input
+										id="name"
+										name="name"
+										type="text"
+										placeholder="Your Name"
+										required
+										className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-200 transition"
+									/>
+								</div>
 
-				{/* Right - Form */}
-				<div className="bg-slate-100 shadow-2xl p-8 rounded-lg">
-					<form className="space-y-6">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+								<div>
+									<label
+										htmlFor="email"
+										className="mb-1 block text-sm font-semibold text-slate-800">
+										Email <span className="text-orange-600">*</span>
+									</label>
+									<input
+										id="email"
+										name="email"
+										type="email"
+										placeholder="you@example.com"
+										required
+										className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-200 transition"
+									/>
+								</div>
+
+								<div>
+									<label
+										htmlFor="mobile"
+										className="mb-1 block text-sm font-semibold text-slate-800">
+										Mobile Number <span className="text-orange-600">*</span>
+									</label>
+									<input
+										id="mobile"
+										name="mobile"
+										type="tel"
+										placeholder="10-digit mobile"
+										pattern="[0-9]{10}"
+										maxLength={10}
+										inputMode="numeric"
+										required
+										className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-200 transition"
+									/>
+								</div>
+
+								<div>
+									<label
+										htmlFor="subject"
+										className="mb-1 block text-sm font-semibold text-slate-800">
+										Subject
+									</label>
+									<input
+										id="subject"
+										name="subject"
+										type="text"
+										placeholder="How can we help?"
+										className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-900 placeholder-slate-400 shadow-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-200 transition"
+									/>
+								</div>
+							</div>
+
 							<div>
-								<label className="block font-semibold mb-1 text-black">
-									Name <span className="text-orange-500">*</span>
+								<label
+									htmlFor="message"
+									className="mb-1 block text-sm font-semibold text-slate-800">
+									Message
 								</label>
-								<input
-									type="text"
-									placeholder="Your Name"
-									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
+								<textarea
+									id="message"
+									name="message"
+									rows={6}
+									placeholder="Your Message"
+									className="w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 shadow-sm outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-200 transition"
 								/>
 							</div>
-							<div>
-								<label className="block font-semibold mb-1 text-black">
-									Email <span className="text-orange-500">*</span>
-								</label>
-								<input
-									type="email"
-									placeholder="Your Email"
-									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-								/>
+
+							<div className="flex flex-wrap items-center gap-3 mt-4">
+								<button
+									type="submit"
+									className="group inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-orange-600 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-orange-300">
+									<FaPaperPlane className="text-xs transition group-hover:translate-x-0.5" />
+									Send
+								</button>
+								<p className="text-xs text-slate-500">
+									By submitting, you agree to be contacted regarding your
+									inquiry.
+								</p>
 							</div>
-							<div>
-								<label className="block font-semibold mb-1 text-black">
-									Mobile Number <span className="text-orange-500">*</span>
-								</label>
-								<input
-									type="tel"
-									placeholder="Your Mobile Number"
-									className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"
-									pattern="[0-9]{10}"
-									maxLength={10}
-									required
-								/>
-							</div>
-						</div>
-						<div>
-							<label className="block font-semibold mb-1 text-black">
-								Message
-							</label>
-							<textarea
-								rows={6}
-								placeholder="Your Message"
-								className="w-full px-4 py-2 rounded border border-slate-300 bg-white text-black placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500"></textarea>
-						</div>
-						<button
-							type="submit"
-							className="flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-600 transition-all">
-							<FaPaperPlane />
-							Send Message
-						</button>
-					</form>
+						</form>
+					</div>
 				</div>
 			</div>
 		</section>
