@@ -58,12 +58,12 @@ export default function Hero() {
 				</h1>
 
 				<h4 className="mb-2 sm:mb-3 text-2xl sm:text-3xl md:text-4xl font-semibold text-green-800 leading-tight tracking-tight">
-					Green. Self -Reliant. Thriving.
+					Building Sustainable Futures for Rural India
 				</h4>
 
 				<p className="mb-5 sm:mb-6 max-w-2xl text-[15px] sm:text-base md:text-lg text-zinc-700">
-					Empowering villages with clean energy, sustainable farming, women -led
-					initiatives, and rural employment to build a self -reliant, green, and
+					Empowering villages with clean energy, sustainable farming, women-led
+					initiatives, and rural employment to build a self-reliant, green, and
 					thriving Bharat.
 				</p>
 
