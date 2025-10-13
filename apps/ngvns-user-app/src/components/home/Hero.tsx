@@ -20,14 +20,14 @@ export default function Hero() {
 					<div className="w-full">
 						<div className="inline-flex min-w-[200%] whitespace-nowrap will-change-transform animate-marquee motion-reduce:animate-none">
 							<span className="inline-block font-semibold text-xl sm:text-2xl leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
-								Be a part of the VR Kisan Parivaar Movement working towards
-								sustainable villages and a stronger rural India.
+								Be part of the journey with VR Kisan Parivaar — towards
+								resilient, sustainable rural communities.
 							</span>
 							<span
 								aria-hidden
 								className="inline-block font-semibold text-xl sm:text-2xl leading-[1.5] pr-12 sm:pr-16 bg-gradient-to-r from-orange-700 via-slate-800 to-green-500 bg-clip-text text-transparent">
-								Be a part of the VR Kisan Parivaar Movement working towards
-								sustainable villages and a stronger rural India.
+								Be part of the journey with VR Kisan Parivaar — towards
+								resilient, sustainable rural communities.
 							</span>
 						</div>
 					</div>
@@ -62,9 +62,9 @@ export default function Hero() {
 				</h4>
 
 				<p className="mb-5 sm:mb-6 max-w-2xl text-[15px] sm:text-base md:text-lg text-zinc-700">
-					Empowering villages through clean energy, sustainable farming,
-					women-led initiatives, and rural employment. Together, we shape a
-					self-reliant and green Bharat.
+					Empowering villages with clean energy, sustainable farming, women-led
+					initiatives, and rural employment to build a self-reliant, green, and
+					thriving Bharat.
 				</p>
 
 				{/* Carousel */}

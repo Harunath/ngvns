@@ -7,9 +7,9 @@ const WhoWeAre = () => {
 	const points = [
 		"Driven by the vision of self-reliant, thriving villages.",
 		"Inspired by the wisdom of nature and simplicity.",
-		"Empowered by the strength of local communities.",
-		"Led by farmers, youth, field workers, and changemakers.",
-		"Focused on practical, scalable rural transformation.",
+		"Guided by practical, scalable approaches to rural transformation.",
+		"Strengthened by the active participation of farmers, youth, field workers, and changemakers.",
+		"Focused on building resilient and sustainable communities.",
 	];
 
 	return (
@@ -26,7 +26,7 @@ const WhoWeAre = () => {
 							VR Kisan Parivaar
 						</span>{" "}
 						is a grassroots organization committed to empowering rural India
-						through self-sustaining development models.
+						through sustainable development and community-driven growth.
 					</p>
 
 					<ul className="space-y-4 mt-4">

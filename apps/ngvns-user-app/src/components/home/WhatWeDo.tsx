@@ -20,37 +20,37 @@ const items: Item[] = [
 	{
 		icon: FiFeather,
 		title: "Sustainable Farming",
-		text: "Promoting eco-friendly, regenerative practices that conserve soil, water, and biodiversity.",
+		text: "Promoting eco-friendly, regenerative practices that protect soil, conserve water, and enhance biodiversity.",
 	},
 	{
 		icon: FiPackage,
 		title: "Dehydration Technology",
-		text: "Natural dehydration methods to preserve produce with maximum nutrition and shelf life.",
+		text: "Using natural methods to preserve produce while retaining maximum nutrition and shelf life.",
 	},
 	{
 		icon: FiGlobe,
 		title: "Farmer Empowerment",
-		text: "Connecting farmers to national and international markets for fair returns.",
+		text: "Connecting farmers to national and global markets to secure fair returns and opportunities.",
 	},
 	{
 		icon: FiSettings,
 		title: "Agricultural Innovation",
-		text: "Leveraging science and indigenous knowledge to develop modern, sustainable solutions.",
+		text: "Combining scientific research and indigenous knowledge to create modern,sustainable solutions.",
 	},
 	{
 		icon: FiRefreshCw,
 		title: "Environmental Stewardship",
-		text: "Converting agri-waste into energy, compost, and eco-products to minimize pollution.",
+		text: "Transforming agricultural waste into energy, compost, and eco-friendly products to reduce pollution.",
 	},
 	{
 		icon: FiShield,
 		title: "Quality Assurance",
-		text: "Strict quality standards for safe, nutritious, and export-ready produce.",
+		text: "Maintaining strict standards for safe, nutritious, and export-ready produce.",
 	},
 	{
 		icon: FiBriefcase,
 		title: "Corporate Farming Model",
-		text: "Scalable, profitable partnerships benefiting landowners, farmers, and communities.",
+		text: "Developing scalable, profitable partnerships that benefit landowners, farmers, and rural communities.",
 	},
 ];
 
@@ -76,9 +76,9 @@ const WhatWeDo: React.FC = () => {
 						<span className="text-orange-600 ">What We Do</span>
 					</h2>
 					<p className="mx-auto mt-3 max-w-3xl text-base text-zinc-700 sm:text-lg">
-						We create value across the agri-ecosystem from regenerative
-						cultivation to premium market access so farmers prosper and the
-						environment thrives.
+						VR Kisan Parivaar is working to create value across the agricultural
+						ecosystem, from regenerative farming to premium market access, so
+						that farmers prosper and the environment thrives.
 					</p>
 				</div>
 
