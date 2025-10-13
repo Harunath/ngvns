@@ -7,19 +7,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AdminRole {
+  ROOT
+  SUPER
+  COMMAND
+  FINANCE
+  DATA_ENTRY
+}
+
 model Admin {
-  id            String     @id @default(uuid())
-  email         String     @unique
-  emailVerified Boolean    @default(false)
+  id            String   @id @default(uuid())
+  email         String   @unique
+  emailVerified Boolean  @default(false)
   password      String
   fullname      String
-  phone         String?    @unique
-  phoneVerified Boolean?   @default(false)
-  role          ADMIN_ROLE
-  address       Json?
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  phone         String  @unique
+  role          AdminRole
+  // TOTP (MVP 2FA)
+  totpSecret    String?  // base32; null until enrolled
+  totpEnabled   Boolean  @default(false)
+
+  // Relations you already have:
+  ApprovedUserPayouts  UserPayout[] @relation("PayoutApprovedBy")
+  RequestedUserPayouts UserPayout[] @relation("PayoutRequestedBy")
+  createdPayoutBatches PayoutBatch[]
+  approvedPayoutBatches PayoutBatch[] @relation("PayoutBatchApprovedBy")
+
+  auditLogs     AdminAuditLog[] @relation("ActorAdminAuditLogs")
+  PayoutAttachments PayoutAttachment[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
+
 
 model User {
   id               String         @id @default(uuid())
@@ -66,7 +85,8 @@ model User {
 
 
   UserPayments     UserPayments[] @relation("payment-user")
-  
+  UserPayouts      UserPayout[]
+
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 
@@ -260,12 +280,6 @@ model TnCAcceptance {
   user         User?      @relation(fields: [userId], references: [id])
 }
 
-enum ADMIN_ROLE {
-  SUPER
-  ADMIN
-  TRESASURAR
-}
-
 enum GenderType {
   Male
   Female
@@ -327,3 +341,194 @@ model SmsMessage {
   @@index([mobile, status])
   @@index([idempotencyKey])
 }
+
+enum PayoutStatus {
+  REQUESTED     // created, awaiting review
+  APPROVED      // approved to be paid (included in an APPROVED/POSTED batch)
+  PAID          // admin marked as paid (manual bank)
+  FAILED        // attempted but failed; may retry
+  CANCELLED     // withdrawn or invalid
+}
+
+enum BatchStatus {
+  DRAFT
+  READY
+  APPROVED
+  POSTED
+  DISBURSED     // all payouts marked PAID or FAILED
+  RECONCILED    // admin verified with bank statements
+  CANCELLED
+}
+
+enum Currency {
+  INR
+}
+
+model UserPayoutType {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  defaultAmountPaise BigInt?    // optional default
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  payouts     UserPayout[]
+}
+
+model PayoutBatch {
+  id            String     @id @default(cuid())
+  name          String
+  status        BatchStatus @default(DRAFT)
+  createdById   String
+  createdBy     Admin      @relation(fields: [createdById], references: [id])
+  approvedById  String?
+  approvedBy    Admin?     @relation("PayoutBatchApprovedBy", fields: [approvedById], references: [id])
+  currency      Currency    @default(INR)
+  totalAmountPaise BigInt   @default(0)
+  scheduledAt   DateTime?
+  postedAt      DateTime?
+  disbursedAt   DateTime?
+  reconciledAt  DateTime?
+  metadata      Json?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  payouts       UserPayout[]
+  payoutAttachments PayoutAttachment[]
+  @@index([status, createdAt])
+}
+
+model UserPayout {
+  id             String       @id @default(uuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  typeId         String
+  type           UserPayoutType @relation(fields: [typeId], references: [id])
+
+  requestedAmountPaise BigInt   // what the system/user proposed
+  approvedAmountPaise  BigInt?  // final approved amount (can differ)
+  currency       Currency  @default(INR)
+
+  status         PayoutStatus @default(REQUESTED)
+
+  // approval chain (optional for MVP single-approver)
+  requestedById  String?
+  requestedBy    Admin?      @relation("PayoutRequestedBy", fields: [requestedById], references: [id])
+
+  approvedById   String?
+  approvedBy     Admin?      @relation("PayoutApprovedBy", fields: [approvedById], references: [id])
+  approvedAt     DateTime?
+
+  // payment proof & reconciliation
+  paymentDate    DateTime?
+  bankReference  String?     // UTR or note; optional but useful
+  paymentDetails Json?       // any extra JSON (bank name, account tail, etc.)
+
+  // batch linkage (nullable so a payout can exist before batching)
+  batchId        String?
+  batch          PayoutBatch? @relation(fields: [batchId], references: [id])
+
+  // safety
+  idempotencyKey String? @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId, status, createdAt])
+  @@index([batchId, status])
+}
+
+model PayoutAttachment {
+  id          String   @id @default(cuid())
+  payoutBatchId    String
+  payout      PayoutBatch @relation(fields: [payoutBatchId], references: [id], onDelete: Cascade)
+  kind        String   // "BANK_PROOF", "NOTE", etc.
+  fileUrl     String?  // if you store files in R2/Cloudinary
+  note        String?
+  createdById String
+  createdBy   Admin    @relation(fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@index([payoutBatchId, kind])
+}
+
+
+
+
+
+model AdminPermission {
+  id        String   @id @default(uuid())
+  code      String   @unique // e.g. "payout.batch.approve"
+  label     String
+
+  ROLE_PERMISSIONS RolePermission[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RolePermission {
+  id           String        @id @default(uuid())
+  role         AdminRole
+  permission   AdminPermission @relation(fields: [permissionId], references: [id])
+  permissionId String
+  createdAt    DateTime      @default(now())
+
+  @@unique([role, permissionId])
+}
+
+
+// model AdminSession {
+//   id            String   @id @default(cuid())
+//   adminId       String
+//   admin         Admin    @relation(fields: [adminId], references: [id])
+//   userAgent     String?
+//   ip            String?
+//   valid         Boolean  @default(true)
+//   lastRotatedAt DateTime @default(now())
+//   expiresAt     DateTime
+//   createdAt     DateTime @default(now())
+
+//   @@index([adminId])
+// }
+
+// model AdminApiKey {
+//   id           String   @id @default(cuid())
+//   adminId      String
+//   admin        Admin    @relation(fields: [adminId], references: [id])
+//   name         String
+//   hashedKey    String   // store hash only
+//   scopes       String[] // list of permission codes or scope strings
+//   valid        Boolean  @default(true)
+//   createdAt    DateTime @default(now())
+//   lastUsedAt   DateTime?
+// }
+
+model AdminAuditLog {
+  id          String   @id @default(cuid())
+  actorId     String?  // null if system
+  actor       Admin?   @relation("ActorAdminAuditLogs", fields: [actorId], references: [id])
+  targetType  String   // "User","Admin","PayoutBatch","Rule"
+  targetId    String?
+  action      String   // "CREATE","UPDATE","DELETE","APPROVE","LOGIN","SHADOW_LOGIN"
+  reason      String?
+  metadata    Json?
+  ip          String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([action, createdAt])
+}
+
+
+// model WebAuthnCredential {
+//   id           String  @id @default(cuid())
+//   adminId      String
+//   admin        Admin   @relation(fields: [adminId], references: [id])
+//   name         String
+//   publicKey    Bytes
+//   credentialId Bytes   @unique
+//   counter      Int     @default(0)
+//   createdAt    DateTime @default(now())
+// }
