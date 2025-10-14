@@ -1,4 +1,4 @@
-import UsersPageClient from "../../../../components/super-admin/users/UsersPageClient";
+import UsersPageClient from "../../../../components/command-admin/users/UsersPageClient";
 
 export default function UsersPage() {
 	return (
@@ -9,8 +9,8 @@ export default function UsersPage() {
 						Users
 					</h1>
 					<p className="text-sm text-neutral-500">
-						Search, filter, and inspect full user details (Super Admin & Super
-						Dev only).
+						Search, filter, and inspect user details except contact details
+						(Command Admin).
 					</p>
 				</header>
 

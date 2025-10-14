@@ -15,6 +15,7 @@ export default function UsersPageClient() {
 		vrKpId: "",
 		name: "",
 		q: "",
+		pincode: "",
 		createdFrom: "",
 		createdTo: "",
 		sortBy: "createdAt",

@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import Filters, { FiltersState } from "./Filters";
 import UserList from "./UserList";
 import { buildQS } from "../../../lib/ui/query";
-import type { UsersApiResponse, UserItem } from "../../../lib/types/users";
+import type { UsersApiResponse, CAUserItem } from "../../../lib/types/users";
 
 export default function UsersPageClient() {
 	const [filters, setFilters] = useState<FiltersState>({
-		id: "",
+		pincode: "",
 		vrKpId: "",
 		name: "",
 		q: "",
@@ -21,7 +21,7 @@ export default function UsersPageClient() {
 	});
 
 	const [loading, setLoading] = useState(false);
-	const [list, setList] = useState<UserItem[]>([]);
+	const [list, setList] = useState<CAUserItem[]>([]);
 	const [total, setTotal] = useState<number | null>(null);
 	const [nextCursor, setNextCursor] = useState<string | null>(null);
 	const firstLoad = useRef(true);
@@ -35,7 +35,7 @@ export default function UsersPageClient() {
 	async function load(initial = false) {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/super-admin/users${qs}`, {
+			const res = await fetch(`/api/command-admin/users${qs}`, {
 				cache: "no-store",
 			});
 			if (!res.ok) throw new Error(await res.text());
@@ -54,7 +54,7 @@ export default function UsersPageClient() {
 		setLoading(true);
 		try {
 			const res = await fetch(
-				`/api/super-admin/users${qs}&cursor=${nextCursor}`,
+				`/api/command-admin/users${qs}&cursor=${nextCursor}`,
 				{
 					cache: "no-store",
 				}

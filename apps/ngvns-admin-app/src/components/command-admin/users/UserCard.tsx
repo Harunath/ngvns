@@ -1,9 +1,9 @@
 "use client";
 
-import { UserItem } from "../../../lib/types/users";
+import { CAUserItem } from "../../../lib/types/users";
 import { format } from "date-fns";
 
-export default function UserCard({ user }: { user: UserItem }) {
+export default function UserCard({ user }: { user: CAUserItem }) {
 	const addr = user.address;
 	return (
 		<article className="group rounded-xl border bg-white p-4 shadow-sm transition hover:shadow-md">
@@ -14,7 +14,7 @@ export default function UserCard({ user }: { user: UserItem }) {
 					</h3>
 					<p className="mt-0.5 text-xs text-neutral-500">
 						{user.vrKpId ? `VRKP: ${user.vrKpId} · ` : ""}
-						{user.email} · {user.phone}
+						{/* {user.email} · {user.phone} */}
 					</p>
 					{addr?.State || addr?.pincode ? (
 						<p className="mt-1 truncate text-xs text-neutral-500">

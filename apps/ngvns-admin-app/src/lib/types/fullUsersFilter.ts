@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const UsersQuerySchema = z.object({
 	// precise filters (any combination)
-	id: z.string().uuid().optional(),
+	pincode: z.string().length(6).optional(),
 	phone: z.string().min(3).optional(),
 	email: z.string().email().optional(),
 	vrKpId: z.string().min(2).optional(),
@@ -27,7 +27,8 @@ export type UsersQuery = z.infer<typeof UsersQuerySchema>;
 export function buildUsersWhere(q: UsersQuery) {
 	const and: any[] = [];
 
-	if (q.id) and.push({ id: q.id });
+	if (q.pincode)
+		and.push({ address: { is: { pincode: { equals: q.pincode } } } });
 	if (q.phone) and.push({ phone: { contains: q.phone, mode: "insensitive" } });
 	if (q.email) and.push({ email: { contains: q.email, mode: "insensitive" } });
 	if (q.vrKpId) {

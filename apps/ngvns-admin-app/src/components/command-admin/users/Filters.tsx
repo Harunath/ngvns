@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export type FiltersState = {
-	id: string;
 	vrKpId: string;
 	name: string;
 	q: string;
+	pincode: string;
 	createdFrom: string; // ISO
 	createdTo: string; // ISO
 	sortBy: "createdAt" | "fullname";
@@ -112,12 +112,12 @@ export default function Filters({
 
 					<div className="space-y-1.5">
 						<label className="text-xs font-medium text-neutral-600">
-							User ID (UUID)
+							Pincode
 						</label>
 						<input
-							value={value.id}
-							onChange={(e) => set("id", e.target.value)}
-							placeholder="uuid..."
+							value={value.pincode}
+							onChange={(e) => set("pincode", e.target.value)}
+							placeholder="pincode..."
 							className="w-full rounded-xl border px-3 py-2 text-sm focus:border-neutral-400"
 						/>
 					</div>
@@ -206,7 +206,7 @@ export default function Filters({
 					<button
 						onClick={() =>
 							onChange({
-								id: "",
+								pincode: "",
 								// phone: "",
 								// email: "",
 								vrKpId: "",

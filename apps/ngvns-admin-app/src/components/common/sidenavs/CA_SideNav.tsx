@@ -38,10 +38,6 @@ const CA_SideNav = () => {
 						icon: <FiShield className="h-4 w-4" />,
 						items: [
 							{
-								label: "Command Admins",
-								href: "/command-admin/admins/command-admin",
-							},
-							{
 								label: "Finance Admins",
 								href: "/command-admin/admins/finance-admin",
 							},

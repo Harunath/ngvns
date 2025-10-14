@@ -22,6 +22,7 @@ export default function UserList({
 
 	return (
 		<div className="grid gap-3">
+			{total !== undefined && <p>Total {total}</p>}
 			{items.map((u, i) => (
 				<motion.div
 					key={u.id}

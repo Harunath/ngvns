@@ -16,7 +16,6 @@ export default async function UserDetailsPage({
 			id: true,
 			fullname: true,
 			vrKpId: true,
-			email: true,
 			phone: true,
 			gender: true,
 			dob: true,
@@ -39,6 +38,8 @@ export default async function UserDetailsPage({
 	});
 
 	if (!user) return notFound();
+	user.phone = "******" + user.phone.slice(-4); // Mask phone for privacy
+	user.aadhaar = "**** **** " + user.aadhaar?.slice(-4); // Mask aadhaar for privacy
 
 	return (
 		<div className="min-h-screen bg-neutral-50">
@@ -49,7 +50,7 @@ export default async function UserDetailsPage({
 					</h1>
 					<p className="text-sm text-neutral-500">
 						{user.vrKpId ? `VRKP: ${user.vrKpId} · ` : ""}
-						{user.email} · {user.phone}
+						+91 {user.phone}
 					</p>
 				</header>
 
@@ -75,13 +76,13 @@ export default async function UserDetailsPage({
 					</div>
 
 					<div className="mt-6 grid gap-6 md:grid-cols-3">
-						<div>
+						{/* <div>
 							<p className="text-xs text-neutral-500">Email</p>
 							<p className="font-medium">{user.email}</p>
 							<p className="text-xs text-neutral-500">
 								{user.emailVerified ? "Verified" : "Not verified"}
 							</p>
-						</div>
+						</div> */}
 						<div>
 							<p className="text-xs text-neutral-500">Aadhaar</p>
 							<p className="font-medium">{user.aadhaar || "-"}</p>

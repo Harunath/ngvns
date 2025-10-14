@@ -26,6 +26,22 @@ export type UserItem = {
 	address?: UserAddress | null;
 };
 
+export type CAUserItem = {
+	id: string;
+	fullname: string;
+	vrKpId?: string | null;
+	gender?: string | null;
+	dob?: string | null;
+	relationType?: string | null;
+	relationName?: string | null;
+	aadhaar?: string | null;
+	aadhaarVerified?: boolean | null;
+	emailVerified?: boolean | null;
+	createdAt: string;
+	updatedAt: string;
+	address?: UserAddress | null;
+};
+
 export type UsersApiResponse = {
 	ok: true;
 	total: number;
