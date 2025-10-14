@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 export type FiltersState = {
-	id: string;
-	phone: string;
-	email: string;
 	vrKpId: string;
 	name: string;
 	q: string;
@@ -88,7 +85,7 @@ export default function Filters({
 						/>
 					</div>
 
-					<div className="space-y-1.5">
+					{/* <div className="space-y-1.5">
 						<label className="text-xs font-medium text-neutral-600">
 							Email
 						</label>
@@ -98,10 +95,10 @@ export default function Filters({
 							placeholder="email@example.com"
 							className="w-full rounded-xl border px-3 py-2 text-sm focus:border-neutral-400"
 						/>
-					</div>
+					</div> */}
 
 					{/* Row 2 */}
-					<div className="space-y-1.5">
+					{/* <div className="space-y-1.5">
 						<label className="text-xs font-medium text-neutral-600">
 							Phone
 						</label>
@@ -111,11 +108,11 @@ export default function Filters({
 							placeholder="9xxx..."
 							className="w-full rounded-xl border px-3 py-2 text-sm focus:border-neutral-400"
 						/>
-					</div>
+					</div> */}
 
 					<div className="space-y-1.5">
 						<label className="text-xs font-medium text-neutral-600">
-							pincode
+							Pincode
 						</label>
 						<input
 							value={value.pincode}
@@ -209,13 +206,12 @@ export default function Filters({
 					<button
 						onClick={() =>
 							onChange({
-								id: "",
-								phone: "",
-								email: "",
+								pincode: "",
+								// phone: "",
+								// email: "",
 								vrKpId: "",
 								name: "",
 								q: "",
-								pincode: "",
 								createdFrom: "",
 								createdTo: "",
 								sortBy: "createdAt",

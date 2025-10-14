@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import UserCard from "./UserCard";
-import type { UserItem } from "../../../lib/types/users";
+import type { CAUserItem } from "../../../lib/types/users";
 
 export default function UserList({
 	items,
 	total,
 }: {
-	items: UserItem[];
+	items: CAUserItem[];
 	total?: number;
 }) {
 	if (items.length === 0) {
@@ -22,7 +22,6 @@ export default function UserList({
 
 	return (
 		<div className="grid gap-3">
-			{total !== undefined && <p>Total {total}</p>}
 			{items.map((u, i) => (
 				<motion.div
 					key={u.id}
@@ -30,7 +29,7 @@ export default function UserList({
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.18, delay: i * 0.02 }}>
 					<Link
-						href={`/super-admin/user-list/${u.id}`}
+						href={`/command-admin/user-list/${u.id}`}
 						className="block focus:outline-none">
 						<UserCard user={u} />
 					</Link>

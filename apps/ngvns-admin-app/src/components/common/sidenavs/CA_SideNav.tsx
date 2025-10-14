@@ -30,17 +30,13 @@ const CA_SideNav = () => {
 						id: "users",
 						label: "Users",
 						icon: <FiUsers className="h-4 w-4" />,
-						href: "/command-admin/users",
+						href: "/command-admin/user-list",
 					},
 					{
 						id: "admins",
 						label: "Admins",
 						icon: <FiShield className="h-4 w-4" />,
 						items: [
-							{
-								label: "Command Admins",
-								href: "/command-admin/admins/command-admin",
-							},
 							{
 								label: "Finance Admins",
 								href: "/command-admin/admins/finance-admin",

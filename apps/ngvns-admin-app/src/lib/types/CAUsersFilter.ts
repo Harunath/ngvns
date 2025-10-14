@@ -3,8 +3,8 @@ import { z } from "zod";
 export const UsersQuerySchema = z.object({
 	// precise filters (any combination)
 	pincode: z.string().length(6).optional(),
-	phone: z.string().min(3).optional(),
-	email: z.string().email().optional(),
+	// phone: z.string().min(3).optional(),
+	// email: z.string().email().optional(),
 	vrKpId: z.string().min(2).optional(),
 
 	// name / generic search
@@ -26,11 +26,10 @@ export type UsersQuery = z.infer<typeof UsersQuerySchema>;
 
 export function buildUsersWhere(q: UsersQuery) {
 	const and: any[] = [];
-
 	if (q.pincode)
 		and.push({ address: { is: { pincode: { equals: q.pincode } } } });
-	if (q.phone) and.push({ phone: { contains: q.phone, mode: "insensitive" } });
-	if (q.email) and.push({ email: { contains: q.email, mode: "insensitive" } });
+	// if (q.phone) and.push({ phone: { contains: q.phone, mode: "insensitive" } });
+	// if (q.email) and.push({ email: { contains: q.email, mode: "insensitive" } });
 	if (q.vrKpId) {
 		// allow both vrkpId and vrkpid schema variants (defensive)
 		and.push({
@@ -45,8 +44,8 @@ export function buildUsersWhere(q: UsersQuery) {
 		and.push({
 			OR: [
 				{ fullname: { contains: q.q, mode: "insensitive" } },
-				{ email: { contains: q.q, mode: "insensitive" } },
-				{ phone: { contains: q.q, mode: "insensitive" } },
+				// { email: { contains: q.q, mode: "insensitive" } },
+				// { phone: { contains: q.q, mode: "insensitive" } },
 				{ id: q.q.length === 36 ? q.q : undefined },
 				{ vrKpId: { contains: q.q, mode: "insensitive" } },
 				{ vrKpId: { contains: q.q, mode: "insensitive" } },
