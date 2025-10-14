@@ -30,7 +30,7 @@ const CA_SideNav = () => {
 						id: "users",
 						label: "Users",
 						icon: <FiUsers className="h-4 w-4" />,
-						href: "/command-admin/users",
+						href: "/command-admin/user-list",
 					},
 					{
 						id: "admins",
