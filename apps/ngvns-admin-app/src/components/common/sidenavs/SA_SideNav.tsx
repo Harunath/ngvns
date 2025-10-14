@@ -34,7 +34,7 @@ const SA_SideNav = () => {
 						id: "users",
 						label: "Users",
 						icon: <FiUsers className="h-4 w-4" />,
-						href: "/super-admin/users",
+						href: "/super-admin/user-list",
 					},
 					{
 						id: "admins",
