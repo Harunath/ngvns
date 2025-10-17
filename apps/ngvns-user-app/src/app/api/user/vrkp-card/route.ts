@@ -165,6 +165,7 @@ export async function POST(req: NextRequest) {
 		const ab = await res.arrayBuffer();
 		templateBuf = Buffer.from(ab);
 	} catch (err) {
+		console.error("Error loading template:", err);
 		return new Response(
 			JSON.stringify({
 				error: "Template not found " + " (" + (err as Error).message + ")",
