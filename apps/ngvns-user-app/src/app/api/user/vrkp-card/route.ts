@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
 import path from "node:path";
+import template from "../../../../../public/vrkp-card-template.png";
 
 // use a runtime-resolved path to the public template so we can read the binary at runtime
 // const TEMPLATE_PATH = path.join(process.cwd(), "public/vrkp-card-template.png");
@@ -148,25 +149,25 @@ export async function POST(req: NextRequest) {
 			{ status: 400 }
 		);
 	}
-	const TEMPLATE_PATH = path.join(
-		process.cwd(),
-		"public",
-		"vrkp-card-template.png"
-	);
+	// const TEMPLATE_PATH = path.join(
+	// 	process.cwd(),
+	// 	"public",
+	// 	"vrkp-card-template.png"
+	// );
 
 	// 1) Base template
 	let templateBuf: Buffer;
 	try {
-		templateBuf = await fs.readFile(TEMPLATE_PATH);
+		const templateUrl = new URL("/vrkp-card-template.png", req.url);
+		console.log("Template URL:", templateUrl.toString());
+		const res = await fetch(templateUrl); // same-origin fetch
+		if (!res.ok) throw new Error("Template fetch failed");
+		const ab = await res.arrayBuffer();
+		templateBuf = Buffer.from(ab);
 	} catch (err) {
 		return new Response(
 			JSON.stringify({
-				error:
-					"Template not found at " +
-					TEMPLATE_PATH +
-					" (" +
-					(err as Error).message +
-					")",
+				error: "Template not found " + " (" + (err as Error).message + ")",
 			}),
 			{ status: 500 }
 		);
