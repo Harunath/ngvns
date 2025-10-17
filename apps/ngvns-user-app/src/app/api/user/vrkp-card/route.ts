@@ -4,11 +4,13 @@ import fs from "node:fs/promises";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
-import path from "node:path";
-import template from "../../../../../public/vrkp-card-template.png";
+// import path from "node:path";
+// import template from "../../../../../public/vrkp-card-template.png";
 
 // use a runtime-resolved path to the public template so we can read the binary at runtime
 // const TEMPLATE_PATH = path.join(process.cwd(), "public/vrkp-card-template.png");
+const path =
+	"https://pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev/users/vrkp-card-template.png";
 
 function escapeXML(str: string) {
 	return str
@@ -158,12 +160,15 @@ export async function POST(req: NextRequest) {
 	// 1) Base template
 	let templateBuf: Buffer;
 	try {
-		const filePath = path.join(
-			process.cwd(),
-			"public",
-			"vrkp-card-template.png"
-		);
-		templateBuf = await fs.readFile(filePath);
+		const res = await fetch(path, { cache: "force-cache" });
+		if (!res.ok) throw new Error("Template fetch failed");
+		templateBuf = Buffer.from(await res.arrayBuffer());
+		// const filePath = path.join(
+		// 	process.cwd(),
+		// 	"public",
+		// 	"vrkp-card-template.png"
+		// );
+		// templateBuf = await fs.readFile(filePath);
 	} catch (err) {
 		console.error("Error loading template:", err);
 		return new Response(
