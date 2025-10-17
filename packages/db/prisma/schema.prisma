@@ -23,6 +23,7 @@ model Admin {
   fullname      String
   phone         String  @unique
   role          AdminRole
+  active        Boolean  @default(true)
   // TOTP (MVP 2FA)
   totpSecret    String?  // base32; null until enrolled
   totpEnabled   Boolean  @default(false)
@@ -32,6 +33,9 @@ model Admin {
   RequestedUserPayouts UserPayout[] @relation("PayoutRequestedBy")
   createdPayoutBatches PayoutBatch[]
   approvedPayoutBatches PayoutBatch[] @relation("PayoutBatchApprovedBy")
+
+  allocationsMade LandAllocation[]
+  issuedBenefit  Benefit[]
 
   auditLogs     AdminAuditLog[] @relation("ActorAdminAuditLogs")
   PayoutAttachments PayoutAttachment[]
@@ -63,12 +67,20 @@ model User {
   deactivated      Boolean        @default(false)
   onBoardingId     String         @unique
   orderId          String         @unique
+
+
   healthCard       Boolean        @default(false)
+  healthCareDocument String?
+  VRKP_Card        VRKP_Card?
+
+  landAllotments   LandAllocation[]
+  benefits        Benefit[]
+  
   parentBId        String?
   parentCId        String?
   parentReferralId String?
-  
-  
+
+
 
   bankDetails      BankDetails?
   TnCAcceptance    TnCAcceptance?
@@ -189,7 +201,8 @@ model States {
   name          String
   code          String?
   isActive      Boolean
-
+  avaliableLands  LandParcel[]
+  LandAllocation  LandAllocation[]
   addresses     Address[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -453,10 +466,6 @@ model PayoutAttachment {
   @@index([payoutBatchId, kind])
 }
 
-
-
-
-
 model AdminPermission {
   id        String   @id @default(uuid())
   code      String   @unique // e.g. "payout.batch.approve"
@@ -532,3 +541,157 @@ model AdminAuditLog {
 //   counter      Int     @default(0)
 //   createdAt    DateTime @default(now())
 // }
+
+
+
+model VRKP_Card {
+  id            String   @id @default(uuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardIssuedAt  DateTime @default(now())
+  cardNumber    String   @unique
+  cardUrl       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+
+// ---------- Enums ----------
+enum LandUnitStatus {
+  AVAILABLE   // selectable
+  RESERVED    // temporarily locked while user is in checkout flow
+  ALLOTTED    // permanently assigned to a user
+  INACTIVE    // hidden/removed by admin (e.g., dispute, error)
+}
+
+enum AllocationStatus {
+  PENDING     // created but not confirmed (optional step)
+  CONFIRMED   // final, user owns this unit
+  CANCELLED   // reversed by admin or user cancelled
+}
+
+
+model LandParcel {
+  id             String        @id @default(uuid())
+  stateId        String
+  state          States         @relation(fields: [stateId], references: [id], onDelete: Restrict)
+
+  title          String        // human-friendly label
+  surveyNumber   String        // as given in records
+  areaSqYards    Int           // total area in sq yards (should be even)
+  // 2 sq yards = 1 unit. Units are materialized in LandParcelUnit.
+
+  addressLine    String?       // optional descriptive location
+  latitude       Decimal?      @db.Decimal(9,6)
+  longitude      Decimal?      @db.Decimal(9,6)
+
+  // Optional denormalized counters for fast filters (kept in sync at app level)
+  unitsTotal     Int           // total 2-sq-yd units = areaSqYards / 2
+  unitsAvailable Int           // quick filter; recompute on writes
+
+  units          LandParcelUnit[]
+  LandAllocation  LandAllocation[]
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([stateId, surveyNumber]) // a survey number is unique within a state
+  @@index([stateId])
+  @@index([surveyNumber])
+  @@index([unitsAvailable])
+}
+
+model LandParcelUnit {
+  id             String          @id @default(uuid())
+  landParcelId   String
+  landParcel     LandParcel      @relation(fields: [landParcelId], references: [id], onDelete: Cascade)
+
+  unitNumber     Int             // 1..N within a parcel
+  status         LandUnitStatus  @default(AVAILABLE)
+
+  // Soft lock to avoid race conditions during selection/checkout.
+  // Treat a unit as selectable only if:
+  //   status = AVAILABLE AND (lockedUntil IS NULL OR lockedUntil < now())
+  lockedUntil    DateTime?
+
+  // Optional: traceability / admin notes
+  note           String?
+
+  // Reverse relation to allocation (if allotted)
+  allocation     LandAllocation?
+
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@unique([landParcelId, unitNumber]) // each unit number unique within a parcel
+  @@index([status])
+  @@index([lockedUntil])
+}
+
+// ---------- Allocation ----------
+model LandAllocation {
+  id               String          @id @default(uuid())
+
+  // The user who gets the 2-sq-yd unit
+  userId           String
+  user             User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  // The specific 2-sq-yd unit allotted
+  landParcelUnitId String          @unique
+  unit             LandParcelUnit  @relation(fields: [landParcelUnitId], references: [id], onDelete: Restrict)
+
+  // Administrative bookkeeping
+  status           AllocationStatus @default(CONFIRMED)
+  referenceNo      String           @unique // e.g., "ALLOC-2025-000123"
+  allocatedAt      DateTime         @default(now())
+  allocatedById    String?          // Admin who confirmed
+  allocatedBy      Admin?           @relation(fields: [allocatedById], references: [id], onDelete: SetNull)
+
+  // Generated doc (small PDF) location
+  docPdfUrl        String?
+
+  // For quick filters
+  stateId          String
+  state            States            @relation(fields: [stateId], references: [id], onDelete: Restrict)
+
+  landParcelId     String
+  landParcel       LandParcel       @relation(fields: [landParcelId], references: [id], onDelete: Restrict)
+
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([stateId])
+  @@index([landParcelId])
+  @@index([allocatedAt])
+}
+
+
+enum BenefitType {
+  INSURANCE
+}
+
+
+model Benefit {
+  id          String   @id @default(uuid())
+  title       String
+  BenefitType  BenefitType @default(INSURANCE)
+  content     String?
+  isActive    Boolean  @default(true)
+
+  userId     String // users who have accepted this version
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  details    Json?  // optional JSON for extra info
+
+  docUrls    String[] // optional URL to related documents 
+
+  createdById String?
+  createdBy   Admin?  @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  issuedAt    DateTime? @default(now())
+  validUntil  DateTime?
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

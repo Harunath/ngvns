@@ -2,18 +2,19 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../../../lib/auth/auth";
 import { FaLeaf, FaHeartbeat, FaFileAlt, FaLandmark } from "react-icons/fa";
+import VrKpCard from "../../../components/user/docs/vrkp-card/VrKpCard";
 
 export default async function Page() {
 	const session = await getServerSession(authOptions);
 	if (!session) redirect("/logout");
 
 	const documents = [
-		{
-			title: "VR Kisan Parivaar Community Card",
-			desc: "Your personalized community membership card will be available here soon.",
-			icon: <FaLeaf className="text-[#045e5a] text-3xl" />,
-			active: true,
-		},
+		// {
+		// 	title: "VR Kisan Parivaar Community Card",
+		// 	desc: "Your personalized community membership card will be available here soon.",
+		// 	icon: <FaLeaf className="text-[#045e5a] text-3xl" />,
+		// 	active: true,
+		// },
 		{
 			title: "ULHC Health Service Program Document",
 			desc: "Details of your health care benefits and partner services will be uploaded soon.",
@@ -40,7 +41,7 @@ export default async function Page() {
 				<h1 className="mb-8 text-3xl font-bold text-[#045e5a]">
 					{session.user.fullname}&apos;s Documents
 				</h1>
-
+				<VrKpCard userId={session.user.id} />
 				<div className="space-y-6">
 					{documents.map((doc, i) => (
 						<article
