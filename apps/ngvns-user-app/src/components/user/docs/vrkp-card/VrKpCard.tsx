@@ -15,7 +15,6 @@ const VrKpCard = async ({ userId }: { userId: string }) => {
 	if (!VrKpCard || !VrKpCard.cardUrl) {
 		return (
 			<div>
-				Your VRKP Card has not been issued yet.
 				<GetVrKpCard />
 			</div>
 		);
