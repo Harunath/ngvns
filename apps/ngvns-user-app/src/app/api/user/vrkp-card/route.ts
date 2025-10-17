@@ -163,6 +163,7 @@ export async function POST(req: NextRequest) {
 		const res = await fetch(path, { cache: "force-cache" });
 		if (!res.ok) throw new Error("Template fetch failed");
 		templateBuf = Buffer.from(await res.arrayBuffer());
+		console.log("Template loaded, size:", templateBuf.length);
 		// const filePath = path.join(
 		// 	process.cwd(),
 		// 	"public",
@@ -178,90 +179,101 @@ export async function POST(req: NextRequest) {
 			{ status: 500 }
 		);
 	}
-	const base = sharp(templateBuf); // 1920x1080
+	try {
+		const base = sharp(templateBuf); // 1920x1080
 
-	// 2) User photo → resize & cover into the slot (approx 420×520 at x=180,y=360)
-	// Adjust size/pos if your template differs.
-	const slot = { w: 420, h: 520, left: 290, top: 350 };
-	const photoBuf = await loadBufferFromUrl(user?.userPhoto!);
-	if (!photoBuf) {
-		return new NextResponse(
-			JSON.stringify({ error: "Failed to load user photo" }),
+		// 2) User photo → resize & cover into the slot (approx 420×520 at x=180,y=360)
+		// Adjust size/pos if your template differs.
+		const slot = { w: 420, h: 520, left: 290, top: 350 };
+		const photoBuf = await loadBufferFromUrl(user?.userPhoto!);
+		if (!photoBuf) {
+			return new NextResponse(
+				JSON.stringify({ error: "Failed to load user photo" }),
+				{ status: 500 }
+			);
+		}
+		const photo = await sharp(photoBuf)
+			.resize(slot.w, slot.h, { fit: "cover", position: "attention" })
+			.toBuffer();
+
+		// 3) Text overlays
+		const rightText = buildMainTextSVG({
+			vrkpid: ": " + session.user.vrKpId!,
+			name: ": " + user?.fullname!,
+			dob:
+				": " +
+				new Date(user?.dob!).toLocaleDateString("en-GB", {
+					year: "numeric",
+					month: "2-digit",
+					day: "2-digit",
+				}),
+			regDate:
+				": " +
+				new Date(user?.createdAt!).toLocaleDateString("en-GB", {
+					year: "numeric",
+					month: "2-digit",
+					day: "2-digit",
+				}),
+		});
+		const issuedText = buildIssuedDateSVG(
+			new Date().toLocaleDateString("en-GB", {
+				year: "numeric",
+				month: "2-digit",
+				day: "2-digit",
+			})
+		);
+
+		// 4) Composite
+		const out = await base
+			.composite([
+				{ input: photo, left: slot.left, top: slot.top },
+				{ input: rightText, left: 0, top: 0 },
+				{ input: issuedText, left: 0, top: 0 },
+			])
+			.webp()
+			.toBuffer();
+		console.log("Generated card image, size:", out.length);
+		const uploadResponse = await fetch(
+			`${process.env.NEXT_PUBLIC_BASE_URL}/api/uploads/vrkp-card/cloudflare`,
+			{
+				method: "POST",
+				body: (() => {
+					const formData = new FormData();
+					formData.append(
+						"file",
+						new Blob([new Uint8Array(out)], { type: "image/webp" }),
+						`vrkp-card-${user.vrKpId}-${Date.now()}.webp`
+					);
+					return formData;
+				})(),
+			}
+		);
+
+		const uploadJson = await uploadResponse.json();
+
+		await prisma.vRKP_Card.create({
+			data: {
+				userId: session.user.id,
+				cardUrl: uploadJson.publicUrl,
+				cardNumber: session.user.vrKpId,
+				cardIssuedAt: new Date(),
+				createdAt: new Date(),
+			},
+		});
+
+		return NextResponse.json(
+			{ cardUrl: uploadJson.publicUrl },
+			{
+				status: 201,
+			}
+		);
+	} catch (err) {
+		console.error("Error generating card:", err);
+		return new Response(
+			JSON.stringify({
+				error: "Card generation failed " + " (" + (err as Error).message + ")",
+			}),
 			{ status: 500 }
 		);
 	}
-	const photo = await sharp(photoBuf)
-		.resize(slot.w, slot.h, { fit: "cover", position: "attention" })
-		.toBuffer();
-
-	// 3) Text overlays
-	const rightText = buildMainTextSVG({
-		vrkpid: ": " + session.user.vrKpId!,
-		name: ": " + user?.fullname!,
-		dob:
-			": " +
-			new Date(user?.dob!).toLocaleDateString("en-GB", {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-			}),
-		regDate:
-			": " +
-			new Date(user?.createdAt!).toLocaleDateString("en-GB", {
-				year: "numeric",
-				month: "2-digit",
-				day: "2-digit",
-			}),
-	});
-	const issuedText = buildIssuedDateSVG(
-		new Date().toLocaleDateString("en-GB", {
-			year: "numeric",
-			month: "2-digit",
-			day: "2-digit",
-		})
-	);
-
-	// 4) Composite
-	const out = await base
-		.composite([
-			{ input: photo, left: slot.left, top: slot.top },
-			{ input: rightText, left: 0, top: 0 },
-			{ input: issuedText, left: 0, top: 0 },
-		])
-		.webp()
-		.toBuffer();
-	const uploadResponse = await fetch(
-		`${process.env.NEXT_PUBLIC_BASE_URL}/api/uploads/vrkp-card/cloudflare`,
-		{
-			method: "POST",
-			body: (() => {
-				const formData = new FormData();
-				formData.append(
-					"file",
-					new Blob([new Uint8Array(out)], { type: "image/webp" }),
-					`vrkp-card-${user.vrKpId}-${Date.now()}.webp`
-				);
-				return formData;
-			})(),
-		}
-	);
-
-	const uploadJson = await uploadResponse.json();
-
-	await prisma.vRKP_Card.create({
-		data: {
-			userId: session.user.id,
-			cardUrl: uploadJson.publicUrl,
-			cardNumber: session.user.vrKpId,
-			cardIssuedAt: new Date(),
-			createdAt: new Date(),
-		},
-	});
-
-	return NextResponse.json(
-		{ cardUrl: uploadJson.publicUrl },
-		{
-			status: 201,
-		}
-	);
 }
