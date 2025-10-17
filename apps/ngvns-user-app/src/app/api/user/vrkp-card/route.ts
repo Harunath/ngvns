@@ -5,7 +5,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
 
-const TEMPLATE_PATH = "/vrkp-card-template.png";
+// const TEMPLATE_PATH = "public/vrkp-card-template.png";
+import path from "path";
+const TEMPLATE_PATH = path.join(
+	process.cwd(),
+	"public",
+	"vrkp-card-template.png"
+);
 
 function escapeXML(str: string) {
 	return str
