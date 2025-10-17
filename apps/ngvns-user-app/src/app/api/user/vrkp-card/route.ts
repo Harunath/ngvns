@@ -5,7 +5,13 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
 
-const TEMPLATE_PATH = "public/vrkp-card-template.png";
+// const TEMPLATE_PATH = "public/vrkp-card-template.png";
+import path from "path";
+const TEMPLATE_PATH = path.join(
+	process.cwd(),
+	"public",
+	"vrkp-card-template.png"
+);
 
 function escapeXML(str: string) {
 	return str
@@ -29,7 +35,6 @@ function buildMainTextSVG({
 }) {
 	// Template is 1920x1080. These coordinates align values to the right column.
 	// Tweak x/y if your template spacing changes.
-	console.log({ name, dob, regDate });
 	const width = 1920,
 		height = 1080;
 	const items = [
@@ -128,7 +133,6 @@ export async function POST(req: NextRequest) {
 	if (!session) {
 		return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 	}
-	console.log("Generating VRKP Card for user:", session.user.id);
 	const user = await prisma.user.findUnique({
 		where: { id: session.user.id },
 	});
