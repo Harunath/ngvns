@@ -4,13 +4,25 @@ import fs from "node:fs/promises";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
-// import path from "node:path";
+import path from "node:path";
 // import template from "../../../../../public/vrkp-card-template.png";
 
 // use a runtime-resolved path to the public template so we can read the binary at runtime
 // const TEMPLATE_PATH = path.join(process.cwd(), "public/vrkp-card-template.png");
-const path =
+const temp_url =
 	"https://pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev/users/vrkp-card-template.png";
+
+async function getFontDataUrl() {
+	const p = path.join(
+		process.cwd(),
+		"public",
+		"fonts",
+		"Inter_28pt-Regular.ttf"
+	);
+	const buf = await fs.readFile(p);
+	const b64 = buf.toString("base64");
+	return `data:font/ttf;base64,${b64}`;
+}
 
 function escapeXML(str: string) {
 	return str
@@ -20,8 +32,7 @@ function escapeXML(str: string) {
 		.replace(/>/g, "&gt;");
 }
 
-/** Build an SVG overlay for the right-column values */
-function buildMainTextSVG({
+async function buildMainTextSVG({
 	vrkpid,
 	name,
 	dob,
@@ -32,10 +43,10 @@ function buildMainTextSVG({
 	dob: string;
 	regDate: string;
 }) {
-	// Template is 1920x1080. These coordinates align values to the right column.
-	// Tweak x/y if your template spacing changes.
 	const width = 1920,
 		height = 1080;
+	const fontUrl = await getFontDataUrl();
+
 	const items = [
 		{
 			text: "VRKP ID",
@@ -46,17 +57,10 @@ function buildMainTextSVG({
 			color: "#0f172a",
 		},
 		{ text: vrkpid, x: 1210, y: 446, size: 52, weight: 800, color: "#0f172a" },
-		{
-			text: "Name",
-			x: 910,
-			y: 566,
-			size: 52,
-			weight: 800,
-			color: "#0f172a",
-		}, // Name
-		{ text: name, x: 1210, y: 566, size: 52, weight: 800, color: "#0f172a" }, // Name
-		{ text: "DOB", x: 910, y: 690, size: 46, weight: 700, color: "#0f172a" }, // Dob
-		{ text: dob, x: 1210, y: 690, size: 46, weight: 700, color: "#0f172a" }, // Dob
+		{ text: "Name", x: 910, y: 566, size: 52, weight: 800, color: "#0f172a" },
+		{ text: name, x: 1210, y: 566, size: 52, weight: 800, color: "#0f172a" },
+		{ text: "DOB", x: 910, y: 690, size: 46, weight: 700, color: "#0f172a" },
+		{ text: dob, x: 1210, y: 690, size: 46, weight: 700, color: "#0f172a" },
 		{
 			text: "Reg Date",
 			x: 910,
@@ -64,51 +68,68 @@ function buildMainTextSVG({
 			size: 46,
 			weight: 700,
 			color: "#0f172a",
-		}, // Reg Date
-		{ text: regDate, x: 1210, y: 810, size: 46, weight: 700, color: "#0f172a" }, // Reg Date
+		},
+		{ text: regDate, x: 1210, y: 810, size: 46, weight: 700, color: "#0f172a" },
 	]
 		.map(
 			(l) => `
-    <text x="${l.x}" y="${l.y}" text-anchor="start"
-      fill="${l.color}"
-      font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial"
-      font-size="${l.size}"
-      font-weight="${l.weight}"
-      dominant-baseline="middle">${escapeXML(l.text)}</text>
-  `
+      <text x="${l.x}" y="${l.y}"
+        fill="${l.color}"
+        font-family="InterLocal, sans-serif"
+        font-size="${l.size}"
+        font-weight="${l.weight}"
+        dominant-baseline="alphabetic">${escapeXML(l.text)}</text>`
 		)
 		.join("");
 
-	return Buffer.from(
-		`<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-      ${items}
-    </svg>`,
-		"utf-8"
-	);
+	const svg = `
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
+     xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @font-face {
+      font-family: 'InterLocal';
+      src: url('${fontUrl}') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
+    }
+    text { paint-order: stroke fill; }
+  </style>
+  ${items}
+</svg>`;
+
+	return Buffer.from(svg, "utf-8");
 }
 
-/** Vertical "ISSUED DATE : ..." on the left side */
-function buildIssuedDateSVG(issuedDate: string) {
+async function buildIssuedDateSVG(issuedDate: string) {
 	const width = 1920,
 		height = 1080;
-
-	// shift down by 200px to leave room for logo
+	const fontUrl = await getFontDataUrl();
 	const topMargin = 200;
 	const yPosition = 760 + topMargin;
 
-	return Buffer.from(
-		`<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">
-      <g transform="translate(140, ${yPosition}) rotate(-90)">
-        <text x="0" y="0"
-          fill="#0f172a"
-          font-family="Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial"
-          font-size="44"
-          font-weight="800"
-          letter-spacing="2">ISSUED DATE : ${escapeXML(issuedDate)}</text>
-      </g>
-    </svg>`,
-		"utf-8"
-	);
+	const svg = `
+<svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
+     xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @font-face {
+      font-family: 'InterLocal';
+      src: url('${fontUrl}') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
+    }
+  </style>
+  <g transform="translate(140, ${yPosition}) rotate(-90)">
+    <text x="0" y="0"
+      fill="#0f172a"
+      font-family="InterLocal, sans-serif"
+      font-size="44"
+      font-weight="800"
+      letter-spacing="2">ISSUED DATE : ${escapeXML(issuedDate)}</text>
+  </g>
+</svg>`;
+	return Buffer.from(svg, "utf-8");
 }
 
 async function loadBufferFromUrl(url: string) {
@@ -151,25 +172,14 @@ export async function POST(req: NextRequest) {
 			{ status: 400 }
 		);
 	}
-	// const TEMPLATE_PATH = path.join(
-	// 	process.cwd(),
-	// 	"public",
-	// 	"vrkp-card-template.png"
-	// );
 
 	// 1) Base template
 	let templateBuf: Buffer;
 	try {
-		const res = await fetch(path, { cache: "force-cache" });
+		const res = await fetch(temp_url, { cache: "force-cache" });
 		if (!res.ok) throw new Error("Template fetch failed");
 		templateBuf = Buffer.from(await res.arrayBuffer());
 		console.log("Template loaded, size:", templateBuf.length);
-		// const filePath = path.join(
-		// 	process.cwd(),
-		// 	"public",
-		// 	"vrkp-card-template.png"
-		// );
-		// templateBuf = await fs.readFile(filePath);
 	} catch (err) {
 		console.error("Error loading template:", err);
 		return new Response(
@@ -197,7 +207,7 @@ export async function POST(req: NextRequest) {
 			.toBuffer();
 
 		// 3) Text overlays
-		const rightText = buildMainTextSVG({
+		const rightText = await buildMainTextSVG({
 			vrkpid: ": " + session.user.vrKpId!,
 			name: ": " + user?.fullname!,
 			dob:
@@ -215,7 +225,7 @@ export async function POST(req: NextRequest) {
 					day: "2-digit",
 				}),
 		});
-		const issuedText = buildIssuedDateSVG(
+		const issuedText = await buildIssuedDateSVG(
 			new Date().toLocaleDateString("en-GB", {
 				year: "numeric",
 				month: "2-digit",
