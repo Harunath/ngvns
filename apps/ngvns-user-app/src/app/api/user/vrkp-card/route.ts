@@ -158,12 +158,12 @@ export async function POST(req: NextRequest) {
 	// 1) Base template
 	let templateBuf: Buffer;
 	try {
-		const templateUrl = new URL("/vrkp-card-template.png", req.url);
-		console.log("Template URL:", templateUrl.toString());
-		const res = await fetch(templateUrl); // same-origin fetch
-		if (!res.ok) throw new Error("Template fetch failed");
-		const ab = await res.arrayBuffer();
-		templateBuf = Buffer.from(ab);
+		const filePath = path.join(
+			process.cwd(),
+			"public",
+			"vrkp-card-template.png"
+		);
+		templateBuf = await fs.readFile(filePath);
 	} catch (err) {
 		console.error("Error loading template:", err);
 		return new Response(
