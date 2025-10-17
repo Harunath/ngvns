@@ -4,14 +4,10 @@ import fs from "node:fs/promises";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
+import path from "node:path";
 
-// const TEMPLATE_PATH = "public/vrkp-card-template.png";
-import path from "path";
-const TEMPLATE_PATH = path.join(
-	process.cwd(),
-	"public",
-	"vrkp-card-template.png"
-);
+// use a runtime-resolved path to the public template so we can read the binary at runtime
+// const TEMPLATE_PATH = path.join(process.cwd(), "public/vrkp-card-template.png");
 
 function escapeXML(str: string) {
 	return str
@@ -152,14 +148,26 @@ export async function POST(req: NextRequest) {
 			{ status: 400 }
 		);
 	}
+	const TEMPLATE_PATH = path.join(
+		process.cwd(),
+		"public",
+		"vrkp-card-template.png"
+	);
 
 	// 1) Base template
 	let templateBuf: Buffer;
 	try {
 		templateBuf = await fs.readFile(TEMPLATE_PATH);
-	} catch {
+	} catch (err) {
 		return new Response(
-			JSON.stringify({ error: "Template not found at " + TEMPLATE_PATH }),
+			JSON.stringify({
+				error:
+					"Template not found at " +
+					TEMPLATE_PATH +
+					" (" +
+					(err as Error).message +
+					")",
+			}),
 			{ status: 500 }
 		);
 	}
