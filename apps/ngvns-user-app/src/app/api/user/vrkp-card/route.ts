@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
-import fs from "node:fs/promises";
+import fs from "node:fs";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth/auth";
 import prisma from "@ngvns2025/db/client";
@@ -12,12 +12,37 @@ import path from "node:path";
 const temp_url =
 	"https://pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev/users/vrkp-card-template.png";
 
-async function getFontDataUrl() {
-	const p = path.join(__dirname, "Inter_28pt-Regular.ttf");
-	console.log("Loading font from", p);
-	const buf = await fs.readFile(p);
+const FONT_PATH = path.join(
+	process.cwd(),
+	"public",
+	"fonts",
+	"Inter_28pt-Regular.ttf"
+);
+
+let FONT_DATA_URL: string;
+
+try {
+	// 2. Synchronously read the file content at module load time (build time)
+	console.log("Reading font file synchronously from:", FONT_PATH);
+	const buf = fs.readFileSync(FONT_PATH);
 	const b64 = buf.toString("base64");
-	return `data:font/ttf;base64,${b64}`;
+
+	// 3. Create the Base64 Data URL once
+	FONT_DATA_URL = `data:font/ttf;base64,${b64}`;
+} catch (error) {
+	// Crucial for debugging if the file is still not found during the build
+	console.error("FAILED TO READ FONT SYNCHRONOUSLY at path:", FONT_PATH);
+	console.error(
+		"This often means the path is incorrect for the Vercel build environment."
+	);
+	FONT_DATA_URL = ""; // Fallback to avoid crashing
+}
+
+function getFontDataUrl() {
+	if (!FONT_DATA_URL) {
+		throw new Error("Font data failed to load. Check console errors.");
+	}
+	return FONT_DATA_URL;
 }
 
 function escapeXML(str: string) {
