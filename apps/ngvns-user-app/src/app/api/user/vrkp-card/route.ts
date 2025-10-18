@@ -13,7 +13,13 @@ const temp_url =
 	"https://pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev/users/vrkp-card-template.png";
 
 async function getFontDataUrl() {
-	const p = path.join(process.cwd(), "app", "fonts", "Inter_28pt-Regular.ttf");
+	const p = path.join(
+		process.cwd(),
+		"src",
+		"app",
+		"fonts",
+		"Inter_28pt-Regular.ttf"
+	);
 	const buf = await fs.readFile(p);
 	const b64 = buf.toString("base64");
 	return `data:font/ttf;base64,${b64}`;
