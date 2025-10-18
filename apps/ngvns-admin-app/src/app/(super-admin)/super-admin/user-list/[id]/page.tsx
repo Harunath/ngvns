@@ -1,6 +1,7 @@
 import prisma from "@ngvns2025/db/client";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import Link from "next/link";
 
 // Server-rendered details page.
 // Assumes auth is handled with middleware or layout for admin-only routes.
@@ -50,6 +51,11 @@ export default async function UserDetailsPage({
 					<p className="text-sm text-neutral-500">
 						{user.vrKpId ? `VRKP: ${user.vrKpId} · ` : ""}
 						{user.email} · {user.phone}
+						<Link
+							href={`/super-admin/user-list/${user.id}/password-reset`}
+							className="ml-4 text-sm text-blue-600 hover:underline">
+							Reset Password
+						</Link>
 					</p>
 				</header>
 
