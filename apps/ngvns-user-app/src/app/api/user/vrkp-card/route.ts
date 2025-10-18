@@ -12,18 +12,18 @@ import path from "node:path";
 const temp_url =
 	"https://pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev/users/vrkp-card-template.png";
 
-// async function getFontDataUrl() {
-// 	const p = path.join(
-// 		process.cwd(),
-// 		"src",
-// 		"app",
-// 		"fonts",
-// 		"Inter_28pt-Regular.ttf"
-// 	);
-// 	const buf = await fs.readFile(p);
-// 	const b64 = buf.toString("base64");
-// 	return `data:font/ttf;base64,${b64}`;
-// }
+async function getFontDataUrl() {
+	const p = path.join(
+		process.cwd(),
+		"public",
+		"fonts",
+		"Inter_28pt-Regular.ttf"
+	);
+	console.log("Loading font from", p);
+	const buf = await fs.readFile(p);
+	const b64 = buf.toString("base64");
+	return `data:font/ttf;base64,${b64}`;
+}
 
 function escapeXML(str: string) {
 	return str
@@ -46,7 +46,7 @@ async function buildMainTextSVG({
 }) {
 	const width = 1920,
 		height = 1080;
-	// const fontUrl = await getFontDataUrl();
+	const fontUrl = await getFontDataUrl();
 
 	const items = [
 		{
@@ -76,6 +76,7 @@ async function buildMainTextSVG({
 			(l) => `
       <text x="${l.x}" y="${l.y}"
         fill="${l.color}"
+        font-family="InterLocal, sans-serif"
         font-size="${l.size}"
         font-weight="${l.weight}"
         dominant-baseline="alphabetic">${escapeXML(l.text)}</text>`
@@ -86,6 +87,13 @@ async function buildMainTextSVG({
 <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
      xmlns="http://www.w3.org/2000/svg">
   <style>
+    @font-face {
+      font-family: 'InterLocal';
+      src: url('${fontUrl}') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
+    }
     text { paint-order: stroke fill; }
   </style>
   ${items}
@@ -97,6 +105,7 @@ async function buildMainTextSVG({
 async function buildIssuedDateSVG(issuedDate: string) {
 	const width = 1920,
 		height = 1080;
+	const fontUrl = await getFontDataUrl();
 	const topMargin = 200;
 	const yPosition = 760 + topMargin;
 
@@ -104,11 +113,18 @@ async function buildIssuedDateSVG(issuedDate: string) {
 <svg width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"
      xmlns="http://www.w3.org/2000/svg">
   <style>
-
+    @font-face {
+      font-family: 'InterLocal';
+      src: url('${fontUrl}') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
+    }
   </style>
   <g transform="translate(140, ${yPosition}) rotate(-90)">
     <text x="0" y="0"
       fill="#0f172a"
+      font-family="InterLocal, sans-serif"
       font-size="44"
       font-weight="800"
       letter-spacing="2">ISSUED DATE : ${escapeXML(issuedDate)}</text>
