@@ -118,7 +118,6 @@ export async function POST(req: Request) {
 		ctx.save();
 		ctx.translate(140, 960);
 		ctx.rotate(-Math.PI / 2);
-		ctx.font = "800 44px Inter";
 		ctx.fillText(`ISSUED DATE : ${issuedAt}`, 0, 0);
 		ctx.restore();
 
