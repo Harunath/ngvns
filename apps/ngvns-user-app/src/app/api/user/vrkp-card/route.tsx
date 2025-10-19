@@ -98,7 +98,6 @@ export async function POST(req: Request) {
 
 		// --- TEXT ---
 		ctx.fillStyle = "#0f172a";
-		ctx.font = "800 52px Inter";
 		ctx.fillText("VRKP ID", 910, 446);
 		ctx.fillText(":" + " " + vrkpid, 1210, 446);
 
@@ -119,7 +118,6 @@ export async function POST(req: Request) {
 		ctx.save();
 		ctx.translate(140, 960);
 		ctx.rotate(-Math.PI / 2);
-		ctx.font = "800 44px Inter";
 		ctx.fillText(`ISSUED DATE : ${issuedAt}`, 0, 0);
 		ctx.restore();
 
