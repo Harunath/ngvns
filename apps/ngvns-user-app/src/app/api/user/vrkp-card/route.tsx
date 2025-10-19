@@ -1,10 +1,48 @@
 // app/api/user/vrkp-card/route.ts
-import { createCanvas, loadImage } from "canvas";
+import { createCanvas, loadImage, registerFont } from "canvas";
 import type { CanvasRenderingContext2D as NodeCanvasRenderingContext2D } from "canvas";
 import sharp from "sharp";
 import { NextResponse } from "next/server";
 
+// app/api/user/vrkp-card/route.ts
+import path from "path";
+import fs from "fs";
+
 export const runtime = "nodejs";
+
+function mustExist(p: string) {
+	if (!fs.existsSync(p)) {
+		throw new Error(`Font file not found at: ${p}`);
+	}
+}
+
+// 👉 Resolve relative to this app's CWD (the app root at runtime)
+const REGULAR_PATH = path.join(
+	process.cwd(),
+	"public",
+	"fonts",
+	"static",
+	"Inter_28pt-Regular.ttf"
+);
+const BOLD_PATH = path.join(
+	process.cwd(),
+	"public",
+	"fonts",
+	"static",
+	"Inter_28pt-Bold.ttf"
+);
+
+// Helpful log once to verify
+console.log("[font] regular:", REGULAR_PATH);
+console.log("[font] bold   :", BOLD_PATH);
+
+mustExist(REGULAR_PATH);
+mustExist(BOLD_PATH);
+
+registerFont(REGULAR_PATH, { family: "Inter" });
+registerFont(BOLD_PATH, { family: "Inter", weight: "bold" });
+
+// ... rest of your code unchanged ...
 
 type Body = {
 	vrkpid: string;
@@ -96,28 +134,46 @@ export async function POST(req: Request) {
 		const userImg = await loadImage(squared);
 		drawRoundedImage(ctx, userImg, AVATAR_X, AVATAR_Y, AVATAR_W, AVATAR_H, 30);
 
-		// --- TEXT ---
+		// ...after drawRoundedImage(ctx, userImg, ...);
+		ctx.shadowColor = "transparent"; // <-- turn off image shadow for crisp text
+		ctx.shadowBlur = 0;
 		ctx.fillStyle = "#0f172a";
-		ctx.fillText("VRKP ID", 910, 446);
-		ctx.fillText(":" + " " + vrkpid, 1210, 446);
+		ctx.textAlign = "left";
+		ctx.textBaseline = "alphabetic";
 
-		ctx.fillText("Name", 910, 566);
-		ctx.fillText(
-			":" + " " + (name.length > 20 ? name.slice(0, 20) : name),
-			1210,
-			566
-		);
+		// choose readable sizes (Inter-Bold is weight 700)
+		const FONT_LABEL = "700 60px Inter"; // labels: VRKP ID, Name, DOB, Reg Date
+		const FONT_VALUE = "700 64px Inter"; // values: : VR500..., : Harunath...
+		const FONT_ISSUED = "700 50px Inter"; // rotated issued date
 
-		ctx.fillText("DOB", 910, 690);
-		ctx.fillText(":" + " " + dob, 1210, 690);
+		// small helper to keep spacing consistent (adds colon block)
+		function drawRow(
+			label: string,
+			value: string,
+			y: number,
+			xLabel = 910,
+			xColon = 1180,
+			xValue = 1210
+		) {
+			ctx.font = FONT_LABEL;
+			ctx.fillText(label, xLabel, y);
 
-		ctx.fillText("Reg Date", 910, 810);
-		ctx.fillText(":" + " " + createdAt, 1210, 810);
+			ctx.font = FONT_VALUE;
+			ctx.fillText(":", xColon, y);
+			ctx.fillText(value, xValue, y);
+		}
+
+		// --- TEXT ---
+		drawRow("VRKP ID", vrkpid, 460); // slightly lower than your 446 for balance
+		drawRow("Name", name.length > 26 ? name.slice(0, 26) + "…" : name, 585);
+		drawRow("DOB", dob, 710);
+		drawRow("Reg Date", createdAt, 835);
 
 		// rotated issued date (left vertical)
 		ctx.save();
 		ctx.translate(140, 960);
 		ctx.rotate(-Math.PI / 2);
+		ctx.font = FONT_ISSUED;
 		ctx.fillText(`ISSUED DATE : ${issuedAt}`, 0, 0);
 		ctx.restore();
 
