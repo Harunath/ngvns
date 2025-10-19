@@ -5,9 +5,9 @@ import Image from "next/image";
 import { toast } from "react-toastify";
 import { FaLeaf } from "react-icons/fa";
 
-const GetVrKpCard = () => {
+const GetVrKpCard = ({ vrkpcard }: { vrkpcard: string | null }) => {
 	const [loading, setLoading] = useState(false);
-	const [card, setCard] = useState<string | null>(null);
+	const [card, setCard] = useState<string | null>(vrkpcard);
 	const router = useRouter();
 	const getCard = async () => {
 		setLoading(true);
@@ -26,6 +26,18 @@ const GetVrKpCard = () => {
 		toast.success("VRKP Card issued successfully!");
 		router.push("/my-docs");
 	};
+	async function handleDownload() {
+		if (!card) return;
+		const res = await fetch(card);
+		const blob = await res.blob();
+		const url = URL.createObjectURL(blob);
+		const a = document.createElement("a");
+		a.href = url;
+		a.download = "VRKP-Card.webp";
+		a.click();
+		URL.revokeObjectURL(url);
+	}
+
 	return (
 		<>
 			<article
@@ -71,16 +83,11 @@ const GetVrKpCard = () => {
 										<p>Your VRKP Card has not been issued yet.</p>
 									)}
 									{card ? (
-										<a
-											href={card}
-											download="VRKP-Card" // This attribute triggers the download
-											target="_blank" // Optional: Opens the link in a new tab first (good practice for files)
-											rel="noopener noreferrer" // Security best practice for target="_blank"
-											className="rounded-lg bg-gradient-to-r from-[#FF9933] via-[#0b5ba7] to-[#138808] px-3 py-1.5 text-xs font-semibold text-white shadow-sm"
-											aria-disabled
-											title="Coming Soon">
+										<button
+											onClick={handleDownload}
+											className="rounded-lg bg-gradient-to-r from-[#FF9933] via-[#0b5ba7] to-[#138808] px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
 											Download
-										</a>
+										</button>
 									) : (
 										<button
 											onClick={getCard}
