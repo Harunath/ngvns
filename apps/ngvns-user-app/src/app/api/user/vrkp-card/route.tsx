@@ -98,7 +98,6 @@ export async function POST(req: Request) {
 
 		// --- TEXT ---
 		ctx.fillStyle = "#0f172a";
-		ctx.font = "800 52px Inter";
 		ctx.fillText("VRKP ID", 910, 446);
 		ctx.fillText(":" + " " + vrkpid, 1210, 446);
 
