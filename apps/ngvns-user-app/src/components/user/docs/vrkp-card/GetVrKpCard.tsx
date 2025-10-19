@@ -11,7 +11,7 @@ const GetVrKpCard = () => {
 	const router = useRouter();
 	const getCard = async () => {
 		setLoading(true);
-		const res = await fetch(`/api/user/vrkp-card`, {
+		const res = await fetch(`/api/uploads/vrkp-card/cloudflare`, {
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 		});
