@@ -13,9 +13,23 @@ const VrKpCard = async ({ userId }: { userId: string }) => {
 	});
 
 	if (!VrKpCard || !VrKpCard.cardUrl) {
+		const user = await prisma.user.findUnique({
+			where: { id: userId },
+			select: {
+				vrKpId: true,
+				fullname: true,
+				dob: true,
+				createdAt: true,
+				userPhoto: true,
+			},
+		});
+		if (!user) {
+			return <div>User not found.</div>;
+		}
 		return (
 			<div>
-				<GetVrKpCard />
+				{" "}
+				<GetVrKpCard />{" "}
 			</div>
 		);
 	}
