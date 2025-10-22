@@ -43,7 +43,10 @@ export async function GET(
 		// don't return raw account number — mask it (or decrypt if needed)
 		let maskedAccount = "****";
 		try {
-			const decrypted = decrypt(bank.accountNumberEnc);
+			const decrypted = decrypt({
+				payload: bank.accountNumberEnc,
+				key: process.env.FIELD_ENCRYPTION_KEY!,
+			});
 			// show last 4 digits
 			maskedAccount =
 				decrypted.length > 4 ? `****${decrypted.slice(-4)}` : decrypted;
@@ -107,7 +110,10 @@ export async function POST(
 		} = parsed.data;
 
 		// Encrypt account number before storing
-		const accountNumberEnc = encrypt(accountNumber);
+		const accountNumberEnc = encrypt({
+			text: accountNumber,
+			key: process.env.FIELD_ENCRYPTION_KEY!,
+		});
 
 		// if isPrimary true, unset previous primary
 		if (isPrimary) {

@@ -20,7 +20,10 @@ const updateSchema = z.object({
 function mask(enc?: string) {
 	if (!enc) return "****";
 	try {
-		const raw = decrypt(enc);
+		const raw = decrypt({
+			payload: enc,
+			key: process.env.FIELD_ENCRYPTION_KEY!,
+		});
 		return raw.length > 4 ? `****${raw.slice(-4)}` : raw;
 	} catch {
 		return "****";
@@ -61,7 +64,10 @@ export async function GET(
 				id: bank.id,
 				userId: bank.userId,
 				accountHolderName: bank.accountHolderName,
-				accountNumberMasked: decrypt(bank.accountNumberEnc),
+				accountNumberMasked: decrypt({
+					payload: bank.accountNumberEnc,
+					key: process.env.FIELD_ENCRYPTION_KEY!,
+				}),
 				ifsc: bank.ifscCode,
 				bankName: bank.bankName,
 				branch: bank.branch,
@@ -111,7 +117,10 @@ export async function PUT(
 
 		// Re-encrypt account number if provided
 		if (parsed.data.accountNumber) {
-			data.accountNumberEnc = encrypt(parsed.data.accountNumber);
+			data.accountNumberEnc = encrypt({
+				text: parsed.data.accountNumber,
+				key: process.env.FIELD_ENCRYPTION_KEY!,
+			});
 			delete data.accountNumber;
 		}
 
