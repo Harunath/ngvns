@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import prisma from "@ngvns2025/db/client";
 import Referral from "../../../components/user/profile/referral/Referral";
+import BankPage from "../../../components/user/bank/BankPage";
 
 const ProfileClient = dynamic(
 	() => import("../../../components/user/profile/ProfileClient")
@@ -62,6 +63,39 @@ export default async function Page() {
 						background: `linear-gradient(90deg, ${SAFFRON}, white, ${GREEN})`,
 					}}
 				/>
+				<section
+					className="relative mx-auto w-full rounded-2xl p-[1px]"
+					style={{
+						background: `linear-gradient(135deg, ${SAFFRON}, white 40%, ${GREEN})`,
+					}}>
+					<div className="relative rounded-[calc(theme(borderRadius.2xl)-1px)] bg-white">
+						{/* Watermark */}
+						<svg
+							className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 opacity-10"
+							viewBox="0 0 100 100"
+							aria-hidden>
+							<g fill="none" stroke={CHAKRA} strokeWidth="2">
+								<circle cx="50" cy="50" r="30" />
+								{Array.from({ length: 24 }).map((_, i) => {
+									const angle = (i * 15 * Math.PI) / 180;
+									const x = 50 + 30 * Math.cos(angle);
+									const y = 50 + 30 * Math.sin(angle);
+									return <line key={i} x1="50" y1="50" x2={x} y2={y} />;
+								})}
+							</g>
+						</svg>
+
+						<BankPage />
+					</div>
+				</section>
+
+				{/* Divider – thin tricolour stripe */}
+				<div
+					className="mx-auto my-8 h-[3px] w-full rounded"
+					style={{
+						background: `linear-gradient(90deg, ${SAFFRON}, white, ${GREEN})`,
+					}}
+				/>
 
 				{/* Address – gradient border card + chakra watermark */}
 				<section
@@ -105,7 +139,6 @@ export default async function Page() {
 									/>
 								</span>
 							</div>
-
 							{/* Address body */}
 							{addr ? (
 								<div className="rounded-xl border bg-neutral-50/70 p-4">
