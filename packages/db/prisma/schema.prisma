@@ -82,7 +82,7 @@ model User {
 
 
 
-  bankDetails      BankDetails?
+  bankDetails      BankDetails[]
   TnCAcceptance    TnCAcceptance?
   onBoarding       Onboarding     @relation("UserOnboarding", fields: [onBoardingId], references: [id])
   order            Order          @relation("paymentOrder", fields: [orderId], references: [id])
@@ -208,16 +208,31 @@ model States {
   updatedAt     DateTime @updatedAt
 }
 
+enum AccountType {
+  SAVINGS
+  CURRENT
+}
+
 model BankDetails {
   id            String   @id @default(uuid())
   bankName      String
-  accountNumber String
+  accountNumberEnc String
   ifscCode      String
   branch        String
   userId        String   @unique
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+
+  accountHolderName      String
+  accountType            AccountType  @default(SAVINGS)
+  upiId                  String?
+  isPrimary              Boolean   @default(false)
+  
+
+  @@index([userId])
+  @@unique([userId, accountNumberEnc])
 }
 
 model GmailVerificationCode {
