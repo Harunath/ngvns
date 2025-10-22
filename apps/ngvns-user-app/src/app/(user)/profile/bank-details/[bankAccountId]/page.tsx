@@ -18,7 +18,10 @@ const page = async ({
 	if (!bankAccount) {
 		return <div>Bank account not found</div>;
 	}
-	bankAccount.accountNumberEnc = decrypt(bankAccount.accountNumberEnc);
+	bankAccount.accountNumberEnc = decrypt({
+		payload: bankAccount.accountNumberEnc,
+		key: process.env.FIELD_ENCRYPTION_KEY!,
+	});
 	return (
 		<div className=" bg-neutral-100 p-6 rounded-lg shadow-md">
 			<h1 className="text-2xl font-bold mb-4">Bank Account Details</h1>
