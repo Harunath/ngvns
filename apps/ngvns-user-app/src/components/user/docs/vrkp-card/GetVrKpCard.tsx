@@ -4,10 +4,12 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { FaLeaf } from "react-icons/fa";
+import { AnimatePresence, motion } from "motion/react";
 
 const GetVrKpCard = ({ vrkpcard }: { vrkpcard: string | null }) => {
 	const [loading, setLoading] = useState(false);
 	const [card, setCard] = useState<string | null>(vrkpcard);
+	const [view, setView] = useState(false);
 	const router = useRouter();
 	const getCard = async () => {
 		setLoading(true);
@@ -24,7 +26,6 @@ const GetVrKpCard = ({ vrkpcard }: { vrkpcard: string | null }) => {
 		setLoading(false);
 		setCard(data.cardUrl);
 		toast.success("VRKP Card issued successfully!");
-		router.push("/my-docs");
 	};
 	async function handleDownload() {
 		if (!card) return;
@@ -60,7 +61,7 @@ const GetVrKpCard = ({ vrkpcard }: { vrkpcard: string | null }) => {
 						<div className="flex-1">
 							<div className="flex flex-wrap items-center gap-3">
 								<h2 className="text-lg font-semibold text-gray-900">
-									VRKP Card
+									VRKP Identity Card
 								</h2>
 							</div>
 
@@ -71,23 +72,48 @@ const GetVrKpCard = ({ vrkpcard }: { vrkpcard: string | null }) => {
 										`flex items-center gap-y-2 justify-between` +
 										(card ? " flex-col" : "")
 									}>
-									{card ? (
-										<Image
-											src={card}
-											alt="VRKP Card"
-											width={600}
-											height={400}
-											className="border"
-										/>
-									) : (
-										<p>Your VRKP Card has not been issued yet.</p>
+									<AnimatePresence initial={false} mode="wait">
+										{card &&
+											(view ? (
+												<motion.div
+													initial={{ opacity: 0, scale: 0.8 }}
+													animate={{ opacity: 1, scale: 1 }}
+													transition={{ duration: 0.3 }}
+													exit={{ opacity: 0, scale: 0.8 }}>
+													<Image
+														src={card}
+														alt="VRKP Card"
+														width={600}
+														height={400}
+														className="border"
+													/>
+												</motion.div>
+											) : (
+												<>
+													<p className="text-sm text-gray-500">
+														View your Card by clicking on view{" "}
+													</p>
+												</>
+											))}
+									</AnimatePresence>
+									{!card && (
+										<p className="text-sm text-gray-500">
+											Get your VRKP Identity Card here.
+										</p>
 									)}
 									{card ? (
-										<button
-											onClick={handleDownload}
-											className="rounded-lg bg-gradient-to-r from-[#FF9933] via-[#0b5ba7] to-[#138808] px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
-											Download
-										</button>
+										<div className="flex gap-4 mt-4">
+											<button
+												onClick={() => setView((prev) => !prev)}
+												className="rounded-lg bg-gradient-to-r from-[#FF9933] via-[#0b5ba7] to-[#138808] px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+												{view ? "Hide Card" : "View Card"}
+											</button>
+											<button
+												onClick={handleDownload}
+												className="rounded-lg bg-gradient-to-r from-[#FF9933] via-[#0b5ba7] to-[#138808] px-3 py-1.5 text-xs font-semibold text-white shadow-sm">
+												Download
+											</button>
+										</div>
 									) : (
 										<button
 											onClick={getCard}
