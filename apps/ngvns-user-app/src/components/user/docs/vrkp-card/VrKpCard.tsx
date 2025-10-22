@@ -1,8 +1,6 @@
 import React from "react";
 import prisma from "@ngvns2025/db/client";
 import GetVrKpCard from "./GetVrKpCard";
-import Image from "next/image";
-import { FaLeaf } from "react-icons/fa";
 
 const VrKpCard = async ({ userId }: { userId: string }) => {
 	if (!userId) {

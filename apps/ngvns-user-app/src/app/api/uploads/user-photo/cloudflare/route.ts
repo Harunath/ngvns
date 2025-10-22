@@ -23,7 +23,7 @@ export async function POST(req: Request) {
 
 		const bytes = Buffer.from(await file.arrayBuffer());
 
-		const key = `users/${crypto.randomUUID()}-${file.name}`;
+		const key = `vrkp-user-image/users/${crypto.randomUUID()}-${file.name}`;
 		const cmd = new PutObjectCommand({
 			Bucket: "vrkp-user-image",
 			Key: key,

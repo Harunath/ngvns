@@ -4,7 +4,6 @@ import type { CanvasRenderingContext2D as NodeCanvasRenderingContext2D } from "c
 import sharp from "sharp";
 import { NextResponse } from "next/server";
 
-// app/api/user/vrkp-card/route.ts
 import path from "path";
 import fs from "fs";
 
@@ -39,10 +38,9 @@ console.log("[font] bold   :", BOLD_PATH);
 mustExist(REGULAR_PATH);
 mustExist(BOLD_PATH);
 
+// DO NOT CHANGE: Inter registration you set up
 registerFont(REGULAR_PATH, { family: "Inter" });
 registerFont(BOLD_PATH, { family: "Inter", weight: "bold" });
-
-// ... rest of your code unchanged ...
 
 type Body = {
 	vrkpid: string;
@@ -52,6 +50,7 @@ type Body = {
 	issuedAt: string;
 	userPhoto: string; // URL or data URL
 };
+
 // helper to draw rounded-rect image
 function drawRoundedImage(
 	ctx: NodeCanvasRenderingContext2D,
@@ -89,10 +88,176 @@ function drawRoundedImage(
 	ctx.stroke();
 }
 
+// ----------------------
+// Name drawing utilities
+// ----------------------
+const NAME_X = 1210;
+const NAME_MAX_RIGHT = 1800;
+const NAME_MAX_WIDTH = NAME_MAX_RIGHT - NAME_X; // 590
+
+const NAME_FONT_BASE = 64; // short names (<=17)
+const NAME_FONT_REDUCED = 54; // medium names (18..30)
+const NAME_FONT_MIN = 36; // absolute minimum
+const NAME_LINE_HEIGHT_FACTOR = 1.15; // for two lines
+
+function setFont(
+	ctx: CanvasRenderingContext2D,
+	px: number,
+	weight = 700,
+	family = "Inter"
+) {
+	ctx.font = `${weight} ${px}px ${family}`;
+}
+function fits(ctx: CanvasRenderingContext2D, text: string, maxWidth: number) {
+	return ctx.measureText(text).width <= maxWidth;
+}
+function shrinkUntilFits(
+	ctx: CanvasRenderingContext2D,
+	text: string,
+	startPx: number,
+	minPx: number,
+	maxWidth: number,
+	weight = 700,
+	family = "Inter"
+) {
+	let px = startPx;
+	while (px > minPx) {
+		setFont(ctx, px, weight, family);
+		if (fits(ctx, text, maxWidth)) return px;
+		px -= 1;
+	}
+	setFont(ctx, minPx, weight, family);
+	return minPx;
+}
+/** Split by spaces into up to 2 lines; shrink font so BOTH lines fit. */
+function splitIntoTwoLinesWithShrink(
+	ctx: CanvasRenderingContext2D,
+	full: string,
+	startPx: number,
+	minPx: number,
+	maxWidth: number
+) {
+	if (!full.includes(" ")) return { ok: false as const };
+
+	let px = startPx;
+
+	while (px >= minPx) {
+		setFont(ctx, px, 700, "Inter");
+
+		const words = full.split(/\s+/);
+		let first = "";
+		let i = 0;
+		for (; i < words.length; i++) {
+			const test = first ? first + " " + words[i] : words[i];
+			if (fits(ctx, test!, maxWidth)) first = test!;
+			else break;
+		}
+
+		if (!first) {
+			px -= 1;
+			continue;
+		}
+
+		const second = words.slice(i).join(" ").trim();
+
+		// Everything fit on first line (rare for >30 chars, but safe to handle)
+		if (!second) {
+			return { ok: true as const, px, lines: [first] };
+		}
+
+		if (fits(ctx, second, maxWidth)) {
+			return { ok: true as const, px, lines: [first, second] };
+		}
+
+		px -= 1; // shrink and try again
+	}
+
+	return { ok: false as const };
+}
+
+/** Your exact rules:
+ *  - <= 17 chars: single line at 64 (shrink if needed)
+ *  - 18..30 chars: single line at 54 (shrink if needed)
+ *  - > 30 chars: split by spaces into 2 lines; shrink so both fit
+ *  Fallback for no-space tokens: shrink single-line.
+ */
+function drawName(
+	ctx: CanvasRenderingContext2D,
+	name: string,
+	baselineY: number
+) {
+	name = ": " + name;
+	if (name.length <= 17) {
+		const px = shrinkUntilFits(
+			ctx,
+			name,
+			NAME_FONT_BASE,
+			NAME_FONT_MIN,
+			NAME_MAX_WIDTH
+		);
+		setFont(ctx, px, 700, "Inter");
+		ctx.fillText(name, NAME_X, baselineY);
+		return;
+	}
+
+	if (name.length <= 30) {
+		const px = shrinkUntilFits(
+			ctx,
+			name,
+			NAME_FONT_REDUCED,
+			NAME_FONT_MIN,
+			NAME_MAX_WIDTH
+		);
+		setFont(ctx, px, 700, "Inter");
+		ctx.fillText(name, NAME_X, baselineY);
+		return;
+	}
+
+	// > 30 → try two lines split by space
+	const res = splitIntoTwoLinesWithShrink(
+		ctx,
+		name,
+		NAME_FONT_REDUCED,
+		NAME_FONT_MIN,
+		NAME_MAX_WIDTH
+	);
+
+	if (res.ok) {
+		const { px, lines } = res;
+		setFont(ctx, px, 700, "Inter");
+		if (!lines[0]) throw new Error("Internal error: no lines after split");
+		if (lines.length === 1) {
+			// if everything somehow fit in one line, just draw it
+			ctx.fillText(lines[0], NAME_X, baselineY);
+			return;
+		}
+
+		// draw two lines
+		const lineHeight = Math.round(px * NAME_LINE_HEIGHT_FACTOR);
+		ctx.fillText(lines[0], NAME_X, baselineY);
+		lines[1] && ctx.fillText(lines[1], NAME_X, baselineY + lineHeight);
+		return;
+	}
+
+	// fallback: no spaces or couldn't fit two lines → shrink single line
+	const px = shrinkUntilFits(
+		ctx,
+		name,
+		NAME_FONT_REDUCED,
+		NAME_FONT_MIN,
+		NAME_MAX_WIDTH
+	);
+	setFont(ctx, px, 700, "Inter");
+	ctx.fillText(name, NAME_X, baselineY);
+}
+
+// ----------------------
+
 export async function POST(req: Request) {
 	try {
-		const { vrkpid, name, dob, createdAt, issuedAt, userPhoto } =
+		const { vrkpid, dob, createdAt, issuedAt, userPhoto } =
 			(await req.json()) as Body;
+		let { name } = (await req.json()) as Body;
 
 		if (!vrkpid || !name || !dob || !createdAt || !issuedAt || !userPhoto) {
 			return NextResponse.json(
@@ -100,7 +265,7 @@ export async function POST(req: Request) {
 				{ status: 400 }
 			);
 		}
-
+		if (name.length > 50) name = name.slice(0, 50); // hard limit
 		// canvas
 		const width = 1920;
 		const height = 1080;
@@ -114,16 +279,15 @@ export async function POST(req: Request) {
 		ctx.drawImage(bgImage, 0, 0, width, height);
 
 		// --- USER PHOTO ---
-		// fetch raw bytes (avoid cross-host CORS headaches)
 		const photoResp = await fetch(userPhoto, { cache: "no-store" });
 		if (!photoResp.ok)
 			throw new Error(`userPhoto fetch failed: ${photoResp.status}`);
 		const photoBuf = Buffer.from(await photoResp.arrayBuffer());
 
 		// auto-orient and square crop to fit the slot nicely
-		const AVATAR_W = 560; // tweak to your template
+		const AVATAR_W = 560;
 		const AVATAR_H = 560;
-		const AVATAR_X = 215; // left/top offsets to match your template
+		const AVATAR_X = 215;
 		const AVATAR_Y = 350;
 
 		const squared = await sharp(photoBuf)
@@ -134,8 +298,8 @@ export async function POST(req: Request) {
 		const userImg = await loadImage(squared);
 		drawRoundedImage(ctx, userImg, AVATAR_X, AVATAR_Y, AVATAR_W, AVATAR_H, 30);
 
-		// ...after drawRoundedImage(ctx, userImg, ...);
-		ctx.shadowColor = "transparent"; // <-- turn off image shadow for crisp text
+		// text styles
+		ctx.shadowColor = "transparent"; // crisp text
 		ctx.shadowBlur = 0;
 		ctx.fillStyle = "#0f172a";
 		ctx.textAlign = "left";
@@ -162,10 +326,15 @@ export async function POST(req: Request) {
 			ctx.fillText(":", xColon, y);
 			ctx.fillText(value, xValue, y);
 		}
+		function drawNameLable(label: string, y: number, xLabel = 910) {
+			ctx.font = FONT_LABEL;
+			ctx.fillText(label, xLabel, y);
+		}
 
 		// --- TEXT ---
-		drawRow("VRKP ID", vrkpid, 460); // slightly lower than your 446 for balance
-		drawRow("Name", name.length > 26 ? name.slice(0, 26) + "…" : name, 585);
+		drawRow("VRKP ID", vrkpid, 460);
+		drawNameLable("Name", 585);
+		drawName(ctx as unknown as CanvasRenderingContext2D, name, 585);
 		drawRow("DOB", dob, 710);
 		drawRow("Reg Date", createdAt, 835);
 
