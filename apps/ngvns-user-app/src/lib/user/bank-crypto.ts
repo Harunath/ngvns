@@ -2,9 +2,10 @@
 import crypto from "crypto";
 
 const KEY = process.env.FIELD_ENCRYPTION_KEY;
-if (!KEY)
+if (!KEY) {
+	console.error("Missing FIELD_ENCRYPTION_KEY env var (32 bytes base64)");
 	throw new Error("Missing FIELD_ENCRYPTION_KEY env var (32 bytes base64)");
-
+}
 const KEY_BUF = Buffer.from(KEY, "base64"); // set env as base64(32 bytes)
 
 export function encrypt(text: string) {
