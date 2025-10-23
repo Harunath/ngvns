@@ -36,6 +36,12 @@ export default async function UserDetailsPage({
 					pincode: true,
 				},
 			},
+			VRKP_Card: {
+				select: {
+					cardNumber: true,
+					cardUrl: true,
+				},
+			},
 		},
 	});
 
@@ -48,13 +54,25 @@ export default async function UserDetailsPage({
 					<h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
 						{user.fullname}
 					</h1>
-					<p className="text-sm text-neutral-500">
+					<p className="text-sm text-neutral-500 flex gap-x-1 wrap-normal">
 						{user.vrKpId ? `VRKP: ${user.vrKpId} · ` : ""}
 						{user.email} · {user.phone}
+						<span className="mx-1">·</span>
 						<Link
 							href={`/super-admin/user-list/${user.id}/password-reset`}
 							className="ml-4 text-sm text-blue-600 hover:underline">
 							Reset Password
+						</Link>
+						<span className="mx-1">·</span>
+						<Link
+							href={`/super-admin/user-list/${user.id}/vrkpcard`}
+							className=" text-blue-500 underline">
+							{" "}
+							{user.VRKP_Card && user.VRKP_Card.cardNumber ? (
+								<p className=" text-green-400">View Card</p>
+							) : (
+								<p className=" text-red-400">Issued card. </p>
+							)}
 						</Link>
 					</p>
 				</header>
