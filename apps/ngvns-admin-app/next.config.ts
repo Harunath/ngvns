@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
 				protocol: "https",
 				hostname: "static.vecteezy.com",
 			},
+			{
+				protocol: "https",
+				hostname: "pub-98a0b13dd37c4b7b84e18b52d9c03d5e.r2.dev",
+			},
 		],
 	},
 };

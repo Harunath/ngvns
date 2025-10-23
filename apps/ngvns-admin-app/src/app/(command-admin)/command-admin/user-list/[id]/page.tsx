@@ -1,6 +1,7 @@
 import prisma from "@ngvns2025/db/client";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import Link from "next/link";
 
 // Server-rendered details page.
 // Assumes auth is handled with middleware or layout for admin-only routes.
@@ -34,6 +35,12 @@ export default async function UserDetailsPage({
 					pincode: true,
 				},
 			},
+			VRKP_Card: {
+				select: {
+					cardNumber: true,
+					cardUrl: true,
+				},
+			},
 		},
 	});
 
@@ -48,9 +55,20 @@ export default async function UserDetailsPage({
 					<h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
 						{user.fullname}
 					</h1>
-					<p className="text-sm text-neutral-500">
+					<p className="text-sm text-neutral-500 flex gap-x-1 wrap-normal">
 						{user.vrKpId ? `VRKP: ${user.vrKpId} · ` : ""}
 						+91 {user.phone}
+						<span className="mx-1">·</span>
+						<Link
+							href={`/command-admin/user-list/${user.id}/vrkpcard`}
+							className=" text-blue-500 underline">
+							{" "}
+							{user.VRKP_Card && user.VRKP_Card.cardNumber ? (
+								<p>View Card</p>
+							) : (
+								<p>Issued card. </p>
+							)}
+						</Link>
 					</p>
 				</header>
 
