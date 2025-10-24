@@ -27,10 +27,17 @@ const ContactMain = () => {
 					{/* left: contact info */}
 					<div className="flex flex-col justify-center rounded-2xl border border-slate-200 bg-white p-8 shadow-xl">
 						<div className="mb-6">
+							<h2 className="text-lg md:text-xl font-semibold text-slate-900 mb-2 border-b border-neutral-200 pb-2">
+								Connect with Us
+							</h2>
 							<div className="h-1 w-24 rounded-full bg-gradient-to-r from-orange-500 to-emerald-500" />
 						</div>
 
 						<div className="space-y-6">
+							{/* Section Title */}
+							
+
+							{/* Email */}
 							<div className="flex items-start gap-4">
 								<div className="rounded-lg bg-orange-100 p-3 text-orange-600">
 									<FaEnvelope className="text-xl" />
@@ -47,6 +54,7 @@ const ContactMain = () => {
 								</div>
 							</div>
 
+							{/* Website */}
 							<div className="flex items-start gap-4">
 								<div className="rounded-lg bg-emerald-100 p-3 text-emerald-700">
 									<FaGlobe className="text-xl" />

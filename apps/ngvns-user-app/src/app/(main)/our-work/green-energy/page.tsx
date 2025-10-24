@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const COLORS = {
 	saffron: "#FF9933",
 	green: "#138808",
@@ -19,13 +21,12 @@ export default function GreenEnergyPage() {
 			<div className="mx-auto max-w-6xl space-y-14">
 				{/* ---------- HEADER & INTRO ---------- */}
 				<section className="space-y-6">
-					<h1
-						className="text-3xl md:text-4xl font-extrabold leading-tight text-center"
-						style={{ color: COLORS.chakra }}>
-						Green Energy
-					</h1>
+											<span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-sm font-semibold tracking-widest text-orange-600 uppercase">
 
-					<div className="max-w-4xl mx-auto">
+						Green Energy
+					</span>
+
+					<div className="max-w-4xl mt-8 mx-auto">
 						<div
 							className="rounded-2xl border bg-white p-6 shadow-sm"
 							style={{ borderColor: "#E5E7EB" }}>
@@ -116,6 +117,23 @@ export default function GreenEnergyPage() {
 								Build local capacity for long-term, self-sustaining energy use.
 							</li>
 						</ul>
+					</div>
+					<div className="text-center pt-4">
+						<Link
+							href="/contact"
+							className="inline-flex items-center gap-2 rounded-full px-8 py-3 font-semibold shadow-md hover:shadow-lg transition"
+							style={{ backgroundColor: COLORS.chakra, color: "#FFFFFF" }}>
+							<span>Join Us</span>
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								className="opacity-90">
+								<path strokeWidth="2" d="M5 12h14M13 5l7 7-7 7" />
+							</svg>
+						</Link>
 					</div>
 				</section>
 
