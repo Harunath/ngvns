@@ -14,13 +14,12 @@ export const metadata: Metadata = {
 };
 
 const BENEFITS = [
-
 	{
 		title: "Health Care Services for 3 Years",
 		desc: "Access partnered healthcare benefits with a 3-year health care services.",
 		accent: "health",
 	},
-	
+
 	{
 		title: "₹5 Lakhs Personal Accidental Insurance (5 Years)",
 		desc: "Coverage up to ₹5,00,000/- for accident;  permanent and partial disabilities also covered",
@@ -31,7 +30,7 @@ const BENEFITS = [
 		desc: "Save on essentials via partnered provision stores and periodic cashback programs.",
 		accent: "savings",
 	},
-		{
+	{
 		title: "2 Sq. Yards Land Allotment",
 		desc: "Eligible members receive an allocation of 2 square yards as per program rules.",
 		accent: "land",
@@ -183,15 +182,6 @@ export default async function BenefitsPage() {
 				</section>
 
 				{/* Notes / disclaimers (optional) */}
-				<section aria-label="Notes" className="mb-12">
-					<div className="rounded-xl border border-neutral-200 bg-white p-4">
-						<p className="text-sm text-neutral-700">
-							<strong>Note:</strong> Benefits are provided as per applicable
-							program policies and eligibility. Detailed terms, verification,
-							and onboarding steps will be shown during registration.
-						</p>
-					</div>
-				</section>
 
 				{/* CTA */}
 				<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
@@ -209,6 +199,15 @@ export default async function BenefitsPage() {
 						Continue to Registration
 					</Link>
 				</div>
+				<section aria-label="Notes" className="mt-12">
+					<div className="rounded-xl border border-neutral-200 bg-white p-4">
+						<p className="text-sm text-neutral-700">
+							<strong>Note:</strong> Benefits are provided as per applicable
+							program policies and eligibility. Detailed terms, verification,
+							and onboarding steps will be shown during registration.
+						</p>
+					</div>
+				</section>
 			</main>
 
 			{/* bottom tricolor hairline */}

@@ -74,33 +74,6 @@ export default function Page() {
 					</h3>
 
 					{/* Row of subtle section tags */}
-					<div className="flex flex-wrap items-center justify-center gap-2">
-						{[
-							"Planning & Leadership",
-							"Water Conservation",
-							"Local Food & Enterprises",
-						].map((t, i) => (
-							<span
-								key={i}
-								className="rounded-full border px-3 py-1 text-xs font-semibold"
-								style={{
-									borderColor:
-										i === 0
-											? COLORS.saffron
-											: i === 1
-												? COLORS.chakra
-												: COLORS.green,
-									color:
-										i === 0
-											? COLORS.saffron
-											: i === 1
-												? COLORS.chakra
-												: COLORS.green,
-								}}>
-								{t}
-							</span>
-						))}
-					</div>
 
 					{/* Cards */}
 					<div className="grid md:grid-cols-3 gap-6">

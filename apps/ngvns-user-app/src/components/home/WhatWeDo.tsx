@@ -153,17 +153,6 @@ const WhatWeDo: React.FC = () => {
 						</ul>
 					</div>
 				</div>
-
-				{/* Footer CTA strip */}
-				<div className="mt-12 rounded-xl border border-zinc-200 bg-white/70 p-5 text-center shadow-sm backdrop-blur">
-					<p className="text-sm text-zinc-700">
-						Looking to collaborate on sustainable agriculture or premium
-						agri-products?
-						<span className="ml-2 font-semibold text-emerald-700">
-							Let’s build it together.
-						</span>
-					</p>
-				</div>
 			</div>
 		</section>
 	);

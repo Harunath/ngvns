@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const COLORS = {
 	saffron: "#FF9933",
@@ -25,13 +26,11 @@ export default function AgriWasteManagementPage() {
 				<section className="grid md:grid-cols-2 gap-10 items-center">
 					{/* Left: Text */}
 					<div className="space-y-5">
-						<h1
-							className="text-3xl md:text-4xl font-extrabold leading-tight"
-							style={{ color: COLORS.chakra }}>
+						<span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-sm font-semibold tracking-widest text-orange-600 uppercase">
 							Agri-Waste Management
-						</h1>
+						</span>
 
-						<p className="text-lg md:text-xl leading-relaxed text-slate-700">
+						<p className="text-lg mt-8 md:text-xl leading-relaxed text-slate-700">
 							Turning agricultural waste into wealth to promote eco-friendly
 							farming and environmental sustainability.
 						</p>
@@ -110,6 +109,23 @@ export default function AgriWasteManagementPage() {
 							creates local green enterprises, enabling farmers to benefit
 							economically and ecologically.
 						</p>
+					</div>
+					<div className="text-center pt-4">
+						<Link
+							href="/contact"
+							className="inline-flex items-center gap-2 rounded-full px-8 py-3 font-semibold shadow-md hover:shadow-lg transition"
+							style={{ backgroundColor: COLORS.chakra, color: "#FFFFFF" }}>
+							<span>Join Us</span>
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								className="opacity-90">
+								<path strokeWidth="2" d="M5 12h14M13 5l7 7-7 7" />
+							</svg>
+						</Link>
 					</div>
 				</section>
 
