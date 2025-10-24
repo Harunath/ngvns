@@ -255,9 +255,10 @@ function drawName(
 
 export async function POST(req: Request) {
 	try {
-		const { vrkpid, dob, createdAt, issuedAt, userPhoto } =
-			(await req.json()) as Body;
-		let { name } = (await req.json()) as Body;
+		const body = await req.json();
+		const { vrkpid, dob, createdAt, issuedAt, userPhoto } = body;
+
+		let { name } = body;
 
 		if (!vrkpid || !name || !dob || !createdAt || !issuedAt || !userPhoto) {
 			return NextResponse.json(
