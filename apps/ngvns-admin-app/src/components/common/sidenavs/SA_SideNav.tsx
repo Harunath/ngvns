@@ -1,4 +1,10 @@
-import { FiFileText, FiUsers, FiShield, FiSettings } from "react-icons/fi";
+import {
+	FiFileText,
+	FiUsers,
+	FiShield,
+	FiSettings,
+	FiBox,
+} from "react-icons/fi";
 import SideNav from "./SideNav";
 
 const SA_SideNav = () => {
@@ -31,12 +37,6 @@ const SA_SideNav = () => {
 						],
 					},
 					{
-						id: "users",
-						label: "Users",
-						icon: <FiUsers className="h-4 w-4" />,
-						href: "/super-admin/user-list",
-					},
-					{
 						id: "admins",
 						label: "Admins",
 						icon: <FiShield className="h-4 w-4" />,
@@ -54,6 +54,18 @@ const SA_SideNav = () => {
 								href: "/super-admin/admins/data-entry",
 							},
 						],
+					},
+					{
+						id: "users",
+						label: "Users",
+						icon: <FiUsers className="h-4 w-4" />,
+						href: "/super-admin/user-list",
+					},
+					{
+						id: "marketing-teams",
+						label: "Marketing Teams",
+						icon: <FiBox className="h-4 w-4" />,
+						href: "/super-admin/marketing-teams",
 					},
 					{
 						id: "settings",
