@@ -14,12 +14,12 @@ export const authOptions: NextAuthOptions = {
 				password: { label: "Password", type: "password" },
 			},
 			async authorize(credentials) {
-				console.log("Authorizing with credentials:", credentials);
 				if (!credentials?.phone || !credentials?.password) {
-					console.error("Missing phone or password in credentials");
 					throw new Error("Invalid email or password");
 				}
-				const admin = await prisma.admin.findFirst({
+
+				// Find user in database
+				const user = await prisma.user.findFirst({
 					where: { phone: credentials.phone },
 					select: {
 						id: true,
@@ -27,39 +27,41 @@ export const authOptions: NextAuthOptions = {
 						password: true,
 						fullname: true,
 						phone: true,
-						role: true,
+						marketingMember: {
+							select: {
+								id: true,
+								teamId: true,
+								role: true,
+							},
+						},
 					},
 				});
-				console.log("Admin found:", admin);
-				if (admin) {
+
+				if (user) {
 					// Verify password
 					const isValidPassword = await bcrypt.compare(
 						credentials.password,
-						admin.password
+						user.password
 					);
 					if (!isValidPassword) {
 						throw new Error("Invalid password");
 					}
-					console.log("Password valid:", isValidPassword);
-					const log = await prisma.adminAuditLog.create({
-						data: {
-							actorId: admin.id,
-							action: "login",
-							targetType: "admin",
-							targetId: admin.id,
-							metadata: {
-								name: admin.fullname,
-								role: admin.role,
-								timestamp: new Date(),
-							},
-						},
-					});
+					if (
+						!user.marketingMember ||
+						!user.marketingMember.id ||
+						!user.marketingMember.role ||
+						!user.marketingMember.teamId
+					) {
+						throw new Error("Unauthorized");
+					}
 					return {
-						id: admin.id,
-						email: admin.email,
-						phone: admin.phone, // Ensure phone is always a string
-						fullname: admin.fullname,
-						role: admin.role,
+						id: user.id,
+						email: user.email,
+						phone: user.phone, // Ensure phone is always a string
+						fullname: user.fullname,
+						role: user.marketingMember?.role,
+						teamId: user.marketingMember?.teamId,
+						marketingMemberId: user.marketingMember?.id,
 					};
 				}
 				return null;
@@ -69,7 +71,7 @@ export const authOptions: NextAuthOptions = {
 	callbacks: {
 		async signIn({ user }) {
 			// Check if user already exists in the database
-			const vr_user = await prisma.admin.findUnique({
+			const vr_user = await prisma.user.findUnique({
 				where: {
 					phone: user.phone!,
 				},
@@ -86,22 +88,31 @@ export const authOptions: NextAuthOptions = {
 		},
 		async jwt({ token, user }) {
 			if (user && user.phone) {
-				const admin = await prisma.admin.findFirst({
+				const vr_user = await prisma.user.findFirst({
 					where: { phone: user.phone },
 					select: {
 						id: true,
 						email: true,
+						password: true,
 						fullname: true,
 						phone: true,
-						role: true,
+						marketingMember: {
+							select: {
+								id: true,
+								teamId: true,
+								role: true,
+							},
+						},
 					},
 				});
-				if (admin) {
-					token.id = admin.id;
-					token.email = admin.email;
-					token.fullname = admin.fullname;
-					token.phone = admin.phone;
-					token.role = admin.role;
+				if (vr_user) {
+					token.id = vr_user.id;
+					token.email = vr_user.email;
+					token.fullname = vr_user.fullname;
+					token.phone = vr_user.phone;
+					token.role = vr_user.marketingMember?.role;
+					token.teamId = vr_user.marketingMember?.teamId;
+					token.marketingMemberId = vr_user.marketingMember?.id;
 				}
 			}
 			return token;
@@ -114,6 +125,8 @@ export const authOptions: NextAuthOptions = {
 				session.user.fullname = token.fullname as string;
 				session.user.phone = token.phone as string;
 				session.user.role = token.role as any;
+				session.user.teamId = token.teamId as string;
+				session.user.marketingMemberId = token.marketingMemberId as string;
 			}
 			return session;
 		},

@@ -7,119 +7,78 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AdminRole {
-  ROOT
-  SUPER
-  COMMAND
-  FINANCE
-  DATA_ENTRY
-}
-
 model Admin {
-  id            String   @id @default(uuid())
-  email         String   @unique
-  emailVerified Boolean  @default(false)
-  password      String
-  fullname      String
-  phone         String  @unique
-  role          AdminRole
-  active        Boolean  @default(true)
-  // TOTP (MVP 2FA)
-  totpSecret    String?  // base32; null until enrolled
-  totpEnabled   Boolean  @default(false)
-
-  // Relations you already have:
-  ApprovedUserPayouts  UserPayout[] @relation("PayoutApprovedBy")
-  RequestedUserPayouts UserPayout[] @relation("PayoutRequestedBy")
-  createdPayoutBatches PayoutBatch[]
-  approvedPayoutBatches PayoutBatch[] @relation("PayoutBatchApprovedBy")
-
-  allocationsMade LandAllocation[]
-  issuedBenefit  Benefit[]
-
-  auditLogs     AdminAuditLog[] @relation("ActorAdminAuditLogs")
-  PayoutAttachments PayoutAttachment[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                    String             @id @default(uuid())
+  email                 String             @unique
+  emailVerified         Boolean            @default(false)
+  password              String
+  fullname              String
+  phone                 String             @unique
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  totpEnabled           Boolean            @default(false)
+  totpSecret            String?
+  role                  AdminRole
+  active                Boolean            @default(true)
+  auditLogs             AdminAuditLog[]    @relation("ActorAdminAuditLogs")
+  issuedBenefit         Benefit[]
+  allocationsMade       LandAllocation[]
+  PayoutAttachments     PayoutAttachment[]
+  approvedPayoutBatches PayoutBatch[]      @relation("PayoutBatchApprovedBy")
+  createdPayoutBatches  PayoutBatch[]
+  ApprovedUserPayouts   UserPayout[]       @relation("PayoutApprovedBy")
+  RequestedUserPayouts  UserPayout[]       @relation("PayoutRequestedBy")
 }
-
-enum MarketingRole {
-  MANAGER
-  TEAM_LEADER
-  AGENT
-}
-
-enum AcquisitionType {
-  USER_REFERRAL
-  MARKETING
-}
-
 
 model User {
-  id               String         @id @default(uuid())
-  fullname         String
-  relationType     RelationType
-  relationName     String
-  dob              DateTime
-  address          Address?       @relation("UserAddress")
-  phone            String         @unique
-  email            String         @unique
-  emailVerified    Boolean
-  aadhaar          String
-  aadhaarVerified  Boolean
-  password         String
-  gender           GenderType     @default(None)
-  userPhoto        String
-  vrKpId           String         @unique
-  nominieeName     String
-  nominieeDob      DateTime
-  relationship     String
-  deleted          Boolean        @default(false)
-  deactivated      Boolean        @default(false)
-  onBoardingId     String         @unique
-  orderId          String         @unique
-
-
-  healthCard       Boolean        @default(false)
-  healthCareDocument String?
-  VRKP_Card        VRKP_Card?
-
-  landAllotments   LandAllocation[]
-  benefits        Benefit[]
-  
-  parentBId        String?
-  parentCId        String?
-  parentReferralId String?
-
-  // marketing acquisition details
-  acquisitionType                  AcquisitionType   @default(USER_REFERRAL)
-  canRefer                         Boolean           @default(true)
-
-  
-// If this user is part of marketing team (at most one)
-  marketingMember MarketingMember?
-
-
-
-  bankDetails      BankDetails[]
-  TnCAcceptance    TnCAcceptance?
-  onBoarding       Onboarding     @relation("UserOnboarding", fields: [onBoardingId], references: [id])
-  order            Order          @relation("paymentOrder", fields: [orderId], references: [id])
-  joinedBy         User?          @relation("UserDirectJoin", fields: [parentReferralId], references: [vrKpId])
-  parentB          User?          @relation("B LEVEL",fields: [parentBId],references: [id])
-  parentC          User?          @relation("C LEVEL",fields: [parentCId],references: [id])
-
-  childB           User[]         @relation("B LEVEL")
-  childC           User[]         @relation("C LEVEL")
-  directJoin       User[]         @relation("UserDirectJoin")
-  directJoinOnBoarding       Onboarding[]         @relation("parentreferral")
-
-
-  UserPayments     UserPayments[] @relation("payment-user")
-  UserPayouts      UserPayout[]
-
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
+  id                   String           @id @default(uuid())
+  fullname             String
+  relationType         RelationType
+  relationName         String
+  dob                  DateTime
+  phone                String           @unique
+  email                String           @unique
+  emailVerified        Boolean
+  aadhaar              String
+  aadhaarVerified      Boolean
+  gender               GenderType       @default(None)
+  userPhoto            String
+  nominieeName         String
+  nominieeDob          DateTime
+  relationship         String
+  deleted              Boolean          @default(false)
+  deactivated          Boolean          @default(false)
+  onBoardingId         String           @unique
+  orderId              String           @unique
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  healthCard           Boolean          @default(false)
+  parentBId            String?
+  parentCId            String?
+  parentReferralId     String?
+  vrKpId               String           @unique
+  password             String
+  healthCareDocument   String?
+  acquisitionType      AcquisitionType  @default(USER_REFERRAL)
+  canRefer             Boolean          @default(true)
+  address              Address?         @relation("UserAddress")
+  bankDetails          BankDetails?
+  benefits             Benefit[]
+  landAllotments       LandAllocation[]
+  marketingMember      MarketingMember?
+  directJoinOnBoarding Onboarding[]     @relation("parentreferral")
+  TnCAcceptance        TnCAcceptance?
+  onBoarding           Onboarding       @relation("UserOnboarding", fields: [onBoardingId], references: [id])
+  order                Order            @relation("paymentOrder", fields: [orderId], references: [id])
+  parentB              User?            @relation("B LEVEL", fields: [parentBId], references: [id])
+  childB               User[]           @relation("B LEVEL")
+  parentC              User?            @relation("C LEVEL", fields: [parentCId], references: [id])
+  childC               User[]           @relation("C LEVEL")
+  joinedBy             User?            @relation("UserDirectJoin", fields: [parentReferralId], references: [vrKpId])
+  directJoin           User[]           @relation("UserDirectJoin")
+  UserPayments         UserPayments[]   @relation("payment-user")
+  UserPayouts          UserPayout[]
+  VRKP_Card            VRKP_Card?
 
   @@index([id])
   @@index([vrKpId])
@@ -127,63 +86,47 @@ model User {
 }
 
 model MarketingTeam {
-  id          String  @id @default(uuid())
-  name        String  @unique
+  id          String            @id @default(uuid())
+  name        String            @unique
   description String?
   imageUrl    String?
-  isActive    Boolean @default(true)
+  isActive    Boolean           @default(true)
   details     Json?
 
   members     MarketingMember[]
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
-// --- Single membership per user ---
 model MarketingMember {
-  id        String        @id @default(uuid())
-  userId    String        @unique          // <— guarantees ONE team per user
-  teamId    String
-  role      MarketingRole
-  isActive  Boolean       @default(true)
-
-  user      User          @relation(fields: [userId], references: [id])
-  team      MarketingTeam @relation(fields: [teamId], references: [id])
-
-  // Optional dates (keep even if you don’t plan to move; cheap future-proofing)
-  joinedAt  DateTime      @default(now())
-  endedAt   DateTime?
+  id       String        @id @default(uuid())
+  userId   String        @unique
+  teamId   String
+  role     MarketingRole
+  isActive Boolean       @default(true)
+  joinedAt DateTime      @default(now())
+  endedAt  DateTime?
+  team     MarketingTeam @relation(fields: [teamId], references: [id])
+  user     User          @relation(fields: [userId], references: [id])
 
   @@index([teamId, role, isActive])
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
 }
 
-enum UserPaymentsType {
-  LEVEL1
-  LEVEL2
-  LEVEL3
-  L1BAR
-  L2BAR
-  L3BAR
-}
-
-model UserPayments{
-  id                 String        @id @default(uuid())
-  userId             String
-
-  type               UserPaymentsType
-  amount             Decimal
-
-  status             PaymentStatus @default(INITIATED)
-
-  paymentDetails     Json?
-
-  user               User           @relation("payment-user",fields: [userId],references: [id])
-
-  paymentDate        DateTime?
-
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
+model UserPayments {
+  id             String           @id @default(uuid())
+  userId         String
+  type           UserPaymentsType
+  amount         Decimal
+  status         PaymentStatus    @default(INITIATED)
+  paymentDetails Json?
+  paymentDate    DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  user           User             @relation("payment-user", fields: [userId], references: [id])
 
   @@index([userId, status, type])
   @@index([userId])
@@ -197,7 +140,6 @@ model Onboarding {
   relationType       RelationType
   relationName       String
   dob                DateTime
-  address            Address?       @relation("OnboardingAddress")
   phone              String         @unique
   phoneVerified      Boolean
   email              String
@@ -209,19 +151,16 @@ model Onboarding {
   nominieeName       String
   nominieeDob        DateTime
   relationship       String
-  
   referralId         String?        @unique
-  
-  parentreferralId   String?
-  parentrederral     User?    @relation("parentreferral",fields: [parentreferralId],references: [vrKpId])
-
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
   onBoardingFinished Boolean        @default(false)
+  parentreferralId   String?
+  address            Address?       @relation("OnboardingAddress")
+  parentrederral     User?          @relation("parentreferral", fields: [parentreferralId], references: [vrKpId])
   orders             Order[]        @relation("OnBoardingPaymentOrder")
   TnCAcceptance      TnCAcceptance?
   user               User?          @relation("UserOnboarding")
-  createdAt          DateTime       @default(now())
-  updatedAt          DateTime       @updatedAt
-
 
   @@index([id, phone])
   @@index([id])
@@ -229,61 +168,49 @@ model Onboarding {
 }
 
 model Address {
-  id            String   @id @default(uuid())
-  addressLine   String
-  addressLine2  String?
-  StateId       String
-  State         States  @relation(fields: [StateId],references: [id])
-  pincode       String
-
-
-  onboardingId String?  @unique
+  id           String      @id @default(uuid())
+  addressLine  String
+  addressLine2 String?
+  StateId      String
+  pincode      String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  onboardingId String?     @unique
+  userId       String?     @unique
+  State        States      @relation(fields: [StateId], references: [id])
   onboarding   Onboarding? @relation("OnboardingAddress", fields: [onboardingId], references: [id])
-
-  userId       String?  @unique
-  user         User?    @relation("UserAddress", fields: [userId], references: [id])
-
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  user         User?       @relation("UserAddress", fields: [userId], references: [id])
 }
 
 model States {
-  id            String   @id @default(uuid())
-  name          String
-  code          String?
-  isActive      Boolean
-  avaliableLands  LandParcel[]
-  LandAllocation  LandAllocation[]
-  addresses     Address[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-enum AccountType {
-  SAVINGS
-  CURRENT
+  id             String           @id @default(uuid())
+  name           String
+  code           String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  isActive       Boolean
+  addresses      Address[]
+  LandAllocation LandAllocation[]
+  avaliableLands LandParcel[]
 }
 
 model BankDetails {
-  id            String   @id @default(uuid())
-  bankName      String
-  accountNumberEnc String
-  ifscCode      String
-  branch        String
-  userId        String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String      @id @default(uuid())
+  bankName          String
+  ifscCode          String
+  branch            String
+  userId            String      @unique
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  accountHolderName String
+  accountNumberEnc  String
+  accountType       AccountType @default(SAVINGS)
+  isPrimary         Boolean     @default(false)
+  upiId             String?
+  User              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-
-  accountHolderName      String
-  accountType            AccountType  @default(SAVINGS)
-  upiId                  String?
-  isPrimary              Boolean   @default(false)
-  
-
-  @@index([userId])
   @@unique([userId, accountNumberEnc])
+  @@index([userId])
 }
 
 model GmailVerificationCode {
@@ -303,20 +230,20 @@ model PhoneVerificationCode {
 }
 
 model Order {
-  id                  String      @id @default(cuid())
-  orderId    String      @unique
-  status              OrderStatus @default(PENDING)
-  totalAmount         Decimal     @default(4999)
-  currency            String      @default("INR")
-  notes               String?
-  onBoardingId        String
-  phone               String?
-  email               String?
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
-  onBoarding          Onboarding  @relation("OnBoardingPaymentOrder", fields: [onBoardingId], references: [id])
-  payments            Payment[]
-  user                User?       @relation("paymentOrder")
+  id           String      @id @default(cuid())
+  status       OrderStatus @default(PENDING)
+  totalAmount  Decimal     @default(4999)
+  currency     String      @default("INR")
+  notes        String?
+  onBoardingId String
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  email        String?
+  orderId      String      @unique
+  phone        String?
+  onBoarding   Onboarding  @relation("OnBoardingPaymentOrder", fields: [onBoardingId], references: [id])
+  payments     Payment[]
+  user         User?       @relation("paymentOrder")
 
   @@index([orderId])
 }
@@ -342,8 +269,8 @@ model TnCVersion {
   id            String          @id @default(uuid())
   version       String
   content       String
-  active        Boolean         @default(false)
   createdAt     DateTime        @default(now())
+  active        Boolean         @default(false)
   TnCAcceptance TnCAcceptance[]
 }
 
@@ -357,6 +284,265 @@ model TnCAcceptance {
   onboarding   Onboarding @relation(fields: [onboardingId], references: [id])
   tncVersion   TnCVersion @relation(fields: [tncVersionId], references: [id])
   user         User?      @relation(fields: [userId], references: [id])
+}
+
+model SmsMessage {
+  id                  String    @id @default(cuid())
+  mobile              String    @db.VarChar(15)
+  templateId          String
+  text                String
+  campId              String?   @unique
+  status              SmsStatus @default(QUEUED)
+  attempts            Int       @default(0)
+  lastError           String?
+  idempotencyKey      String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  processingExpiresAt DateTime?
+  processingToken     String?
+  fakeTrigger         String?
+
+  @@index([mobile, status])
+  @@index([idempotencyKey])
+}
+
+model UserPayoutType {
+  id                 String       @id @default(uuid())
+  name               String       @unique
+  description        String?
+  defaultAmountPaise BigInt?
+  isActive           Boolean      @default(true)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  payouts            UserPayout[]
+}
+
+model PayoutBatch {
+  id                String             @id @default(cuid())
+  name              String
+  status            BatchStatus        @default(DRAFT)
+  createdById       String
+  approvedById      String?
+  currency          Currency           @default(INR)
+  totalAmountPaise  BigInt             @default(0)
+  scheduledAt       DateTime?
+  postedAt          DateTime?
+  disbursedAt       DateTime?
+  reconciledAt      DateTime?
+  metadata          Json?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  payoutAttachments PayoutAttachment[]
+  approvedBy        Admin?             @relation("PayoutBatchApprovedBy", fields: [approvedById], references: [id])
+  createdBy         Admin              @relation(fields: [createdById], references: [id])
+  payouts           UserPayout[]
+
+  @@index([status, createdAt])
+}
+
+model UserPayout {
+  id                   String         @id @default(uuid())
+  userId               String
+  typeId               String
+  requestedAmountPaise BigInt
+  approvedAmountPaise  BigInt?
+  currency             Currency       @default(INR)
+  status               PayoutStatus   @default(REQUESTED)
+  requestedById        String?
+  approvedById         String?
+  approvedAt           DateTime?
+  paymentDate          DateTime?
+  bankReference        String?
+  paymentDetails       Json?
+  batchId              String?
+  idempotencyKey       String?        @unique
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  approvedBy           Admin?         @relation("PayoutApprovedBy", fields: [approvedById], references: [id])
+  batch                PayoutBatch?   @relation(fields: [batchId], references: [id])
+  requestedBy          Admin?         @relation("PayoutRequestedBy", fields: [requestedById], references: [id])
+  type                 UserPayoutType @relation(fields: [typeId], references: [id])
+  user                 User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status, createdAt])
+  @@index([batchId, status])
+}
+
+model PayoutAttachment {
+  id            String      @id @default(cuid())
+  payoutBatchId String
+  kind          String
+  fileUrl       String?
+  note          String?
+  createdById   String
+  createdAt     DateTime    @default(now())
+  createdBy     Admin       @relation(fields: [createdById], references: [id])
+  payout        PayoutBatch @relation(fields: [payoutBatchId], references: [id], onDelete: Cascade)
+
+  @@index([payoutBatchId, kind])
+}
+
+model AdminPermission {
+  id               String           @id @default(uuid())
+  code             String           @unique
+  label            String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  ROLE_PERMISSIONS RolePermission[]
+}
+
+model RolePermission {
+  id           String          @id @default(uuid())
+  role         AdminRole
+  permissionId String
+  createdAt    DateTime        @default(now())
+  permission   AdminPermission @relation(fields: [permissionId], references: [id])
+
+  @@unique([role, permissionId])
+}
+
+model AdminAuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  targetType String
+  targetId   String?
+  action     String
+  reason     String?
+  metadata   Json?
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  actor      Admin?   @relation("ActorAdminAuditLogs", fields: [actorId], references: [id])
+
+  @@index([targetType, targetId])
+  @@index([action, createdAt])
+}
+
+model VRKP_Card {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  cardIssuedAt DateTime @default(now())
+  cardNumber   String   @unique
+  cardUrl      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LandParcel {
+  id             String           @id @default(uuid())
+  stateId        String
+  title          String
+  surveyNumber   String
+  areaSqYards    Int
+  addressLine    String?
+  latitude       Decimal?         @db.Decimal(9, 6)
+  longitude      Decimal?         @db.Decimal(9, 6)
+  unitsTotal     Int
+  unitsAvailable Int
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  LandAllocation LandAllocation[]
+  state          States           @relation(fields: [stateId], references: [id])
+  units          LandParcelUnit[]
+
+  @@unique([stateId, surveyNumber])
+  @@index([stateId])
+  @@index([surveyNumber])
+  @@index([unitsAvailable])
+}
+
+model LandParcelUnit {
+  id           String          @id @default(uuid())
+  landParcelId String
+  unitNumber   Int
+  status       LandUnitStatus  @default(AVAILABLE)
+  lockedUntil  DateTime?
+  note         String?
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  allocation   LandAllocation?
+  landParcel   LandParcel      @relation(fields: [landParcelId], references: [id], onDelete: Cascade)
+
+  @@unique([landParcelId, unitNumber])
+  @@index([status])
+  @@index([lockedUntil])
+}
+
+model LandAllocation {
+  id               String           @id @default(uuid())
+  userId           String
+  landParcelUnitId String           @unique
+  status           AllocationStatus @default(CONFIRMED)
+  referenceNo      String           @unique
+  allocatedAt      DateTime         @default(now())
+  allocatedById    String?
+  docPdfUrl        String?
+  stateId          String
+  landParcelId     String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  allocatedBy      Admin?           @relation(fields: [allocatedById], references: [id])
+  landParcel       LandParcel       @relation(fields: [landParcelId], references: [id])
+  unit             LandParcelUnit   @relation(fields: [landParcelUnitId], references: [id])
+  state            States           @relation(fields: [stateId], references: [id])
+  user             User             @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([stateId])
+  @@index([landParcelId])
+  @@index([allocatedAt])
+}
+
+model Benefit {
+  id          String      @id @default(uuid())
+  title       String
+  BenefitType BenefitType @default(INSURANCE)
+  content     String?
+  isActive    Boolean     @default(true)
+  userId      String
+  details     Json?
+  docUrls     String[]
+  createdById String?
+  issuedAt    DateTime?   @default(now())
+  validUntil  DateTime?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  createdBy   Admin?      @relation(fields: [createdById], references: [id])
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum AdminRole {
+  ROOT
+  SUPER
+  COMMAND
+  FINANCE
+  DATA_ENTRY
+}
+
+enum MarketingRole {
+  MANAGER
+  TEAM_LEADER
+  AGENT
+}
+
+enum AcquisitionType {
+  USER_REFERRAL
+  MARKETING
+}
+
+enum UserPaymentsType {
+  LEVEL1
+  LEVEL2
+  LEVEL3
+  L1BAR
+  L2BAR
+  L3BAR
+}
+
+enum AccountType {
+  SAVINGS
+  CURRENT
 }
 
 enum GenderType {
@@ -401,32 +587,12 @@ enum SmsStatus {
   FAILED
 }
 
-model SmsMessage {
-  id               String    @id @default(cuid())
-  mobile           String    @db.VarChar(15)
-  templateId       String
-  text             String
-  campId           String?   @unique
-  status           SmsStatus @default(QUEUED)
-  attempts         Int       @default(0)
-  lastError        String?
-  idempotencyKey   String?
-  processingToken  String?
-  processingExpiresAt    DateTime?
-  fakeTrigger      String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
-
-  @@index([mobile, status])
-  @@index([idempotencyKey])
-}
-
 enum PayoutStatus {
-  REQUESTED     // created, awaiting review
-  APPROVED      // approved to be paid (included in an APPROVED/POSTED batch)
-  PAID          // admin marked as paid (manual bank)
-  FAILED        // attempted but failed; may retry
-  CANCELLED     // withdrawn or invalid
+  REQUESTED
+  APPROVED
+  PAID
+  FAILED
+  CANCELLED
 }
 
 enum BatchStatus {
@@ -434,8 +600,8 @@ enum BatchStatus {
   READY
   APPROVED
   POSTED
-  DISBURSED     // all payouts marked PAID or FAILED
-  RECONCILED    // admin verified with bank statements
+  DISBURSED
+  RECONCILED
   CANCELLED
 }
 
@@ -443,321 +609,19 @@ enum Currency {
   INR
 }
 
-model UserPayoutType {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  defaultAmountPaise BigInt?    // optional default
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  payouts     UserPayout[]
-}
-
-model PayoutBatch {
-  id            String     @id @default(cuid())
-  name          String
-  status        BatchStatus @default(DRAFT)
-  createdById   String
-  createdBy     Admin      @relation(fields: [createdById], references: [id])
-  approvedById  String?
-  approvedBy    Admin?     @relation("PayoutBatchApprovedBy", fields: [approvedById], references: [id])
-  currency      Currency    @default(INR)
-  totalAmountPaise BigInt   @default(0)
-  scheduledAt   DateTime?
-  postedAt      DateTime?
-  disbursedAt   DateTime?
-  reconciledAt  DateTime?
-  metadata      Json?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-
-  payouts       UserPayout[]
-  payoutAttachments PayoutAttachment[]
-  @@index([status, createdAt])
-}
-
-model UserPayout {
-  id             String       @id @default(uuid())
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  typeId         String
-  type           UserPayoutType @relation(fields: [typeId], references: [id])
-
-  requestedAmountPaise BigInt   // what the system/user proposed
-  approvedAmountPaise  BigInt?  // final approved amount (can differ)
-  currency       Currency  @default(INR)
-
-  status         PayoutStatus @default(REQUESTED)
-
-  // approval chain (optional for MVP single-approver)
-  requestedById  String?
-  requestedBy    Admin?      @relation("PayoutRequestedBy", fields: [requestedById], references: [id])
-
-  approvedById   String?
-  approvedBy     Admin?      @relation("PayoutApprovedBy", fields: [approvedById], references: [id])
-  approvedAt     DateTime?
-
-  // payment proof & reconciliation
-  paymentDate    DateTime?
-  bankReference  String?     // UTR or note; optional but useful
-  paymentDetails Json?       // any extra JSON (bank name, account tail, etc.)
-
-  // batch linkage (nullable so a payout can exist before batching)
-  batchId        String?
-  batch          PayoutBatch? @relation(fields: [batchId], references: [id])
-
-  // safety
-  idempotencyKey String? @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@index([userId, status, createdAt])
-  @@index([batchId, status])
-}
-
-model PayoutAttachment {
-  id          String   @id @default(cuid())
-  payoutBatchId    String
-  payout      PayoutBatch @relation(fields: [payoutBatchId], references: [id], onDelete: Cascade)
-  kind        String   // "BANK_PROOF", "NOTE", etc.
-  fileUrl     String?  // if you store files in R2/Cloudinary
-  note        String?
-  createdById String
-  createdBy   Admin    @relation(fields: [createdById], references: [id])
-  createdAt   DateTime @default(now())
-
-  @@index([payoutBatchId, kind])
-}
-
-model AdminPermission {
-  id        String   @id @default(uuid())
-  code      String   @unique // e.g. "payout.batch.approve"
-  label     String
-
-  ROLE_PERMISSIONS RolePermission[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model RolePermission {
-  id           String        @id @default(uuid())
-  role         AdminRole
-  permission   AdminPermission @relation(fields: [permissionId], references: [id])
-  permissionId String
-  createdAt    DateTime      @default(now())
-
-  @@unique([role, permissionId])
-}
-
-
-// model AdminSession {
-//   id            String   @id @default(cuid())
-//   adminId       String
-//   admin         Admin    @relation(fields: [adminId], references: [id])
-//   userAgent     String?
-//   ip            String?
-//   valid         Boolean  @default(true)
-//   lastRotatedAt DateTime @default(now())
-//   expiresAt     DateTime
-//   createdAt     DateTime @default(now())
-
-//   @@index([adminId])
-// }
-
-// model AdminApiKey {
-//   id           String   @id @default(cuid())
-//   adminId      String
-//   admin        Admin    @relation(fields: [adminId], references: [id])
-//   name         String
-//   hashedKey    String   // store hash only
-//   scopes       String[] // list of permission codes or scope strings
-//   valid        Boolean  @default(true)
-//   createdAt    DateTime @default(now())
-//   lastUsedAt   DateTime?
-// }
-
-model AdminAuditLog {
-  id          String   @id @default(cuid())
-  actorId     String?  // null if system
-  actor       Admin?   @relation("ActorAdminAuditLogs", fields: [actorId], references: [id])
-  targetType  String   // "User","Admin","PayoutBatch","Rule"
-  targetId    String?
-  action      String   // "CREATE","UPDATE","DELETE","APPROVE","LOGIN","SHADOW_LOGIN"
-  reason      String?
-  metadata    Json?
-  ip          String?
-  userAgent   String?
-  createdAt   DateTime @default(now())
-
-  @@index([targetType, targetId])
-  @@index([action, createdAt])
-}
-
-
-// model WebAuthnCredential {
-//   id           String  @id @default(cuid())
-//   adminId      String
-//   admin        Admin   @relation(fields: [adminId], references: [id])
-//   name         String
-//   publicKey    Bytes
-//   credentialId Bytes   @unique
-//   counter      Int     @default(0)
-//   createdAt    DateTime @default(now())
-// }
-
-
-
-model VRKP_Card {
-  id            String   @id @default(uuid())
-  userId        String   @unique
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cardIssuedAt  DateTime @default(now())
-  cardNumber    String   @unique
-  cardUrl       String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
-
-// ---------- Enums ----------
 enum LandUnitStatus {
-  AVAILABLE   // selectable
-  RESERVED    // temporarily locked while user is in checkout flow
-  ALLOTTED    // permanently assigned to a user
-  INACTIVE    // hidden/removed by admin (e.g., dispute, error)
+  AVAILABLE
+  RESERVED
+  ALLOTTED
+  INACTIVE
 }
 
 enum AllocationStatus {
-  PENDING     // created but not confirmed (optional step)
-  CONFIRMED   // final, user owns this unit
-  CANCELLED   // reversed by admin or user cancelled
+  PENDING
+  CONFIRMED
+  CANCELLED
 }
-
-
-model LandParcel {
-  id             String        @id @default(uuid())
-  stateId        String
-  state          States         @relation(fields: [stateId], references: [id], onDelete: Restrict)
-
-  title          String        // human-friendly label
-  surveyNumber   String        // as given in records
-  areaSqYards    Int           // total area in sq yards (should be even)
-  // 2 sq yards = 1 unit. Units are materialized in LandParcelUnit.
-
-  addressLine    String?       // optional descriptive location
-  latitude       Decimal?      @db.Decimal(9,6)
-  longitude      Decimal?      @db.Decimal(9,6)
-
-  // Optional denormalized counters for fast filters (kept in sync at app level)
-  unitsTotal     Int           // total 2-sq-yd units = areaSqYards / 2
-  unitsAvailable Int           // quick filter; recompute on writes
-
-  units          LandParcelUnit[]
-  LandAllocation  LandAllocation[]
-
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-
-  @@unique([stateId, surveyNumber]) // a survey number is unique within a state
-  @@index([stateId])
-  @@index([surveyNumber])
-  @@index([unitsAvailable])
-}
-
-model LandParcelUnit {
-  id             String          @id @default(uuid())
-  landParcelId   String
-  landParcel     LandParcel      @relation(fields: [landParcelId], references: [id], onDelete: Cascade)
-
-  unitNumber     Int             // 1..N within a parcel
-  status         LandUnitStatus  @default(AVAILABLE)
-
-  // Soft lock to avoid race conditions during selection/checkout.
-  // Treat a unit as selectable only if:
-  //   status = AVAILABLE AND (lockedUntil IS NULL OR lockedUntil < now())
-  lockedUntil    DateTime?
-
-  // Optional: traceability / admin notes
-  note           String?
-
-  // Reverse relation to allocation (if allotted)
-  allocation     LandAllocation?
-
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
-
-  @@unique([landParcelId, unitNumber]) // each unit number unique within a parcel
-  @@index([status])
-  @@index([lockedUntil])
-}
-
-// ---------- Allocation ----------
-model LandAllocation {
-  id               String          @id @default(uuid())
-
-  // The user who gets the 2-sq-yd unit
-  userId           String
-  user             User            @relation(fields: [userId], references: [id], onDelete: Restrict)
-
-  // The specific 2-sq-yd unit allotted
-  landParcelUnitId String          @unique
-  unit             LandParcelUnit  @relation(fields: [landParcelUnitId], references: [id], onDelete: Restrict)
-
-  // Administrative bookkeeping
-  status           AllocationStatus @default(CONFIRMED)
-  referenceNo      String           @unique // e.g., "ALLOC-2025-000123"
-  allocatedAt      DateTime         @default(now())
-  allocatedById    String?          // Admin who confirmed
-  allocatedBy      Admin?           @relation(fields: [allocatedById], references: [id], onDelete: SetNull)
-
-  // Generated doc (small PDF) location
-  docPdfUrl        String?
-
-  // For quick filters
-  stateId          String
-  state            States            @relation(fields: [stateId], references: [id], onDelete: Restrict)
-
-  landParcelId     String
-  landParcel       LandParcel       @relation(fields: [landParcelId], references: [id], onDelete: Restrict)
-
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-
-  @@index([userId])
-  @@index([stateId])
-  @@index([landParcelId])
-  @@index([allocatedAt])
-}
-
 
 enum BenefitType {
   INSURANCE
-}
-
-
-model Benefit {
-  id          String   @id @default(uuid())
-  title       String
-  BenefitType  BenefitType @default(INSURANCE)
-  content     String?
-  isActive    Boolean  @default(true)
-
-  userId     String // users who have accepted this version
-  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  details    Json?  // optional JSON for extra info
-
-  docUrls    String[] // optional URL to related documents 
-
-  createdById String?
-  createdBy   Admin?  @relation(fields: [createdById], references: [id], onDelete: SetNull)
-
-  issuedAt    DateTime? @default(now())
-  validUntil  DateTime?
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
