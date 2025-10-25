@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const COLORS = {
 	saffron: "#FF9933",
@@ -25,13 +26,11 @@ export default function RuralEmploymentPage() {
 				<section className="grid md:grid-cols-2 gap-10 items-center">
 					{/* Left: Title & Intro */}
 					<div className="space-y-5">
-						<h1
-							className="text-3xl md:text-4xl font-extrabold leading-tight"
-							style={{ color: COLORS.chakra }}>
+						<span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 text-sm font-semibold tracking-widest text-orange-600 uppercase">
 							Rural Employment
-						</h1>
+						</span>
 
-						<div className="rounded-2xl border bg-white p-5 shadow-sm">
+						<div className="rounded-2xl border mt-8 bg-white p-5 shadow-sm">
 							<p className="text-lg md:text-xl leading-relaxed text-slate-700">
 								At VR KISAN PARIVAAR, we believe strong villages are built on
 								thriving local economies . Our Rural Employment initiatives
@@ -119,6 +118,23 @@ export default function RuralEmploymentPage() {
 							but also create a sense of pride, stability, and self-reliance in
 							rural life.
 						</p>
+					</div>
+					<div className="text-center pt-4">
+						<Link
+							href="/contact"
+							className="inline-flex items-center gap-2 rounded-full px-8 py-3 font-semibold shadow-md hover:shadow-lg transition"
+							style={{ backgroundColor: COLORS.chakra, color: "#FFFFFF" }}>
+							<span>Join Us</span>
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								className="opacity-90">
+								<path strokeWidth="2" d="M5 12h14M13 5l7 7-7 7" />
+							</svg>
+						</Link>
 					</div>
 				</section>
 

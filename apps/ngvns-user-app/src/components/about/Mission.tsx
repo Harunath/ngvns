@@ -1,5 +1,11 @@
 "use client";
-import { FaLeaf, FaRecycle, FaBriefcase, FaIndustry, FaGlobeAsia } from "react-icons/fa";
+import {
+	FaLeaf,
+	FaRecycle,
+	FaBriefcase,
+	FaIndustry,
+	FaGlobeAsia,
+} from "react-icons/fa";
 
 export default function Mission() {
 	return (
@@ -29,41 +35,18 @@ export default function Mission() {
 						{/* decorative quote mark */}
 						<div
 							aria-hidden
-							className="pointer-events-none absolute -top-10 -left-2 text-8xl font-black leading-none text-emerald-100 select-none"
-						>
+							className="pointer-events-none absolute -top-10 -left-2 text-8xl font-black leading-none text-neutral-100 select-none">
 							“
 						</div>
 
-						<p className="text-balance text-xl leading-relaxed text-neutral-800 sm:text-2xl">
-							To{" "}
-							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
-								empower farmers
-							</strong>
-							, promote{" "}
-							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
-								natural farming
-							</strong>
-							, utilize{" "}
-							<strong className="bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
-								bio-waste efficiently
-							</strong>
-							, create{" "}
-							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
-								employment opportunities
-							</strong>
-							, and advance{" "}
-							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
-								food processing
-							</strong>{" "}
-							while expanding{" "}
-							<strong className="bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
-								market opportunities globally
-							</strong>{" "}
-							through{" "}
-							<strong className="bg-gradient-to-r from-emerald-600 to-emerald-400 bg-clip-text text-transparent">
-								innovation and sustainability
-							</strong>
-							.
+						<p className="text-balance text-xl leading-relaxed text-black sm:text-2xl">
+							To <strong>empower farmers</strong>, promote{" "}
+							<strong>natural farming</strong>, utilize{" "}
+							<strong>bio-waste efficiently</strong>, create{" "}
+							<strong>employment opportunities</strong>, and advance{" "}
+							<strong>food processing</strong> while expanding{" "}
+							<strong>market opportunities globally</strong> through{" "}
+							<strong>innovation and sustainability</strong>.
 						</p>
 
 						{/* keyword chips */}
@@ -71,8 +54,12 @@ export default function Mission() {
 							<Tag icon={<FaLeaf className="size-3.5" />}>Natural Farming</Tag>
 							<Tag icon={<FaRecycle className="size-3.5" />}>Bio-waste</Tag>
 							<Tag icon={<FaBriefcase className="size-3.5" />}>Employment</Tag>
-							<Tag icon={<FaIndustry className="size-3.5" />}>Food Processing</Tag>
-							<Tag icon={<FaGlobeAsia className="size-3.5" />}>Global Markets</Tag>
+							<Tag icon={<FaIndustry className="size-3.5" />}>
+								Food Processing
+							</Tag>
+							<Tag icon={<FaGlobeAsia className="size-3.5" />}>
+								Global Markets
+							</Tag>
 						</div>
 
 						{/* subtle progress/impact bar */}
@@ -88,7 +75,9 @@ export default function Mission() {
 									{ label: "Employment", tint: "bg-emerald-500" },
 									{ label: "Global", tint: "bg-orange-500" },
 								].map((b, i) => (
-									<div key={i} className="rounded-xl border border-neutral-200 p-2">
+									<div
+										key={i}
+										className="rounded-xl border border-neutral-200 p-2">
 										<div className={`h-2 w-full rounded-full ${b.tint}`} />
 										<p className="mt-2 text-center text-[11px] font-medium text-neutral-600">
 											{b.label}
@@ -102,8 +91,8 @@ export default function Mission() {
 
 				{/* bottom note */}
 				<p className="mx-auto mt-8 max-w-3xl text-center text-sm text-neutral-600">
-					Our mission guides programs, partnerships, and investments to uplift rural
-					communities with planet-first growth.
+					Our mission guides programs, partnerships, and investments to uplift
+					rural communities with planet-first growth.
 				</p>
 			</div>
 		</section>
@@ -111,7 +100,13 @@ export default function Mission() {
 }
 
 /* small helper for pill tags */
-function Tag({ children, icon }: { children: React.ReactNode; icon?: React.ReactNode }) {
+function Tag({
+	children,
+	icon,
+}: {
+	children: React.ReactNode;
+	icon?: React.ReactNode;
+}) {
 	return (
 		<span className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-semibold text-neutral-700 shadow-sm transition hover:shadow">
 			{icon}

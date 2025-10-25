@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 const COLORS = {
 	saffron: "#FF9933",
@@ -115,6 +116,23 @@ export default function NaturalFarmingPage() {
 								</li>
 							</ul>
 						</div>
+					</div>
+					<div className="text-center pt-4">
+						<Link
+							href="/contact"
+							className="inline-flex items-center gap-2 rounded-full px-8 py-3 font-semibold shadow-md hover:shadow-lg transition"
+							style={{ backgroundColor: COLORS.chakra, color: "#FFFFFF" }}>
+							<span>Join Us</span>
+							<svg
+								width="18"
+								height="18"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								className="opacity-90">
+								<path strokeWidth="2" d="M5 12h14M13 5l7 7-7 7" />
+							</svg>
+						</Link>
 					</div>
 				</section>
 
