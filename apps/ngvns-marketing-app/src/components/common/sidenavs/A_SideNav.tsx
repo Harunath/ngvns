@@ -5,7 +5,7 @@ const A_SideNav = () => {
 	return (
 		<div>
 			<SideNav
-				title="Command Admin"
+				title="Agent"
 				sections={[
 					{
 						id: "logs",

@@ -5,7 +5,7 @@ const TL_SideNav = () => {
 	return (
 		<div>
 			<SideNav
-				title="Command Admin"
+				title="Team Leader"
 				sections={[
 					// {
 					// 	id: "logs",
@@ -42,7 +42,7 @@ const TL_SideNav = () => {
 								href: "/team-leader/team-leaders",
 							},
 							{
-								label: "Data Entry Admins",
+								label: "Agents",
 								href: "/team-leader/agents",
 							},
 						],

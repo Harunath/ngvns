@@ -23,6 +23,7 @@ export const authOptions: NextAuthOptions = {
 					where: { phone: credentials.phone },
 					select: {
 						id: true,
+						vrKpId: true,
 						email: true,
 						password: true,
 						fullname: true,
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
 						email: user.email,
 						phone: user.phone, // Ensure phone is always a string
 						fullname: user.fullname,
+						vrKpId: user.vrKpId,
 						role: user.marketingMember?.role,
 						teamId: user.marketingMember?.teamId,
 						marketingMemberId: user.marketingMember?.id,
@@ -96,6 +98,7 @@ export const authOptions: NextAuthOptions = {
 						password: true,
 						fullname: true,
 						phone: true,
+						vrKpId: true,
 						marketingMember: {
 							select: {
 								id: true,
@@ -113,6 +116,7 @@ export const authOptions: NextAuthOptions = {
 					token.role = vr_user.marketingMember?.role;
 					token.teamId = vr_user.marketingMember?.teamId;
 					token.marketingMemberId = vr_user.marketingMember?.id;
+					token.vrKpId = vr_user.vrKpId;
 				}
 			}
 			return token;
@@ -127,6 +131,7 @@ export const authOptions: NextAuthOptions = {
 				session.user.role = token.role as any;
 				session.user.teamId = token.teamId as string;
 				session.user.marketingMemberId = token.marketingMemberId as string;
+				session.user.vrKpId = token.vrKpId as string;
 			}
 			return session;
 		},

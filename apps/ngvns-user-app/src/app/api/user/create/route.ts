@@ -1,4 +1,4 @@
-import prisma from "@ngvns2025/db/client";
+import prisma, { MarketingRole } from "@ngvns2025/db/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -108,8 +108,22 @@ export async function POST(req: NextRequest) {
 				id: true,
 				parentB: { select: { id: true } },
 				joinedBy: { select: { id: true } },
+				marketingMember: true,
+				canRefer: true,
+				vrKpId: true,
 			},
 		});
+
+		if (!parents) {
+			console.error("parent_user_not_found", {
+				onboardingId,
+				parentReferralId: ob.parentreferralId,
+			});
+			return NextResponse.json(
+				{ ok: false, error: "parent_user_not_found" },
+				{ status: 404 }
+			);
+		}
 
 		// 4) Create user in a transaction with vrKpId collision retries
 		const MAX_RETRIES = 5;
@@ -121,6 +135,9 @@ export async function POST(req: NextRequest) {
 			);
 		}
 		for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+			if (parents?.canRefer === false) {
+				break;
+			}
 			try {
 				createdUser = await prisma.$transaction(async (tx) => {
 					// Recompute vrKpId each retry to change the suffix
@@ -139,8 +156,62 @@ export async function POST(req: NextRequest) {
 								},
 							}
 						: undefined;
+					type ParentInfo = {
+						id: string;
+						canRefer: boolean | null;
+						joinedBy?: { id: string } | null; // parentA's parent (B)
+						parentB?: { id: string } | null; // parentA's grandparent (C)
+						marketingMember?: { isActive: boolean; role: MarketingRole } | null;
+						vrKpId: string;
+					};
+					function computeABC(p: ParentInfo) {
+						// A = direct parent (always p.id)
+						// B/C depend on marketing role when it's a marketing join
+						let A: string | null = p.id;
+						let B: string | null = p.joinedBy?.id ?? null;
+						let C: string | null = p.parentB?.id ?? null;
+						const isMarketingJoin =
+							!!parents?.marketingMember?.isActive &&
+							[
+								MarketingRole.MANAGER,
+								MarketingRole.TEAM_LEADER,
+								MarketingRole.AGENT,
+							].includes(parents.marketingMember.role);
+						if (isMarketingJoin) {
+							switch (p.marketingMember!.role) {
+								case MarketingRole.MANAGER:
+									// A = manager, no B/C
+									B = null;
+									C = null;
+									break;
+								case MarketingRole.TEAM_LEADER:
+									// A = team leader, B = their manager
+									// (joinedBy is expected to be manager in your current model)
+									C = null;
+									break;
+								case MarketingRole.AGENT:
+									// A = agent, B = TL, C = manager (as you stored)
+									break;
+								default:
+									// keep defaults
+									break;
+							}
+						}
 
-					// Create the user
+						return { A, B, C };
+					}
+
+					const { A, B, C } = computeABC(parents);
+					let canRefer = false;
+					if (!parents?.marketingMember) {
+						canRefer = true;
+					}
+					console.log("Creating user with vrKpId", vrKpId);
+					console.log("Parent/Referral IDs", {
+						A,
+						B,
+						C,
+					});
 					const user = await tx.user.create({
 						data: {
 							fullname: ob.fullname,
@@ -157,16 +228,15 @@ export async function POST(req: NextRequest) {
 							gender: ob.gender,
 							userPhoto: ob.userPhoto,
 							vrKpId: vrKpId,
+							canRefer: canRefer,
 							nominieeName: ob.nominieeName,
 							nominieeDob: ob.nominieeDob,
 							relationship: ob.relationship,
 							onBoardingId: ob.id,
 							orderId: order.id,
-							parentReferralId: ob.parentreferralId,
-							parentBId: parents?.joinedBy?.id ?? null,
-							parentCId: parents?.parentB?.id ?? null,
-
-							// defaults: deleted=false, deactivated=false, healthCard=false
+							parentReferralId: A ? parents.vrKpId : null,
+							parentBId: B,
+							parentCId: C,
 						},
 						select: {
 							id: true,
@@ -222,7 +292,16 @@ export async function POST(req: NextRequest) {
 				throw err;
 			}
 		}
-
+		if (!createdUser) {
+			console.error("Failed to create user - parent cannot refer", {
+				onboardingId,
+				parentReferralId: ob.parentreferralId,
+			});
+			return NextResponse.json(
+				{ ok: false, error: "parent_cannot_refer" },
+				{ status: 400 }
+			);
+		}
 		return NextResponse.json(
 			{
 				ok: true,
