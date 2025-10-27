@@ -1,10 +1,11 @@
 import React from "react";
+import AddingTL from "./AddingTL";
 
 const page = () => {
 	return (
 		<div>
-			Manager Dashboard
-			<p>more features coming soon</p>
+			<h1>Team Leader Creation Page</h1>
+			<AddingTL />
 		</div>
 	);
 };

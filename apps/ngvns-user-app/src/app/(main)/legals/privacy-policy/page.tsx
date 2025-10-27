@@ -155,7 +155,7 @@ export default function PrivacyPolicy() {
 			<h2 className="text-2xl font-semibold mt-10 mb-4">Contact Us</h2>
 			<p className="mb-2">If you have questions, contact us:</p>
 			<ul className="list-disc list-inside space-y-1">
-				<li>Email: contact@vrkisanparivaar.com</li>
+				<li>Email: support@vrkisanparivaar.com</li>
 			</ul>
 		</section>
 	);
