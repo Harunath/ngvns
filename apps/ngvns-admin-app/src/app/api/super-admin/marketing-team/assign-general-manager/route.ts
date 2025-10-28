@@ -10,9 +10,9 @@ export const POST = async (request: NextRequest) => {
 			return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 		}
 		const body = await request.json();
-		const { marketingTeamId, managerId } = body;
+		const { marketingTeamId, generalmanagerId } = body;
 
-		if (!marketingTeamId || !managerId) {
+		if (!marketingTeamId || !generalmanagerId) {
 			console.error("marketingTeamId or managerId ");
 			return NextResponse.json(
 				{ error: "marketingTeamId and managerId are required" },
@@ -21,7 +21,7 @@ export const POST = async (request: NextRequest) => {
 		}
 		// Here you would add the logic to assign the manager to the marketing team
 		const user = await prisma.user.findUnique({
-			where: { id: managerId },
+			where: { id: generalmanagerId },
 			select: { id: true },
 		});
 		if (!user) {
@@ -38,13 +38,13 @@ export const POST = async (request: NextRequest) => {
 		}
 		await prisma.marketingMember.create({
 			data: {
-				userId: managerId,
+				userId: generalmanagerId,
 				teamId: marketingTeamId,
-				role: MarketingRole.MANAGER,
+				role: MarketingRole.GENERAL_MANAGER,
 			},
 		});
 		return NextResponse.json(
-			{ message: "Manager assigned successfully" },
+			{ message: "General Manager assigned successfully" },
 			{ status: 200 }
 		);
 	} catch (err) {

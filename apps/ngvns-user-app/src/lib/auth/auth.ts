@@ -35,6 +35,12 @@ export const authOptions: NextAuthOptions = {
 						phone: true,
 						userPhoto: true,
 						vrKpId: true,
+						marketingMember: {
+							select: {
+								id: true,
+							},
+						},
+						canRefer: true,
 					},
 				});
 
@@ -54,6 +60,8 @@ export const authOptions: NextAuthOptions = {
 						fullname: user.fullname,
 						userPhoto: user.userPhoto,
 						vrKpId: user.vrKpId,
+						canRefer: !!user.canRefer,
+						marketingMember: !!user.marketingMember,
 					};
 				}
 				return null;
@@ -89,6 +97,12 @@ export const authOptions: NextAuthOptions = {
 						phone: true,
 						userPhoto: true,
 						vrKpId: true,
+						canRefer: true,
+						marketingMember: {
+							select: {
+								id: true,
+							},
+						},
 					},
 				});
 				if (vr_user) {
@@ -98,6 +112,8 @@ export const authOptions: NextAuthOptions = {
 					token.phone = vr_user.phone;
 					token.userPhoto = vr_user.userPhoto;
 					token.vrKpId = vr_user.vrKpId;
+					token.canRefer = !!vr_user.canRefer;
+					token.marketingMember = !!vr_user.marketingMember;
 				}
 			}
 			return token;
@@ -111,6 +127,8 @@ export const authOptions: NextAuthOptions = {
 				session.user.phone = token.phone as string;
 				session.user.userPhoto = token.userPhoto as string;
 				session.user.vrKpId = token.vrKpId as string;
+				session.user.canRefer = token.canRefer as boolean;
+				session.user.marketingMember = token.marketingMember as boolean;
 			}
 			return session;
 		},

@@ -10,7 +10,7 @@ const page = async () => {
 	if (
 		!session?.user?.id ||
 		!session.user.role ||
-		session.user.role !== MarketingRole.MANAGER ||
+		session.user.role !== MarketingRole.GENERAL_MANAGER ||
 		!session?.user.teamId
 	) {
 		redirect("/logout");
@@ -29,7 +29,6 @@ const page = async () => {
 		orderBy: { createdAt: "desc" },
 		take: 5,
 	});
-	if (!managers.length) return <div>No Managers found</div>;
 	return (
 		<div className="p-4 min-w-xl w-full h-full bg-neutral-100 ">
 			<h2>
@@ -40,13 +39,17 @@ const page = async () => {
 					Add New Manager
 				</Link>
 			</h2>
-			{managers.map((manager) => (
-				<div key={manager.id} className="p-4 m-2 border rounded">
-					<h2 className="text-lg font-bold">{manager.user.fullname}</h2>
-					<p className="text-sm text-gray-600">Email: {manager.user.email}</p>
-					<p className="text-sm text-gray-600">ID: {manager.user.id}</p>
-				</div>
-			))}
+			{managers.length > 0 ? (
+				managers.map((manager) => (
+					<div key={manager.id} className="p-4 m-2 border rounded">
+						<h2 className="text-lg font-bold">{manager.user.fullname}</h2>
+						<p className="text-sm text-gray-600">Email: {manager.user.email}</p>
+						<p className="text-sm text-gray-600">ID: {manager.user.id}</p>
+					</div>
+				))
+			) : (
+				<div>No Managers found</div>
+			)}
 		</div>
 	);
 };

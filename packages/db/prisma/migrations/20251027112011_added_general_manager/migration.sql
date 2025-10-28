@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "MarketingRole" ADD VALUE 'GENERAL_MANAGER';

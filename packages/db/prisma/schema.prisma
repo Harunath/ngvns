@@ -521,6 +521,7 @@ enum AdminRole {
 }
 
 enum MarketingRole {
+  GENERAL_MANAGER
   MANAGER
   TEAM_LEADER
   AGENT

@@ -28,6 +28,8 @@ export default function AdminLoginPage() {
 				router.push("/team-leader");
 			else if (session.user.role === MarketingRole.MANAGER)
 				router.push("/manager");
+			else if (session.user.role === MarketingRole.GENERAL_MANAGER)
+				router.push("/general-manager");
 			else {
 				signOut({ callbackUrl: "/login" }); // logout and redirect to login
 			}

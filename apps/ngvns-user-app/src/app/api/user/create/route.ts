@@ -1,4 +1,4 @@
-import prisma, { MarketingRole } from "@ngvns2025/db/client";
+import prisma, { AcquisitionType, MarketingRole } from "@ngvns2025/db/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
@@ -170,15 +170,21 @@ export async function POST(req: NextRequest) {
 						let A: string | null = p.id;
 						let B: string | null = p.joinedBy?.id ?? null;
 						let C: string | null = p.parentB?.id ?? null;
+
 						const isMarketingJoin =
 							!!parents?.marketingMember?.isActive &&
 							[
+								MarketingRole.GENERAL_MANAGER,
 								MarketingRole.MANAGER,
 								MarketingRole.TEAM_LEADER,
 								MarketingRole.AGENT,
 							].includes(parents.marketingMember.role);
 						if (isMarketingJoin) {
 							switch (p.marketingMember!.role) {
+								case MarketingRole.MANAGER:
+									B = null;
+									C = null;
+									break;
 								case MarketingRole.MANAGER:
 									// A = manager, no B/C
 									B = null;
@@ -206,12 +212,6 @@ export async function POST(req: NextRequest) {
 					if (!parents?.marketingMember) {
 						canRefer = true;
 					}
-					console.log("Creating user with vrKpId", vrKpId);
-					console.log("Parent/Referral IDs", {
-						A,
-						B,
-						C,
-					});
 					const user = await tx.user.create({
 						data: {
 							fullname: ob.fullname,
@@ -229,6 +229,9 @@ export async function POST(req: NextRequest) {
 							userPhoto: ob.userPhoto,
 							vrKpId: vrKpId,
 							canRefer: canRefer,
+							acquisitionType: parents.marketingMember
+								? AcquisitionType.MARKETING
+								: AcquisitionType.USER_REFERRAL,
 							nominieeName: ob.nominieeName,
 							nominieeDob: ob.nominieeDob,
 							relationship: ob.relationship,
