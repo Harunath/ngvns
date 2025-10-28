@@ -3,7 +3,6 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 type User = {
 	id: string;
@@ -93,11 +92,14 @@ export default function FetchingUser({ teamId }: Props) {
 		setIsAssigning(true);
 		try {
 			const res = await fetch(
-				`/api/super-admin/marketing-team/assign-manager`,
+				`/api/super-admin/marketing-team/assign-general-manager`,
 				{
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ marketingTeamId: teamId, managerId: user.id }),
+					body: JSON.stringify({
+						marketingTeamId: teamId,
+						generalmanagerId: user.id,
+					}),
 				}
 			);
 
@@ -110,13 +112,15 @@ export default function FetchingUser({ teamId }: Props) {
 				throw new Error(msg);
 			}
 
-			toast.success(`Assigned ${user.fullname} as Manager successfully.`);
+			toast.success(
+				`Assigned ${user.fullname} as General Manager successfully.`
+			);
 			setUser(null);
 			setQuery("");
 			setHasSearchedOnce(false);
 		} catch (err: any) {
 			console.error(err);
-			toast.error(err?.message || "Error assigning manager.");
+			toast.error(err?.message || "Error assigning General Manager.");
 		} finally {
 			setIsAssigning(false);
 		}
@@ -133,11 +137,11 @@ export default function FetchingUser({ teamId }: Props) {
 		<div className="w-full max-w-3xl rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
 			<div className="mb-4">
 				<h2 className="text-lg font-semibold text-neutral-900">
-					Assign Team Manager
+					Assign General Manager
 				</h2>
 				<p className="mt-1 text-sm text-neutral-600">
 					Search a user by their <span className="font-medium">ID</span> and
-					assign them as the manager for this team.
+					assign them as the General Manager for this team.
 				</p>
 			</div>
 
@@ -268,7 +272,7 @@ export default function FetchingUser({ teamId }: Props) {
 													Assigning…
 												</>
 											) : (
-												<>Assign {user.fullname} as Manager</>
+												<>Assign {user.fullname} as General Manager</>
 											)}
 										</button>
 									</div>

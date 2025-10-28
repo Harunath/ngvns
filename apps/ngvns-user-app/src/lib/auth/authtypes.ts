@@ -7,6 +7,8 @@ declare module "next-auth" {
 		fullname: string;
 		userPhoto: string;
 		vrKpId: string;
+		canRefer?: boolean;
+		marketingMember?: boolean;
 	}
 
 	interface Session {

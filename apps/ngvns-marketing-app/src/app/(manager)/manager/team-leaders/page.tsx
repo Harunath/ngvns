@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
 import { authOptions } from "../../../../lib/auth/auth";
-import Link from "next/link";
 
 const page = async () => {
 	const session = await getServerSession(authOptions);
@@ -32,14 +31,7 @@ const page = async () => {
 
 	return (
 		<div className="p-4 min-w-xl w-full h-full bg-neutral-100 ">
-			<h2>
-				team_leaders ({team_leaders.length})
-				<Link
-					href={"/manager/team-leaders/create"}
-					className="ml-4 text-sm text-blue-600 underline">
-					Add New TL
-				</Link>
-			</h2>
+			<h2>team_leaders ({team_leaders.length})</h2>
 			{team_leaders.length > 0 ? (
 				team_leaders.map((team_leader) => (
 					<div key={team_leader.id} className="p-4 m-2 border rounded">

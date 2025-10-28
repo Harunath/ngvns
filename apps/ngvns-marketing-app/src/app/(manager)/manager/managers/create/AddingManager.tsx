@@ -26,7 +26,7 @@ const AddingTL = () => {
 
 	const handleAddTeamLeader = async () => {
 		try {
-			const response = await fetch("/api/manager/team-leaders", {
+			const response = await fetch("/api/manager/team-leader", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

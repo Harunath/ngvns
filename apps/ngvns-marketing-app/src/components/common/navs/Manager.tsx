@@ -9,7 +9,6 @@ const ManagerNav = () => {
 					{ label: "dashboard", href: "/manager/" },
 					{ label: "profile", href: "/manager/profile" },
 				]}
-				cta={{ label: "Register", href: "/manager/register" }}
 			/>
 		</div>
 	);
