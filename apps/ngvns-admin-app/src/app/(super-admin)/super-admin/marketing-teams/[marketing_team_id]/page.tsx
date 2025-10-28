@@ -6,11 +6,11 @@ import Link from "next/link";
 export const revalidate = 86400;
 
 type PageProps = {
-	params: { marketing_team_id: string };
+	params: Promise<{ marketing_team_id: string }>;
 };
 
 export default async function MarketingTeamPage({ params }: PageProps) {
-	const marketingTeamId = params.marketing_team_id;
+	const marketingTeamId = (await params).marketing_team_id;
 
 	if (!marketingTeamId) {
 		return (
