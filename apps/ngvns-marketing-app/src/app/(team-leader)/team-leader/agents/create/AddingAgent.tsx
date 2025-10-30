@@ -12,7 +12,7 @@ type ApiUser = {
 	email?: string;
 };
 
-export default function AddingManager() {
+export default function AddingAgent() {
 	const [userId, setUserId] = React.useState("");
 	const [userData, setUserData] = React.useState<ApiUser | null>(null);
 	const [loading, setLoading] = React.useState<"get" | "add" | null>(null);
@@ -25,7 +25,7 @@ export default function AddingManager() {
 		}
 		try {
 			setLoading("get");
-			const res = await fetch("/api/general-manager/user/getuser", {
+			const res = await fetch("/api/team-leader/user/getuser", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ userId: userId.trim() }),
@@ -54,7 +54,7 @@ export default function AddingManager() {
 		}
 		try {
 			setLoading("add");
-			const res = await fetch("/api/general-manager/manager", {
+			const res = await fetch("/api/team-leader/agents", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ userId: userId.trim() }),
@@ -62,15 +62,15 @@ export default function AddingManager() {
 			const data = await res.json().catch(() => ({}));
 
 			if (res.ok) {
-				toast.success("Manager added successfully!");
+				toast.success("Executive added successfully!");
 				setUserData(null);
 				setUserId("");
 			} else {
-				toast.error(data?.message || "Failed to add Manager.");
+				toast.error(data?.message || "Failed to add Executive.");
 			}
-			console.log("Add Manager Response:", data);
+			console.log("Add Executive Response:", data);
 		} catch (err: any) {
-			toast.error("Error adding Manager.");
+			toast.error("Error adding Executive.");
 			console.error(err);
 		} finally {
 			setLoading(null);
@@ -84,7 +84,7 @@ export default function AddingManager() {
 			<div className="mx-auto max-w-3xl">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="text-2xl font-bold text-gray-900">Add Manager</h1>
+					<h1 className="text-2xl font-bold text-gray-900">Add Executive</h1>
 					<p className="mt-1 text-sm text-gray-600">
 						Lookup a user by ID, preview their details, then assign them as a
 						Manager.
@@ -202,7 +202,7 @@ export default function AddingManager() {
 											<Spinner /> Adding…
 										</span>
 									) : (
-										"Add as Manager"
+										"Add as Executive"
 									)}
 								</motion.button>
 

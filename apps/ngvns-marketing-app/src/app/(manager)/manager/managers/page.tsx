@@ -32,14 +32,7 @@ const page = async () => {
 	if (!managers.length) return <div>No Managers found</div>;
 	return (
 		<div className="p-4 min-w-xl w-full h-full bg-neutral-100 ">
-			<h2>
-				Managers ({managers.length})
-				<Link
-					href={"/general-manager/managers/create"}
-					className="ml-4 text-sm text-blue-600 underline">
-					Add New Manager
-				</Link>
-			</h2>
+			<h2>Managers ({managers.length})</h2>
 			{managers.map((manager) => (
 				<div key={manager.id} className="p-4 m-2 border rounded">
 					<h2 className="text-lg font-bold">{manager.user.fullname}</h2>

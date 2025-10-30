@@ -7,7 +7,7 @@ const ManagerNav = () => {
 			<Nav
 				navItems={[
 					{ label: "dashboard", href: "/manager/" },
-					{ label: "profile", href: "/manager/profile" },
+					{ label: "profile", href: "/manager/settings/profile" },
 				]}
 			/>
 		</div>

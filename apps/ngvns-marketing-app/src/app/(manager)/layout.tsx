@@ -1,19 +1,25 @@
-import React from "react";
+import { Suspense } from "react";
+import RoleGuard from "../../components/auth/RoleGuard";
+import { MarketingRole } from "@ngvns2025/db/client";
+import LayoutLoader from "../../components/common/LayoutLoader";
 import ManagerNav from "../../components/common/navs/Manager";
 import M_SideNav from "../../components/common/sidenavs/M_SideNav";
 
-function layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<div>
-			<ManagerNav />
-			<div className=" flex gap-x-2">
-				<div>
-					<M_SideNav />
+		<RoleGuard allowed={[MarketingRole.MANAGER]}>
+			<div className="min-h-screen">
+				<ManagerNav />
+				<div className="flex">
+					<div className="min-w-[300px]">
+						<M_SideNav />
+					</div>
+
+					<div className="">
+						<Suspense fallback={<LayoutLoader />}>{children}</Suspense>
+					</div>
 				</div>
-				<div>{children}</div>
 			</div>
-		</div>
+		</RoleGuard>
 	);
 }
-
-export default layout;

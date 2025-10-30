@@ -7,7 +7,7 @@ const AgentNav = () => {
 			<Nav
 				navItems={[
 					{ label: "dashboard", href: "/agent" },
-					{ label: "profile", href: "/agent/profile" },
+					{ label: "profile", href: "/agent/settings/profile" },
 				]}
 			/>
 		</div>

@@ -5,47 +5,13 @@ const A_SideNav = () => {
 	return (
 		<div>
 			<SideNav
-				title="Agent"
+				title="Executive"
 				sections={[
 					{
-						id: "logs",
-						label: "Logs",
-						icon: <FiFileText className="h-4 w-4" />,
-						items: [
-							{
-								label: "Command Admin Logs",
-								href: "/command-admin/logs/command-admin",
-							},
-							{
-								label: "Finance Admin Logs",
-								href: "/command-admin/logs/finance-admin",
-							},
-							{
-								label: "Data Entry Logs",
-								href: "/command-admin/logs/data-entry",
-							},
-						],
-					},
-					{
-						id: "users",
-						label: "Users",
+						id: "agents",
+						label: "Executives",
 						icon: <FiUsers className="h-4 w-4" />,
-						href: "/command-admin/user-list",
-					},
-					{
-						id: "admins",
-						label: "Admins",
-						icon: <FiShield className="h-4 w-4" />,
-						items: [
-							{
-								label: "Finance Admins",
-								href: "/command-admin/admins/finance-admin",
-							},
-							{
-								label: "Data Entry Admins",
-								href: "/command-admin/admins/data-entry",
-							},
-						],
+						href: "/agent/agents",
 					},
 					{
 						id: "settings",
@@ -54,7 +20,7 @@ const A_SideNav = () => {
 						items: [
 							{
 								label: "Profile Settings",
-								href: "/command-admin/settings/profile",
+								href: "/agent/settings/profile",
 							},
 						],
 					},

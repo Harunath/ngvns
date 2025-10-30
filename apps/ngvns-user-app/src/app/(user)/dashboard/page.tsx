@@ -2,8 +2,6 @@ import React from "react";
 import { authOptions } from "../../../lib/auth/auth";
 import { getServerSession } from "next-auth";
 import Referral from "../../../components/user/profile/referral/Referral";
-import Link from "next/link";
-import { FiSettings } from "react-icons/fi";
 
 const page = async () => {
 	const session = await getServerSession(authOptions);
