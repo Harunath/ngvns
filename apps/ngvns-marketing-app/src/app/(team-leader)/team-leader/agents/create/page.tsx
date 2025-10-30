@@ -1,9 +1,10 @@
 import React from "react";
+import AddingAgent from "./AddingAgent";
 
 const page = () => {
 	return (
 		<div>
-			<h1>Add a team leader</h1>
+			<AddingAgent />
 		</div>
 	);
 };

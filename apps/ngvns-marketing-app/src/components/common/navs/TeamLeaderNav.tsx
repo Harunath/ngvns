@@ -7,7 +7,7 @@ const TeamLeaderNav = () => {
 			<Nav
 				navItems={[
 					{ label: "dashboard", href: "/team-leader/" },
-					{ label: "profile", href: "/team-leader/profile" },
+					{ label: "profile", href: "/team-leader/settings/profile" },
 				]}
 			/>
 		</div>

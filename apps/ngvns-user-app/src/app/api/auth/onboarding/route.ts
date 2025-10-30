@@ -17,10 +17,10 @@ export async function POST(req: NextRequest) {
 
 		const parent = await prisma.user.findUnique({
 			where: { vrKpId: referralId },
-			select: { id: true, vrKpId: true },
+			select: { id: true, vrKpId: true, canRefer: true },
 		});
 
-		if (!parent) {
+		if (!parent || !!parent.canRefer) {
 			return bad("Invalid Referral ID.", 400, { field: "referralId" });
 		}
 		const state = await prisma.states.findUnique({

@@ -80,6 +80,12 @@ model User {
   UserPayouts          UserPayout[]
   VRKP_Card            VRKP_Card?
 
+  byAcquisitionId     String?
+  byAcquisition       MarketingMember?           @relation("AcquiredUsers", fields: [byAcquisitionId], references: [id])
+  
+  byMarketingTeamId   String?
+  byMarketingTeam     MarketingTeam?   @relation(fields: [byMarketingTeamId], references: [id])
+
   @@index([id])
   @@index([vrKpId])
   @@index([phone])
@@ -94,6 +100,7 @@ model MarketingTeam {
   details     Json?
 
   members     MarketingMember[]
+  users       User[]
 
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
@@ -104,16 +111,18 @@ model MarketingMember {
   userId   String        @unique
   teamId   String
   role     MarketingRole
+  AcquiredUsers       User[]         @relation("AcquiredUsers")
   isActive Boolean       @default(true)
   joinedAt DateTime      @default(now())
   endedAt  DateTime?
   team     MarketingTeam @relation(fields: [teamId], references: [id])
   user     User          @relation(fields: [userId], references: [id])
 
-  @@index([teamId, role, isActive])
 
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
+  @@index([teamId, role, isActive])
+  @@index([userId, isActive])
 }
 
 model UserPayments {

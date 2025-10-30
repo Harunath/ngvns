@@ -4,7 +4,7 @@ import React from "react";
 import { motion } from "motion/react";
 
 export default function Logout() {
-	signOut({ callbackUrl: "/login" });
+	signOut();
 	return (
 		<div>
 			<p className=" text-2xl font-bold text-center">

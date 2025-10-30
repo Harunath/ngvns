@@ -102,6 +102,7 @@ export async function POST(req: NextRequest) {
 				{ status: 400 }
 			);
 		}
+
 		const parents = await prisma.user.findFirst({
 			where: { vrKpId: ob.parentreferralId! },
 			select: {
@@ -124,7 +125,6 @@ export async function POST(req: NextRequest) {
 				{ status: 404 }
 			);
 		}
-
 		// 4) Create user in a transaction with vrKpId collision retries
 		const MAX_RETRIES = 5;
 		let createdUser = null;
@@ -212,6 +212,7 @@ export async function POST(req: NextRequest) {
 					if (!parents?.marketingMember) {
 						canRefer = true;
 					}
+
 					const user = await tx.user.create({
 						data: {
 							fullname: ob.fullname,
@@ -240,6 +241,13 @@ export async function POST(req: NextRequest) {
 							parentReferralId: A ? parents.vrKpId : null,
 							parentBId: B,
 							parentCId: C,
+							byAcquisitionId: parents.marketingMember
+								? parents.marketingMember.id
+								: null,
+
+							byMarketingTeamId: parents.marketingMember
+								? parents.marketingMember.teamId
+								: null,
 						},
 						select: {
 							id: true,
@@ -255,12 +263,6 @@ export async function POST(req: NextRequest) {
 					return user;
 				});
 				if (createdUser) {
-					console.log("User created", {
-						id: createdUser.id,
-						name: createdUser.fullname,
-						vrKpId: createdUser.vrKpId,
-						phone: createdUser.phone,
-					});
 					const res = await fetch(
 						`${process.env.NEXT_PUBLIC_BASE_URL}/api/notifications/sms/welcome`,
 						{

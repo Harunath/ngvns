@@ -1,5 +1,5 @@
 import React from "react";
-import AddingTL from "./AddingManager";
+import AddingTL from "./AddingTL";
 
 const page = () => {
 	return (

@@ -25,7 +25,7 @@ export default function AddingManager() {
 		}
 		try {
 			setLoading("get");
-			const res = await fetch("/api/general-manager/user/getuser", {
+			const res = await fetch("/api/manager/user/getuser", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ userId: userId.trim() }),
@@ -54,7 +54,7 @@ export default function AddingManager() {
 		}
 		try {
 			setLoading("add");
-			const res = await fetch("/api/general-manager/manager", {
+			const res = await fetch("/api/manager/team-leaders", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ userId: userId.trim() }),
@@ -62,15 +62,15 @@ export default function AddingManager() {
 			const data = await res.json().catch(() => ({}));
 
 			if (res.ok) {
-				toast.success("Manager added successfully!");
+				toast.success("Team Leader added successfully!");
 				setUserData(null);
 				setUserId("");
 			} else {
-				toast.error(data?.message || "Failed to add Manager.");
+				toast.error(data?.message || "Failed to add Team Leader.");
 			}
-			console.log("Add Manager Response:", data);
+			console.log("Add Team Leader Response:", data);
 		} catch (err: any) {
-			toast.error("Error adding Manager.");
+			toast.error("Error adding Team Leader.");
 			console.error(err);
 		} finally {
 			setLoading(null);
@@ -84,7 +84,7 @@ export default function AddingManager() {
 			<div className="mx-auto max-w-3xl">
 				{/* Header */}
 				<div className="mb-8">
-					<h1 className="text-2xl font-bold text-gray-900">Add Manager</h1>
+					<h1 className="text-2xl font-bold text-gray-900">Add Team Leader</h1>
 					<p className="mt-1 text-sm text-gray-600">
 						Lookup a user by ID, preview their details, then assign them as a
 						Manager.
@@ -104,7 +104,7 @@ export default function AddingManager() {
 							<label
 								htmlFor="userId"
 								className="mb-1 block text-sm font-medium text-gray-800">
-								User ID
+								VRKP ID
 							</label>
 							<input
 								id="userId"
@@ -153,8 +153,8 @@ export default function AddingManager() {
 									</h2>
 									<dl className="mt-2 space-y-1 text-sm">
 										<div className="flex gap-2">
-											<dt className="min-w-16 text-gray-500">User ID:</dt>
-											<dd className="break-all">{userData.id}</dd>
+											<dt className="min-w-16 text-gray-500">Name:</dt>
+											<dd className="break-all">{userData.fullname}</dd>
 										</div>
 										{userData.phone && (
 											<div className="flex gap-2">
@@ -202,7 +202,7 @@ export default function AddingManager() {
 											<Spinner /> Adding…
 										</span>
 									) : (
-										"Add as Manager"
+										"Add as Team Leader"
 									)}
 								</motion.button>
 
