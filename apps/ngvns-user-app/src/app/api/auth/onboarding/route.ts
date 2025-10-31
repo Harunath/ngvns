@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 			select: { id: true, vrKpId: true, canRefer: true },
 		});
 
-		if (!parent || !!parent.canRefer) {
+		if (!parent || parent.canRefer == false) {
 			return bad("Invalid Referral ID.", 400, { field: "referralId" });
 		}
 		const state = await prisma.states.findUnique({
